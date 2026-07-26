@@ -8,33 +8,40 @@ import {
 } from 'react'
 import {
   calculateMetrics,
-  loadCaseResources,
   rasterizeStudentStrokes,
   type EvaluationMetrics,
+} from './evaluation'
+import {
+  loadCaseResources,
   type LoadedCaseResources,
   type ValidationSummary,
-} from './evaluation'
+} from './caseData'
 import {
   clientPointToSource,
   type Point,
   type Size,
 } from './coordinates'
+import {
+  createInvestigationSession,
+  type InvestigationSession,
+} from './investigationSession'
+import { StudentReport } from './StudentReport'
+import {
+  INITIAL_VIEW,
+  MAX_SCALE,
+  MIN_SCALE,
+  ZOOM_STEP,
+  clampViewToBounds,
+  panView,
+  zoomView,
+  type ViewState,
+} from './viewerState'
 
-const MIN_SCALE = 1
-const MAX_SCALE = 6
-const ZOOM_STEP = 0.4
 const FALLBACK_SOURCE_WIDTH = 1000
 const FALLBACK_SOURCE_HEIGHT = 432
 const MIN_BRUSH_SIZE = 4
 const MAX_BRUSH_SIZE = 12
 const DEFAULT_BRUSH_SIZE = 8
-const BRUSH_SIZE_STORAGE_KEY = 'herculaneum-ink-lab.brush-size'
-
-type View = {
-  scale: number
-  x: number
-  y: number
-}
 
 type Stroke = {
   id: number
@@ -45,7 +52,6 @@ type Stroke = {
 
 type StageSize = Size
 
-const INITIAL_VIEW: View = { scale: 1, x: 0, y: 0 }
 const INITIAL_STAGE: StageSize = {
   width: FALLBACK_SOURCE_WIDTH,
   height: FALLBACK_SOURCE_HEIGHT,
@@ -64,11 +70,7 @@ function clampBrushSize(value: number) {
 }
 
 function getInitialBrushSize() {
-  if (typeof window === 'undefined') return DEFAULT_BRUSH_SIZE
-  const storedValue = window.localStorage.getItem(BRUSH_SIZE_STORAGE_KEY)
-  return storedValue === null
-    ? DEFAULT_BRUSH_SIZE
-    : clampBrushSize(Number(storedValue))
+  return DEFAULT_BRUSH_SIZE
 }
 
 function pointsToPath(points: Point[]) {
@@ -96,11 +98,11 @@ function Investigation({
   const imageRef = useRef<HTMLImageElement>(null)
   const activePointers = useRef(new Map<number, Point>())
   const drawingPointer = useRef<number | null>(null)
-  const viewRef = useRef<View>(INITIAL_VIEW)
+  const viewRef = useRef<ViewState>(INITIAL_VIEW)
   const stageSizeRef = useRef<StageSize>(INITIAL_STAGE)
   const nextStrokeId = useRef(1)
 
-  const [view, setView] = useState<View>(INITIAL_VIEW)
+  const [view, setView] = useState<ViewState>(INITIAL_VIEW)
   const [stageSize, setStageSize] = useState<StageSize>(INITIAL_STAGE)
   const [sourceImageSize, setSourceImageSize] =
     useState<Size>(INITIAL_SOURCE_SIZE)
@@ -124,6 +126,10 @@ function Investigation({
   const [studentReferenceVisible, setStudentReferenceVisible] = useState(false)
   const [studentReferenceOpacity, setStudentReferenceOpacity] = useState(55)
   const [sideBySideComparison, setSideBySideComparison] = useState(false)
+  const [studentIdentifier, setStudentIdentifier] = useState('')
+  const [reportError, setReportError] = useState<string | null>(null)
+  const [reportSession, setReportSession] =
+    useState<InvestigationSession | null>(null)
   const [showSource, setShowSource] = useState(true)
   const [showStudentInspection, setShowStudentInspection] = useState(true)
   const [showReference, setShowReference] = useState(true)
@@ -150,7 +156,7 @@ function Investigation({
   }, [])
 
   const clampView = useCallback(
-    (nextView: View, size = stageSizeRef.current): View => {
+    (nextView: ViewState, size = stageSizeRef.current): ViewState => {
       const viewer = viewerRef.current
       if (!viewer) return nextView
 
@@ -158,26 +164,16 @@ function Investigation({
         viewer.getBoundingClientRect()
       if (!viewerWidth || !viewerHeight) return nextView
 
-      const maxX = Math.max(
-        0,
-        (size.width * nextView.scale - viewerWidth) / 2,
-      )
-      const maxY = Math.max(
-        0,
-        (size.height * nextView.scale - viewerHeight) / 2,
-      )
-
-      return {
-        scale: nextView.scale,
-        x: Math.min(maxX, Math.max(-maxX, nextView.x)),
-        y: Math.min(maxY, Math.max(-maxY, nextView.y)),
-      }
+      return clampViewToBounds(nextView, size, {
+        width: viewerWidth,
+        height: viewerHeight,
+      })
     },
     [],
   )
 
   const updateView = useCallback(
-    (nextView: View) => {
+    (nextView: ViewState) => {
       const clamped = clampView(nextView)
       viewRef.current = clamped
       setView(clamped)
@@ -216,10 +212,6 @@ function Investigation({
     updateStageGeometry()
   }, [sideBySideComparison, updateStageGeometry])
 
-  useEffect(() => {
-    window.localStorage.setItem(BRUSH_SIZE_STORAGE_KEY, String(brushSize))
-  }, [brushSize])
-
   const ensureCaseResources = useCallback(async () => {
     if (caseResources) return caseResources
     try {
@@ -242,12 +234,7 @@ function Investigation({
 
   const changeZoom = useCallback(
     (amount: number) => {
-      const current = viewRef.current
-      const scale = Math.min(
-        MAX_SCALE,
-        Math.max(MIN_SCALE, current.scale + amount),
-      )
-      updateView({ ...current, scale })
+      updateView(zoomView(viewRef.current, amount))
     },
     [updateView],
   )
@@ -281,11 +268,13 @@ function Investigation({
     const current = viewRef.current
 
     if (currentPoints.length === 1) {
-      updateView({
-        ...current,
-        x: current.x + event.clientX - previousPoint.x,
-        y: current.y + event.clientY - previousPoint.y,
-      })
+      updateView(
+        panView(
+          current,
+          event.clientX - previousPoint.x,
+          event.clientY - previousPoint.y,
+        ),
+      )
       return
     }
 
@@ -339,11 +328,7 @@ function Investigation({
       return
     }
 
-    updateView({
-      ...current,
-      x: current.x - event.deltaX,
-      y: current.y - event.deltaY,
-    })
+    updateView(panView(current, -event.deltaX, -event.deltaY))
   }
 
   const getAnnotationPoint = (
@@ -486,6 +471,9 @@ function Investigation({
     setStudentReferenceVisible(false)
     setStudentReferenceOpacity(55)
     setSideBySideComparison(false)
+    setStudentIdentifier('')
+    setReportError(null)
+    setReportSession(null)
     setLabelsVisible(true)
     setMode('navigate')
     setTool('ink')
@@ -493,6 +481,45 @@ function Investigation({
   }
 
   const renderedStrokes = draft ? [...strokes, draft] : strokes
+  const openReport = () => {
+    if (!metrics || !caseResources) return
+    try {
+      setReportSession(
+        createInvestigationSession({
+          studentIdentifier,
+          investigationTitle: 'Herculaneum Ink Lab — Investigation Report',
+          completedAt: new Date().toISOString(),
+          caseIdentifier: caseResources.metadata.caseId,
+          sourceCredit: caseResources.metadata.sourceCredit,
+          license: caseResources.metadata.license,
+          surfaceImageUrl: `/${caseResources.metadata.surfaceImage}`,
+          referenceImageUrl: `/${caseResources.metadata.referenceMask}`,
+          sourceSize: { ...sourceImageSize },
+          strokes,
+          metrics,
+          referenceRevealUnlocked,
+          referenceRevealed: studentReferenceRevealed,
+          completionState: 'report-ready',
+        }),
+      )
+      setReportError(null)
+    } catch (error) {
+      setReportError(
+        error instanceof Error
+          ? error.message
+          : 'The report could not be created.',
+      )
+    }
+  }
+  const startOverFromReport = () => {
+    if (
+      window.confirm(
+        'Start over? This clears the student identifier, labels, and results.',
+      )
+    ) {
+      startOver()
+    }
+  }
   const stageStyle = {
     width: `${stageSize.width}px`,
     height: `${stageSize.height}px`,
@@ -610,6 +637,16 @@ function Investigation({
       )}
     </svg>
   )
+
+  if (reportSession) {
+    return (
+      <StudentReport
+        session={reportSession}
+        onReturn={() => setReportSession(null)}
+        onStartOver={startOverFromReport}
+      />
+    )
+  }
 
   return (
     <main className="investigation-shell">
@@ -1107,6 +1144,38 @@ function Investigation({
               validation={validation}
               error={resourceError}
             />
+          )}
+        </section>
+      )}
+
+      {metrics && !teacherMode && (
+        <section className="report-entry" aria-labelledby="report-entry-title">
+          <div>
+            <p className="eyebrow">Final report</p>
+            <h2 id="report-entry-title">Prepare your investigation report</h2>
+            <p>
+              Your identifier stays only in this browser memory and is cleared
+              when you start over or refresh the page.
+            </p>
+          </div>
+          <label>
+            Student name or assigned identifier
+            <input
+              value={studentIdentifier}
+              autoComplete="off"
+              onChange={(event) => {
+                setStudentIdentifier(event.target.value)
+                setReportError(null)
+              }}
+            />
+          </label>
+          <button className="control-button" onClick={openReport}>
+            Create Final Report
+          </button>
+          {reportError && (
+            <p className="report-entry-error" role="alert">
+              {reportError}
+            </p>
           )}
         </section>
       )}

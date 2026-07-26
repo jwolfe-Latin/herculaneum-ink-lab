@@ -67,6 +67,33 @@ On narrow screens, including an iPad in portrait orientation, the comparison
 panels stack vertically. Zooming, panning, and resetting still affect both
 panels together.
 
+## Create and print the student report
+
+After checking labels, enter a student name or assigned identifier in the
+**Final report** section and select **Create Final Report**.
+
+The report includes the investigation and case information, completion date,
+source credit, license, both comparison images, and all three metrics.
+
+- **Return to Investigation** keeps the current identifier, labels, and results
+  in memory so the student can revise and create another report.
+- **Print Report** opens the browser print dialog.
+- **Save as PDF through the browser print dialog** opens the same dialog. Choose
+  the browser's **Save as PDF** destination instead of a printer.
+- **Start Over** asks for confirmation, then clears the identifier, labels,
+  results, and expert-reference access.
+
+The report uses a US letter print layout. Editing controls are hidden when
+printing, while the two images, metrics, source credit, and license remain
+visible.
+
+### Student privacy
+
+The student identifier and report exist only in the current page's memory.
+They are not uploaded and are not written to local storage, session storage,
+cookies, analytics, or an external tracking service. Refreshing or closing the
+page also clears them.
+
 ## Run the tests
 
 From the project folder, run:
@@ -225,16 +252,23 @@ single overall score.
 
 ## Project map
 
-- `src/App.tsx` — student workflow, annotation viewer, comparison modes,
-  metrics, and teacher inspection interface
+- `src/App.tsx` — student workflow and composition of the separate modules
+- `src/caseData.ts` — case metadata, image loading, and reference validation
 - `src/coordinates.ts` — shared conversion between browser pointer positions
   and source-image pixels
-- `src/evaluation.ts` — reusable mask loading, validation, rasterization, and
-  metric calculations
+- `src/viewerState.ts` — zoom, pan, reset state, and viewport bounds
+- `src/evaluation.ts` — annotation rasterization and metric calculations only
+- `src/investigationSession.ts` — documented in-memory report data structure
+- `src/StudentReport.tsx` — report rendering and print controls
+- `src/classifierContract.ts` — type-only contract for a possible future
+  classifier; no model is implemented
 - `src/index.css` — layout and responsive visual design
 - `src/App.test.tsx` — interface, accessibility, and interaction tests
 - `src/coordinates.test.ts` — top-edge, corner, zoom, pan, and resize tests
 - `src/evaluation.test.ts` — artificial-image validation and scoring tests
+- `src/investigationSession.test.ts` — session construction and validation
+  tests
+- `src/StudentReport.test.tsx` — report content, image, metric, and print tests
 - `src/main.tsx` — starts React in the browser
 - `public/surface.png` — browser-ready papyrus image
 - `public/reference-mask.png` — expert reference mask
@@ -254,6 +288,58 @@ single overall score.
 - The layout adapts to desktop, tablet landscape, and tablet portrait widths.
 - Reduced-motion browser preferences disable nonessential transitions.
 
+## Investigation-session data structure
+
+The report receives one plain `InvestigationSession` object instead of reading
+directly from React components. The object contains:
+
+- the student identifier;
+- investigation title and completion time;
+- case identifier, source credit, and license;
+- surface and reference image paths;
+- source-image width and height;
+- a copied list of annotation strokes in source-image pixels;
+- a copied metrics result;
+- expert-reference unlock and reveal state;
+- the investigation completion state.
+
+`createInvestigationSession` trims and validates the identifier and copies the
+stroke, point, size, and metric data. The report can therefore be tested or
+rendered using only this object. A future persistence feature could serialize
+this documented structure without redesigning annotation rendering or scoring,
+but this milestone intentionally does not save it anywhere.
+
+## Future Expansion Architecture
+
+The code is divided into small layers so future work can be added without
+changing the current student workflow:
+
+1. **Case data** (`src/caseData.ts`) owns the surface image, expert mask,
+   credits, license, instructions, file validation, and alpha-channel mask
+   membership. It does not score student work.
+2. **Investigation session data** (`src/investigationSession.ts`) is a plain,
+   in-memory snapshot containing the student identifier, annotation strokes,
+   scoring result, reference reveal state, and completion state. Nothing is
+   written to browser storage or sent elsewhere.
+3. **Viewer and coordinates** (`src/viewerState.ts` and `src/coordinates.ts`)
+   own zoom, pan, viewport bounds, pointer conversion, source-image
+   coordinates, and the common geometry used by the brush cursor and aligned
+   overlays.
+4. **Scoring** (`src/evaluation.ts`) rasterizes source-coordinate strokes and
+   calculates Ink Recovered, Label Precision, and Extra Surface Marked. It has
+   no user-interface or report responsibility.
+5. **Report generation** (`src/StudentReport.tsx`) reads the completed
+   `InvestigationSession`. It displays the metrics already stored in that
+   snapshot and never recalculates them.
+
+`src/classifierContract.ts` documents a future classifier boundary only. Its
+request can describe source-image dimensions, an image or image region,
+positive ink labels, separate future negative non-ink labels, and case
+metadata. Its result can describe a source-aligned probability map, model
+status, training-round identifier, and structured error information. There is
+deliberately no classifier implementation, model dependency, API, server, or
+persistence at this checkpoint.
+
 ## Current limitations
 
 - Student work is kept only in browser memory and is lost when the page is
@@ -262,6 +348,8 @@ single overall score.
 - The application currently opens one sample case; there is no case-selection
   screen.
 - There are no saved student accounts, class reports, or exported results.
+- Reports can only be saved by printing to PDF; there is no JSON export or
+  import.
 - The expert reference is a prepared comparison standard, not proof that all
   transparent regions contain no ink.
 - Machine-learning predictions are not included.

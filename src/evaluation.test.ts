@@ -1,10 +1,12 @@
 import {
-  calculateMetrics,
   createReferenceMembership,
   parsePngHeader,
-  rasterizeStudentStrokes,
   validateCaseImages,
   type PixelImage,
+} from './caseData'
+import {
+  calculateMetrics,
+  rasterizeStudentStrokes,
 } from './evaluation'
 
 function pngHeader(width: number, height: number, colorType: number) {

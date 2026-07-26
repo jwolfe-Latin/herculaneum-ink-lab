@@ -679,6 +679,222 @@ h1 {
   line-height: 1.5;
 }
 
+.report-entry {
+  width: min(100%, 90rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) minmax(16rem, 24rem) auto;
+  align-items: end;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(23, 59, 53, 0.2);
+  border-radius: 0.75rem;
+  background: rgba(255, 253, 248, 0.94);
+}
+
+.report-entry h2,
+.report-entry p {
+  margin: 0;
+}
+
+.report-entry h2 {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.report-entry p:not(.eyebrow) {
+  margin-top: 0.35rem;
+  color: #5a6965;
+  font-size: 0.85rem;
+}
+
+.report-entry label {
+  display: grid;
+  gap: 0.4rem;
+  color: #334d47;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.report-entry input {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(23, 59, 53, 0.35);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+.report-entry-error {
+  grid-column: 2 / -1;
+  color: #8b3523 !important;
+  font-weight: 700;
+}
+
+.report-shell {
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: #ece7dc;
+}
+
+.report-controls {
+  width: min(100%, 8.5in);
+  margin: 0 auto 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.report-start-over {
+  margin-left: auto;
+  color: #8b3523;
+}
+
+.student-report {
+  width: min(100%, 8.5in);
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.55in;
+  color: #182f2b;
+  background: #fff;
+  box-shadow: 0 0.8rem 2.5rem rgba(31, 39, 35, 0.14);
+}
+
+.report-header {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #173b35;
+}
+
+.report-header h1 {
+  max-width: 14ch;
+  font-size: 2.1rem;
+}
+
+.report-details {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.report-details div {
+  break-inside: avoid;
+}
+
+.report-details dt {
+  color: #5b6b67;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.report-details dd {
+  margin: 0.12rem 0 0;
+  font-weight: 700;
+}
+
+.report-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.report-figure {
+  min-width: 0;
+  margin: 0;
+  break-inside: avoid;
+}
+
+.report-capture {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border: 1px solid #4c5653;
+  background: #111;
+}
+
+.report-capture img,
+.report-student-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.report-capture img {
+  object-fit: fill;
+}
+
+.report-reference-layer {
+  filter: brightness(0) saturate(100%) invert(67%) sepia(27%) saturate(998%)
+    hue-rotate(138deg) brightness(82%) contrast(94%);
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+
+.report-student-layer rect {
+  fill: rgba(190, 67, 27, 0.72);
+}
+
+.report-figure figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.report-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.report-metrics article {
+  padding: 0.75rem;
+  border: 1px solid #82908c;
+  border-left: 5px solid #9b4c2f;
+  break-inside: avoid;
+}
+
+.report-metrics h2 {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.report-metrics strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.65rem;
+}
+
+.report-methodology,
+.report-source {
+  break-inside: avoid;
+}
+
+.report-methodology {
+  margin: 1rem 0 0;
+  padding: 0.75rem;
+  border-left: 4px solid #247d85;
+  background: #eef4f3;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.report-source {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid #82908c;
+  font-size: 0.76rem;
+}
+
+.report-source p {
+  margin: 0.25rem 0;
+}
+
 .control-button {
   padding: 0.65rem 1rem;
   border: 1px solid rgba(23, 59, 53, 0.28);
@@ -766,6 +982,29 @@ h1 {
   .comparison-viewer {
     height: clamp(18rem, 42vh, 30rem);
   }
+
+  .report-entry {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .report-entry-error {
+    grid-column: auto;
+  }
+
+  .report-shell {
+    padding: 0.75rem;
+  }
+
+  .student-report {
+    min-height: auto;
+    padding: clamp(1rem, 5vw, 2rem);
+  }
+
+  .report-header,
+  .report-images {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -815,5 +1054,67 @@ h1 {
   .label-color,
   .expert-reference-overlay {
     transition: none;
+  }
+}
+
+@page {
+  size: letter;
+  margin: 0.45in;
+}
+
+@media print {
+  :root,
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .report-shell {
+    min-height: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .report-controls {
+    display: none !important;
+  }
+
+  .student-report {
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .report-images,
+  .report-metrics,
+  .report-figure,
+  .report-metrics article,
+  .report-methodology,
+  .report-source {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-reference-layer {
+    filter: grayscale(1) contrast(1.8);
+    opacity: 0.72;
+  }
+
+  .report-student-layer rect {
+    fill: rgba(25, 25, 25, 0.65);
+  }
+
+  .report-figure:first-child .report-student-layer rect {
+    fill: rgba(90, 90, 90, 0.62);
+  }
+
+  .report-metrics article {
+    border-color: #222;
+  }
+
+  .report-methodology {
+    border-color: #222;
+    background: #eee;
   }
 }

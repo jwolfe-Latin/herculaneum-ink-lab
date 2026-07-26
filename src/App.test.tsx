@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as evaluation from './evaluation'
-import type { LoadedCaseResources } from './evaluation'
+import * as caseData from './caseData'
+import type { LoadedCaseResources } from './caseData'
 import App from './App'
 
 async function openInvestigation() {
@@ -81,7 +82,7 @@ function fakeCaseResources(): LoadedCaseResources {
 }
 
 function mockSuccessfulScoring() {
-  vi.spyOn(evaluation, 'loadCaseResources').mockResolvedValue(
+  vi.spyOn(caseData, 'loadCaseResources').mockResolvedValue(
     fakeCaseResources(),
   )
   vi.spyOn(evaluation, 'rasterizeStudentStrokes').mockImplementation(
@@ -115,9 +116,22 @@ async function enterSideBySideComparison(
   )
 }
 
+async function prepareReport(
+  user: ReturnType<typeof userEvent.setup>,
+  identifier = 'Student 24',
+) {
+  await enterLabelMode(user)
+  drawStroke()
+  await user.click(screen.getByRole('button', { name: 'Check My Labels' }))
+  const identifierInput = await screen.findByRole('textbox', {
+    name: 'Student name or assigned identifier',
+  })
+  if (identifier) await user.type(identifierInput, identifier)
+  await user.click(screen.getByRole('button', { name: 'Create Final Report' }))
+}
+
 afterEach(() => {
   vi.restoreAllMocks()
-  window.localStorage.clear()
   window.history.pushState({}, '', '/')
 })
 
@@ -567,7 +581,7 @@ describe('Herculaneum Ink Lab', () => {
   })
 
   it('allows revision after reveal and updates scoring when checked again', async () => {
-    vi.spyOn(evaluation, 'loadCaseResources').mockResolvedValue(
+    vi.spyOn(caseData, 'loadCaseResources').mockResolvedValue(
       fakeCaseResources(),
     )
     const rasterize = vi
@@ -671,20 +685,6 @@ describe('Herculaneum Ink Lab', () => {
 
     expect(sizeControl).toHaveValue('4')
     expect(screen.getByText('Brush size: 4 px')).toBeInTheDocument()
-  })
-
-  it.each([
-    ['below the range', '1', '4'],
-    ['above the range', '40', '12'],
-  ])('clamps a stored value %s', async (_description, stored, expected) => {
-    window.localStorage.setItem('herculaneum-ink-lab.brush-size', stored)
-
-    await openInvestigation()
-
-    expect(screen.getByRole('slider')).toHaveValue(expected)
-    expect(
-      window.localStorage.getItem('herculaneum-ink-lab.brush-size'),
-    ).toBe(expected)
   })
 
   it('uses the same selected source-pixel size for brush and eraser', async () => {
@@ -835,7 +835,7 @@ describe('Herculaneum Ink Lab', () => {
   })
 
   it('replaces evaluation results after labels are revised and checked again', async () => {
-    vi.spyOn(evaluation, 'loadCaseResources').mockResolvedValue(
+    vi.spyOn(caseData, 'loadCaseResources').mockResolvedValue(
       fakeCaseResources(),
     )
     vi.spyOn(evaluation, 'rasterizeStudentStrokes').mockImplementation(
@@ -864,9 +864,77 @@ describe('Herculaneum Ink Lab', () => {
     expect(screen.getAllByText('100%')).toHaveLength(3)
   })
 
+  it('requires a student identifier before creating the report', async () => {
+    mockSuccessfulScoring()
+    const user = await openInvestigation()
+
+    await prepareReport(user, '')
+
+    expect(
+      screen.getByRole('alert'),
+    ).toHaveTextContent('Enter a student name or assigned identifier.')
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Herculaneum Ink Lab — Investigation Report',
+      }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('returns from the report with the current identifier and labels preserved', async () => {
+    mockSuccessfulScoring()
+    const user = await openInvestigation()
+    await prepareReport(user)
+
+    await user.click(
+      screen.getByRole('button', { name: 'Return to Investigation' }),
+    )
+
+    expect(screen.getByTestId('annotation-stroke')).toBeInTheDocument()
+    expect(
+      screen.getByRole('textbox', {
+        name: 'Student name or assigned identifier',
+      }),
+    ).toHaveValue('Student 24')
+    expect(screen.getByRole('button', { name: 'Undo' })).toBeEnabled()
+  })
+
+  it('clears personal and investigation data when report Start Over is confirmed', async () => {
+    mockSuccessfulScoring()
+    const user = await openInvestigation()
+    await prepareReport(user)
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+    await user.click(screen.getByRole('button', { name: 'Start Over' }))
+
+    expect(confirm).toHaveBeenCalledWith(
+      'Start over? This clears the student identifier, labels, and results.',
+    )
+    expect(screen.queryByText('Student 24')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('annotation-stroke')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Reveal Expert Reference' }),
+    ).toBeDisabled()
+    expect(
+      screen.queryByRole('textbox', {
+        name: 'Student name or assigned identifier',
+      }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('does not store the student identifier in browser storage', async () => {
+    mockSuccessfulScoring()
+    const localSet = vi.spyOn(Storage.prototype, 'setItem')
+    const user = await openInvestigation()
+
+    await prepareReport(user, 'Private Student')
+
+    expect(localSet).not.toHaveBeenCalled()
+    expect(document.cookie).toBe('')
+  })
+
   it('keeps source, student, and reference layers on one stage through zoom and resize', async () => {
     window.history.pushState({}, '', '/?teacher=1')
-    vi.spyOn(evaluation, 'loadCaseResources').mockResolvedValue(
+    vi.spyOn(caseData, 'loadCaseResources').mockResolvedValue(
       fakeCaseResources(),
     )
     const user = await openInvestigation()

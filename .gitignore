@@ -1,26 +1,42 @@
-# Dependencies
+# Dependencies and package-manager cache
 node_modules/
 .pnpm-store/
 
-# Production build
+# Production output and local build caches
 dist/
-
-# Local environment settings
-.env
-.env.local
-
-# Test output
+.vite/
+.cache/
 coverage/
+*.tsbuildinfo
 
-# Editor and operating-system files
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
+# Local environment settings (keep a safe example file if one is added)
+.env
+.env.*
+!.env.example
 
 # Logs
 *.log
 npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# Editor files
+.idea/
+.vscode/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
 
 # Original high-resolution source images
 public/*.tif

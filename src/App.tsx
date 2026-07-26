@@ -26,6 +26,7 @@ import {
   type InvestigationSession,
 } from './investigationSession'
 import { StudentReport } from './StudentReport'
+import { publicAssetUrl } from './assetPaths'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -492,8 +493,12 @@ function Investigation({
           caseIdentifier: caseResources.metadata.caseId,
           sourceCredit: caseResources.metadata.sourceCredit,
           license: caseResources.metadata.license,
-          surfaceImageUrl: `/${caseResources.metadata.surfaceImage}`,
-          referenceImageUrl: `/${caseResources.metadata.referenceMask}`,
+          surfaceImageUrl: publicAssetUrl(
+            caseResources.metadata.surfaceImage,
+          ),
+          referenceImageUrl: publicAssetUrl(
+            caseResources.metadata.referenceMask,
+          ),
           sourceSize: { ...sourceImageSize },
           strokes,
           metrics,
@@ -529,7 +534,7 @@ function Investigation({
     <img
       ref={primary ? imageRef : undefined}
       className="surface-image"
-      src="/surface.png"
+      src={publicAssetUrl('surface.png')}
       alt={
         primary
           ? 'Grayscale scan of a Herculaneum papyrus surface'
@@ -557,7 +562,9 @@ function Investigation({
     <img
       className="expert-reference-overlay"
       data-testid="expert-reference-overlay"
-      src={`/${caseResources?.metadata.referenceMask ?? 'reference-mask.png'}`}
+      src={publicAssetUrl(
+        caseResources?.metadata.referenceMask ?? 'reference-mask.png',
+      )}
       alt=""
       aria-hidden="true"
       draggable="false"
@@ -939,7 +946,7 @@ function Investigation({
           <img
             ref={imageRef}
             className="surface-image"
-            src="/surface.png"
+            src={publicAssetUrl('surface.png')}
             alt="Grayscale scan of a Herculaneum papyrus surface"
             draggable="false"
             onLoad={(event) => {
@@ -957,7 +964,10 @@ function Investigation({
             <img
               className="expert-reference-overlay"
               data-testid="expert-reference-overlay"
-              src={`/${caseResources?.metadata.referenceMask ?? 'reference-mask.png'}`}
+              src={publicAssetUrl(
+                caseResources?.metadata.referenceMask ??
+                  'reference-mask.png',
+              )}
               alt=""
               aria-hidden="true"
               draggable="false"

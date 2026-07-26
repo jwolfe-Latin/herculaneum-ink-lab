@@ -21,7 +21,7 @@ runs this project.
 2. Move into the project folder:
 
    ```powershell
-   cd "C:\Users\j.wolfe\OneDrive - severnschool.com\Severn Latin\herculaneum-ink-lab"
+   cd "PATH-TO-YOUR-PROJECT\herculaneum-ink-lab"
    ```
 
 3. Install the project packages. You only need to do this the first time:
@@ -192,7 +192,7 @@ this expert reference annotation.
 2. Copy it into:
 
    ```text
-   C:\Users\j.wolfe\OneDrive - severnschool.com\Severn Latin\herculaneum-ink-lab\public
+   PATH-TO-YOUR-PROJECT\herculaneum-ink-lab\public
    ```
 
 3. Allow Windows to replace the existing file.

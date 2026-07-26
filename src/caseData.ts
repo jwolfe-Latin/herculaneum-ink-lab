@@ -51,8 +51,8 @@ export type CaseAssetUrls = {
 
 export function resolveCaseAssetUrls(metadata: CaseMetadata): CaseAssetUrls {
   return {
-    surface: `/${metadata.surfaceImage}`,
-    referenceMask: `/${metadata.referenceMask}`,
+    surface: publicAssetUrl(metadata.surfaceImage),
+    referenceMask: publicAssetUrl(metadata.referenceMask),
   }
 }
 
@@ -208,8 +208,9 @@ async function decodePng(url: string, includePixels: boolean) {
 }
 
 async function loadCaseResourcesUncached(): Promise<LoadedCaseResources> {
-  const metadataResponse = await fetch('/metadata.json')
-  if (!metadataResponse.ok) throw new Error('Missing file: /metadata.json')
+  const metadataUrl = publicAssetUrl('metadata.json')
+  const metadataResponse = await fetch(metadataUrl)
+  if (!metadataResponse.ok) throw new Error(`Missing file: ${metadataUrl}`)
   const metadata = (await metadataResponse.json()) as CaseMetadata
   const urls = resolveCaseAssetUrls(metadata)
 
@@ -236,3 +237,4 @@ export function loadCaseResources() {
 export function clearCaseResourceCache() {
   resourcePromise = null
 }
+import { publicAssetUrl } from './assetPaths'

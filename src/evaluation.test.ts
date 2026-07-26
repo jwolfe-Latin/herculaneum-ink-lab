@@ -1,6 +1,7 @@
 import {
   createReferenceMembership,
   parsePngHeader,
+  resolveCaseAssetUrls,
   validateCaseImages,
   type PixelImage,
 } from './caseData'
@@ -46,6 +47,26 @@ const reference4x4 = new Uint8Array([
 ])
 
 describe('reference-mask loading and validation', () => {
+  it('resolves public case assets beneath the GitHub Pages base path', () => {
+    expect(
+      resolveCaseAssetUrls({
+        caseId: 'sample',
+        caseTitle: 'Sample',
+        studentInstructions: 'Inspect',
+        surfaceImage: 'surface.png',
+        referenceMask: 'reference-mask.png',
+        minimumInkRecovery: 0,
+        minimumLabelPrecision: 0,
+        sourceCredit: 'Credit',
+        license: 'License',
+        referenceMaskDescription: 'Description',
+      }),
+    ).toEqual({
+      surface: '/herculaneum-ink-lab/surface.png',
+      referenceMask: '/herculaneum-ink-lab/reference-mask.png',
+    })
+  })
+
   it('recognizes a transparent RGBA PNG header', () => {
     expect(parsePngHeader(pngHeader(4, 4, 6))).toEqual({
       width: 4,

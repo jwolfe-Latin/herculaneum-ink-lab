@@ -159,7 +159,7 @@ describe('Herculaneum Ink Lab', () => {
       screen.getByRole('img', {
         name: 'Grayscale scan of a Herculaneum papyrus surface',
       }),
-    ).toHaveAttribute('src', '/surface.png')
+    ).toHaveAttribute('src', '/herculaneum-ink-lab/surface.png')
   })
 
   it('supports keyboard activation of the investigation and mode controls', async () => {

@@ -1,0 +1,12 @@
+{
+  "caseId": "herculaneum-ink-lab-001",
+  "caseTitle": "Herculaneum Papyrus Investigation",
+  "studentInstructions": "Examine the surface carefully. What patterns might indicate ink?",
+  "surfaceImage": "surface.png",
+  "referenceMask": "reference-mask.png",
+  "minimumInkRecovery": 0.2,
+  "minimumLabelPrecision": 0.6,
+  "sourceCredit": "Development image supplied by the project owner.",
+  "license": "Confirm the source-image license before public distribution.",
+  "referenceMaskDescription": "Real expert reference annotation supplied by the project owner. Accepted ink is encoded as opaque white using the PNG alpha channel."
+}

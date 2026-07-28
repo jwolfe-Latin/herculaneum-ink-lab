@@ -37,7 +37,7 @@ export const RIB_785_CASE = {
     {
       activity: 'transcription',
       label: 'Transcription',
-      status: 'coming-later',
+      status: 'available',
     },
     {
       activity: 'word-segmentation',
@@ -174,12 +174,13 @@ export function validateRib785Case(
   }
   if (
     investigation.stageAvailability[0]?.status !== 'available' ||
+    investigation.stageAvailability[1]?.status !== 'available' ||
     investigation.stageAvailability
-      .slice(1)
+      .slice(2)
       .some((stage) => stage.status !== 'coming-later')
   ) {
     errors.push(
-      'Only RIB 785 letter identification may be available.',
+      'RIB 785 letter identification and transcription must be available.',
     )
   }
   if (!investigation.letterReferenceAvailable) {

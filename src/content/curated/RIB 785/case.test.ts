@@ -99,7 +99,7 @@ describe('RIB 785 curated case data', () => {
     expect(RIB_785_CASE.imageSource.creditLine).not.toContain('RIB Online')
   })
 
-  it('opens only the completed letter-identification stage', () => {
+  it('advertises letter identification and transcription availability', () => {
     expect(RIB_785_CASE.developmentStatus).toBe('available')
     expect(RIB_785_CASE.statusLabel).toBe('Begin Investigation')
     expect(RIB_785_CASE.enabled).toBe(true)
@@ -107,9 +107,13 @@ describe('RIB 785 curated case data', () => {
       activity: 'letter-identification',
       status: 'available',
     })
+    expect(RIB_785_CASE.stageAvailability[1]).toMatchObject({
+      activity: 'transcription',
+      status: 'available',
+    })
     expect(
       RIB_785_CASE.stageAvailability
-        .slice(1)
+        .slice(2)
         .every((stage) => stage.status === 'coming-later'),
     ).toBe(true)
   })

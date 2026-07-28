@@ -104,7 +104,7 @@ describe('RIB 785 student letter identification', () => {
     )
   })
 
-  it('makes only Letter Identification active and keeps later stages locked', async () => {
+  it('starts in Letter Identification and keeps later stages gated', async () => {
     await openRib785()
 
     const stages = screen.getByRole('navigation', {
@@ -120,7 +120,10 @@ describe('RIB 785 student letter identification', () => {
     expect(stages.querySelectorAll('.student-letter-stage--locked')).toHaveLength(
       3,
     )
-    expect(screen.getAllByText('Coming Later')).toHaveLength(3)
+    expect(screen.getAllByText('Coming Later')).toHaveLength(2)
+    expect(screen.getByText('Transcription').closest('li')).toHaveTextContent(
+      'Locked',
+    )
   })
 
   it('keeps the instructor reference hidden before checking', async () => {
@@ -398,7 +401,7 @@ describe('RIB 785 student letter identification', () => {
     expect(
       screen.getAllByText('Letter Identification Complete').length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByText('Coming Later')).toHaveLength(3)
+    expect(screen.getAllByText('Coming Later')).toHaveLength(2)
   })
 
   it('clears only student session data after Start Over confirmation', async () => {
@@ -409,7 +412,7 @@ describe('RIB 785 student letter identification', () => {
     await user.click(screen.getByRole('button', { name: 'Start Over' }))
 
     expect(confirm).toHaveBeenCalledWith(
-      'Start over? This clears your RIB 785 letter-identification work.',
+      'Start over? This clears all of your RIB 785 investigation work.',
     )
     expect(screen.getByText('0 letters selected')).toBeInTheDocument()
     expect(
@@ -427,7 +430,7 @@ describe('RIB 785 student letter identification', () => {
     )
 
     expect(confirm).toHaveBeenCalledWith(
-      'Return to the homepage? Your RIB 785 letter selections will be lost.',
+      'Return to the homepage? Your RIB 785 investigation work will be lost.',
     )
     expect(
       screen.getByRole('heading', {

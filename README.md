@@ -551,7 +551,8 @@ record.
 
 Students enter RIB 785 from the **Latin Paleography Training** card on the
 normal homepage by choosing **Begin Investigation**. Only **Letter
-Identification** is active. Transcription, Word Segmentation, and Translation
+Identification** is active when the case begins. Transcription unlocks only
+after Letter Identification is completed. Word Segmentation and Translation
 remain visibly labeled **Coming Later** and cannot be opened.
 
 In the active stage, a student chooses **Select Letter mode** and drags a box
@@ -578,7 +579,8 @@ comparison, return to editing, revise their work, and check again.
 The stage can be marked complete only after a current check and with no label
 or line mismatches. Remaining missed or student-only regions require the
 explicit confirmation **Finish this stage with remaining differences?**.
-Completion does not unlock transcription during this milestone.
+Completion unlocks the Transcription stage while preserving the student's
+letter regions in the same in-memory case session.
 
 Student letter work exists only in current browser memory. Refreshing or
 closing the page may clear it. The application warns before leaving, returning
@@ -586,13 +588,52 @@ to the homepage, or starting over after work begins. It does not use
 `localStorage`, `sessionStorage`, accounts, cloud storage, or export for this
 stage.
 
+## Student Transcription
+
+**Transcription** unlocks only after the student completes Letter
+Identification, so the stage order cannot be bypassed. Students see the same
+RIB 785 source image in a review-only version of the reusable viewer. They can
+zoom, pan, reset the view, and show or hide their own letter selections while
+typing, but those labels are not copied into the transcription fields.
+
+This activity uses a *diplomatic transcription*: students record the visible
+Latin letters as they appear, preserving the five source lines, visible V,
+abbreviations such as `D M`, and letter order. Visible V is not normalized to
+U, and abbreviations are not expanded because normalization and interpretation
+belong to later stages. Five clearly labeled text areas accept uppercase text
+and preserve spaces and introductory notation.
+
+**Check Transcription** remains disabled until all five lines contain text.
+The reusable comparison utility uppercases text, trims outside whitespace,
+and collapses repeated ordinary spaces for display. For the main letter
+comparison it removes ordinary spaces only, so `DM`, `D M`, and `D  M` compare
+as the same sequence. It does not equate V with U, change letter order, remove
+notation, expand abbreviations, or merge line boundaries.
+
+Each line is classified neutrally as Matches Instructor Reference, Missing
+Character, Extra Character, Different Character, or Character Order
+Difference. After checking, students may reveal or hide the instructor
+transcription, hide their own text, inspect character-level pairs, return to
+editing, revise, and check again. No percentage, grade, combined score, or
+pass/fail result is produced.
+
+Completion requires five nonblank lines and a current check. Remaining
+differences require the neutral confirmation **Finish this stage with
+remaining differences?**. Word Segmentation and Translation remain locked and
+labeled **Coming Later** even after Transcription is completed.
+
+The student transcription, check history, comparison state, reveal state, and
+completion state are part of the same current-memory case session as Letter
+Identification. They are cleared by case-level **Start Over** and are never
+written to `localStorage`, `sessionStorage`, an account, or a server.
+
 ## Current limitations
 
 - Student work is kept only in browser memory and is lost when the page is
   refreshed or closed.
 - The full image is used for scoring; there is no separate evaluation mask.
-- RIB 785 currently includes only Letter Identification; its later language
-  stages are intentionally locked.
+- RIB 785 currently includes Letter Identification and Transcription. Word
+  Segmentation and Translation are intentionally locked.
 - There are no saved student accounts, class reports, or exported results.
 - Reports can only be saved by printing to PDF; there is no JSON export or
   import.

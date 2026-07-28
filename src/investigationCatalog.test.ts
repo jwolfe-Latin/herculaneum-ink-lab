@@ -55,7 +55,7 @@ describe('investigation catalog architecture', () => {
       {
         activity: 'transcription',
         label: 'Transcription',
-        status: 'coming-later',
+        status: 'available',
       },
       {
         activity: 'word-segmentation',

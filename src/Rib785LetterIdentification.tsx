@@ -13,8 +13,10 @@ import {
 } from './letterIdentificationSession'
 import type { LetterRegion } from './letterRegions'
 import { LetterRegionSelector } from './LetterRegionSelector'
+import { Rib785Transcription } from './Rib785Transcription'
 
 type ComparisonMode = 'editing' | 'overlay' | 'side-by-side'
+type StudentStage = 'letter-identification' | 'transcription'
 
 const VALID_LINES = [1, 2, 3, 4, 5] as const
 
@@ -206,9 +208,14 @@ export function Rib785LetterIdentification({
   const [showInstructorReference, setShowInstructorReference] =
     useState(false)
   const [showStudentSelections, setShowStudentSelections] = useState(true)
+  const [activeStage, setActiveStage] =
+    useState<StudentStage>('letter-identification')
 
   const hasWork =
-    session.studentRegions.length > 0 || session.checkedAtLeastOnce
+    session.studentRegions.length > 0 ||
+    session.checkedAtLeastOnce ||
+    session.studentTranscription.some((line) => line.length > 0) ||
+    session.transcriptionCheckCount > 0
   useEffect(() => {
     if (!hasWork) return
     const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -318,7 +325,7 @@ export function Rib785LetterIdentification({
     if (
       hasWork &&
       !window.confirm(
-        'Return to the homepage? Your RIB 785 letter selections will be lost.',
+        'Return to the homepage? Your RIB 785 investigation work will be lost.',
       )
     ) {
       return
@@ -330,7 +337,7 @@ export function Rib785LetterIdentification({
     if (
       hasWork &&
       !window.confirm(
-        'Start over? This clears your RIB 785 letter-identification work.',
+        'Start over? This clears all of your RIB 785 investigation work.',
       )
     ) {
       return
@@ -341,24 +348,28 @@ export function Rib785LetterIdentification({
     setComparisonMode('editing')
     setShowInstructorReference(false)
     setShowStudentSelections(true)
+    setActiveStage('letter-identification')
   }
 
   const toggleInstructorReference = () => {
-    setShowInstructorReference((visible) => {
-      const nextVisible = !visible
-      setSession((current) => ({
-        ...current,
-        instructorReferenceRevealed: nextVisible,
-      }))
-      return nextVisible
-    })
+    const nextVisible = !showInstructorReference
+    setShowInstructorReference(nextVisible)
+    setSession((current) => ({
+      ...current,
+      instructorReferenceRevealed: nextVisible,
+    }))
   }
 
   return (
     <main className="student-letter-investigation">
       <header className="student-letter-investigation__header">
         <div>
-          <p className="eyebrow">RIB 785 · Letter Identification</p>
+          <p className="eyebrow">
+            RIB 785 ·{' '}
+            {activeStage === 'letter-identification'
+              ? 'Letter Identification'
+              : 'Transcription'}
+          </p>
           <h1>{RIB_785_CASE.title}</h1>
           <p>{RIB_785_CASE.studentContext.text}</p>
           <p className="student-letter-investigation__credit">
@@ -385,30 +396,72 @@ export function Rib785LetterIdentification({
         aria-label="RIB 785 investigation stages"
       >
         <ol>
-          {RIB_785_CASE.stageAvailability.map((stage, index) => (
-            <li
-              className={
-                stage.status === 'available'
-                  ? 'student-letter-stage student-letter-stage--active'
-                  : 'student-letter-stage student-letter-stage--locked'
-              }
-              aria-current={index === 0 ? 'step' : undefined}
-              key={stage.activity}
-            >
-              <span>{index + 1}</span>
-              <strong>{stage.label}</strong>
-              <small>
-                {index === 0
-                  ? session.stageStatus === 'complete'
-                    ? 'Letter Identification Complete'
-                    : 'Current Stage'
-                  : 'Coming Later'}
-              </small>
-            </li>
-          ))}
+          {RIB_785_CASE.stageAvailability.map((stage, index) => {
+            const isLetterStage = index === 0
+            const isTranscriptionStage = index === 1
+            const isAvailable =
+              isLetterStage ||
+              (isTranscriptionStage &&
+                session.stageStatus === 'complete')
+            const isCurrent =
+              (isLetterStage &&
+                activeStage === 'letter-identification') ||
+              (isTranscriptionStage &&
+                activeStage === 'transcription')
+
+            return (
+              <li
+                className={
+                  isAvailable
+                    ? 'student-letter-stage student-letter-stage--active'
+                    : 'student-letter-stage student-letter-stage--locked'
+                }
+                aria-current={isCurrent ? 'step' : undefined}
+                key={stage.activity}
+              >
+                <span>{index + 1}</span>
+                {isAvailable ? (
+                  <button
+                    type="button"
+                    disabled={isCurrent}
+                    onClick={() =>
+                      setActiveStage(
+                        isLetterStage
+                          ? 'letter-identification'
+                          : 'transcription',
+                      )
+                    }
+                  >
+                    {stage.label}
+                  </button>
+                ) : (
+                  <strong>{stage.label}</strong>
+                )}
+                <small>
+                  {isLetterStage
+                    ? session.stageStatus === 'complete'
+                      ? 'Letter Identification Complete'
+                      : isCurrent
+                        ? 'Current Stage'
+                        : 'Available'
+                    : isTranscriptionStage
+                      ? session.stageStatus !== 'complete'
+                        ? 'Locked'
+                        : session.transcriptionStageStatus === 'complete'
+                          ? 'Transcription Complete'
+                          : isCurrent
+                            ? 'Current Stage'
+                            : 'Available'
+                      : 'Coming Later'}
+                </small>
+              </li>
+            )
+          })}
         </ol>
       </nav>
 
+      {activeStage === 'letter-identification' ? (
+        <>
       <section
         className="student-letter-prompt"
         aria-labelledby="student-letter-prompt-title"
@@ -741,6 +794,16 @@ export function Rib785LetterIdentification({
             its uppercase letter and line also agree.
           </p>
         </section>
+      )}
+        </>
+      ) : (
+        <Rib785Transcription
+          session={session}
+          setSession={setSession}
+          onReturnToLetterIdentification={() =>
+            setActiveStage('letter-identification')
+          }
+        />
       )}
     </main>
   )

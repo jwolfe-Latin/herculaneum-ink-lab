@@ -40,6 +40,11 @@ type LetterRegionSelectorProps = {
   visibleRegionIds?: ReadonlySet<string>
   zoomToRegionRequest?: { id: string; requestId: number } | null
   studentFacing?: boolean
+  readOnly?: boolean
+  selectionToggleLabels?: {
+    show: string
+    hide: string
+  }
 }
 
 type RegionInteraction =
@@ -89,6 +94,11 @@ export function LetterRegionSelector({
   visibleRegionIds,
   zoomToRegionRequest,
   studentFacing = false,
+  readOnly = false,
+  selectionToggleLabels = {
+    show: 'Show Selections',
+    hide: 'Hide Selections',
+  },
 }: LetterRegionSelectorProps) {
   const viewerRef = useRef<HTMLDivElement>(null)
   const activePointers = useRef(new Map<number, Point>())
@@ -567,13 +577,23 @@ export function LetterRegionSelector({
       <header className="letter-region-selector__header">
         <div>
           <p className="eyebrow">
-            {studentFacing ? 'Current tool' : 'Reusable source-image tool'}
+            {readOnly
+              ? 'Letter evidence'
+              : studentFacing
+                ? 'Current tool'
+                : 'Reusable source-image tool'}
           </p>
           <h2 id="letter-region-selector-title">
-            {studentFacing ? 'Select visible letters' : 'Letter-region selector'}
+            {readOnly
+              ? 'Review my letter selections'
+              : studentFacing
+                ? 'Select visible letters'
+                : 'Letter-region selector'}
           </h2>
           <p>
-            {studentFacing
+            {readOnly
+              ? 'Zoom and pan the source while reviewing the letter regions you selected.'
+              : studentFacing
               ? 'Choose Select Letter, then drag a box around one visible letter.'
               : 'Select rectangular letter regions in source-image pixels. Regions exist only in current browser memory.'}
           </p>
@@ -604,41 +624,47 @@ export function LetterRegionSelector({
         >
           Navigate mode
         </button>
-        <button
-          type="button"
-          aria-pressed={mode === 'select'}
-          onClick={() => {
-            activePointers.current.clear()
-            setMode('select')
-          }}
-        >
-          Select Letter mode
-        </button>
-        <button
-          type="button"
-          disabled={!selectedId}
-          onClick={deleteSelected}
-        >
-          Delete Selected
-        </button>
-        <button type="button" disabled={past.length === 0} onClick={undo}>
-          Undo
-        </button>
-        <button type="button" disabled={future.length === 0} onClick={redo}>
-          Redo
-        </button>
-        <button
-          type="button"
-          disabled={regions.length === 0}
-          onClick={clearSelections}
-        >
-          Clear Selections
-        </button>
+        {!readOnly && (
+          <>
+            <button
+              type="button"
+              aria-pressed={mode === 'select'}
+              onClick={() => {
+                activePointers.current.clear()
+                setMode('select')
+              }}
+            >
+              Select Letter mode
+            </button>
+            <button
+              type="button"
+              disabled={!selectedId}
+              onClick={deleteSelected}
+            >
+              Delete Selected
+            </button>
+            <button type="button" disabled={past.length === 0} onClick={undo}>
+              Undo
+            </button>
+            <button type="button" disabled={future.length === 0} onClick={redo}>
+              Redo
+            </button>
+            <button
+              type="button"
+              disabled={regions.length === 0}
+              onClick={clearSelections}
+            >
+              Clear Selections
+            </button>
+          </>
+        )}
         <button
           type="button"
           onClick={() => setSelectionsVisible((current) => !current)}
         >
-          {selectionsVisible ? 'Hide Selections' : 'Show Selections'}
+          {selectionsVisible
+            ? selectionToggleLabels.hide
+            : selectionToggleLabels.show}
         </button>
       </div>
 
@@ -677,10 +703,12 @@ export function LetterRegionSelector({
             viewBox={`0 0 ${sourceSize.width} ${sourceSize.height}`}
             preserveAspectRatio="none"
             aria-label="Letter selections"
-            onPointerDown={beginCreate}
-            onPointerMove={updateSelection}
-            onPointerUp={finishSelection}
-            onPointerCancel={() => setInteraction(null)}
+            onPointerDown={readOnly ? undefined : beginCreate}
+            onPointerMove={readOnly ? undefined : updateSelection}
+            onPointerUp={readOnly ? undefined : finishSelection}
+            onPointerCancel={
+              readOnly ? undefined : () => setInteraction(null)
+            }
           >
             {selectionsVisible &&
               displayedRegions
@@ -707,22 +735,29 @@ export function LetterRegionSelector({
                       y={region.y}
                       width={region.width}
                       height={region.height}
-                      tabIndex={0}
-                      role="button"
+                      tabIndex={readOnly ? undefined : 0}
+                      role={readOnly ? undefined : 'button'}
                       aria-label={`Letter region ${index + 1}${
                         selected ? ', selected' : ''
                       }`}
-                      onPointerDown={(event) =>
-                        beginMove(event, region)
+                      onPointerDown={
+                        readOnly
+                          ? undefined
+                          : (event) => beginMove(event, region)
                       }
-                      onFocus={() => selectRegion(region.id)}
+                      onFocus={
+                        readOnly
+                          ? undefined
+                          : () => selectRegion(region.id)
+                      }
                     />
                     {showLabels && (
                       <text x={region.x + 3} y={region.y + 12}>
                         {region.label || index + 1}
                       </text>
                     )}
-                    {selected &&
+                    {!readOnly &&
+                      selected &&
                       HANDLES.map((handle) => {
                         const point = handlePosition(region, handle)
                         return (
@@ -793,7 +828,12 @@ export function LetterRegionSelector({
       </div>
 
       <p className="letter-region-help">
-        {studentFacing ? (
+        {readOnly ? (
+          <>
+            Your completed letter selections are shown for review and are not
+            copied into the transcription fields.
+          </>
+        ) : studentFacing ? (
           <>
             Select a box to label, move, resize, or delete it. Your work stays
             only in this browser tab.

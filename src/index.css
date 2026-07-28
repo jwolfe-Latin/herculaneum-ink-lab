@@ -2551,6 +2551,300 @@ h1 {
   }
 }
 
+.student-letter-stage button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+  min-height: 44px;
+}
+
+.student-letter-stage button:disabled {
+  cursor: default;
+  opacity: 1;
+  text-decoration: none;
+}
+
+.student-transcription-workspace {
+  display: grid;
+  grid-template-columns: minmax(19rem, 1.05fr) minmax(20rem, 0.95fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.student-transcription-viewer,
+.student-transcription-entry,
+.student-transcription-progress,
+.student-transcription-comparison,
+.student-transcription-letter-review {
+  border: 1px solid var(--line-color);
+  border-radius: 1.15rem;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 0.75rem 2rem rgba(32, 52, 45, 0.08);
+}
+
+.student-transcription-viewer {
+  overflow: hidden;
+}
+
+.student-transcription-viewer .letter-region-selector {
+  border: 0;
+  box-shadow: none;
+}
+
+.student-transcription-entry,
+.student-transcription-progress,
+.student-transcription-comparison,
+.student-transcription-letter-review {
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.student-transcription-entry header h2,
+.student-transcription-progress h2,
+.student-transcription-comparison h2,
+.student-transcription-letter-review h2 {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.student-transcription-fields {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.student-transcription-fields label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.student-transcription-fields textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.25rem;
+  resize: vertical;
+  border: 2px solid #a6aca5;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: var(--ink);
+  font: 700 1.05rem/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 0.75rem;
+  text-transform: uppercase;
+}
+
+.student-transcription-notation {
+  margin: 1rem 0 0;
+  border-left: 0.3rem solid var(--rust);
+  padding-left: 0.8rem;
+  color: var(--muted);
+}
+
+.student-transcription-progress,
+.student-transcription-letter-review,
+.student-transcription-comparison {
+  margin-top: 1.25rem;
+}
+
+.student-transcription-progress dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.student-transcription-progress dl div,
+.student-transcription-comparison__lines > li {
+  border: 1px solid var(--line-color);
+  border-radius: 0.75rem;
+  padding: 0.85rem;
+}
+
+.student-transcription-progress dt {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.student-transcription-progress dd {
+  margin: 0.2rem 0 0;
+  color: var(--ink);
+  font: 800 1.45rem/1 Georgia, serif;
+}
+
+.student-transcription-comparison > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.student-transcription-comparison__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.student-transcription-comparison__controls button {
+  min-height: 44px;
+}
+
+.student-transcription-comparison__lines {
+  list-style: none;
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.student-transcription-comparison__lines > li {
+  border-left-width: 0.45rem;
+}
+
+.student-transcription-comparison__lines > li[data-status='matches'] {
+  border-left-style: solid;
+}
+
+.student-transcription-comparison__lines > li[data-status='missing-character'] {
+  border-left-style: dashed;
+}
+
+.student-transcription-comparison__lines > li[data-status='extra-character'] {
+  border-left-style: double;
+}
+
+.student-transcription-comparison__lines > li[data-status='different-character'] {
+  border-left-style: dotted;
+}
+
+.student-transcription-comparison__lines
+  > li[data-status='character-order-difference'] {
+  border-left-style: groove;
+}
+
+.student-transcription-comparison__status {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.student-transcription-comparison__status > span {
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.student-transcription-comparison__lines dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 0.75rem 0 0;
+}
+
+.student-transcription-comparison__lines dl div {
+  min-width: 0;
+  background: #f5f1e8;
+  border-radius: 0.55rem;
+  padding: 0.65rem;
+}
+
+.student-transcription-comparison__lines dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.student-transcription-comparison__lines dd {
+  overflow-wrap: anywhere;
+  margin: 0.3rem 0 0;
+  font: 700 1rem/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.student-transcription-characters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.7rem;
+}
+
+.student-transcription-characters > span {
+  display: grid;
+  min-width: 2rem;
+  border: 2px solid currentColor;
+  border-radius: 0.35rem;
+  padding: 0.2rem;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.student-transcription-characters > span[data-matches='false'] {
+  border-style: dashed;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 5px,
+    rgba(172, 72, 40, 0.12) 5px 10px
+  );
+}
+
+.student-transcription-characters small {
+  border-top: 1px solid currentColor;
+  margin-top: 0.15rem;
+  padding-top: 0.15rem;
+}
+
+.student-transcription-letter-review {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.7fr) minmax(18rem, 1.3fr);
+  gap: 1rem;
+}
+
+.student-transcription-letter-review ol {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.student-transcription-letter-review li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.5rem;
+  border-bottom: 1px dashed var(--line-color);
+  padding: 0.4rem 0;
+}
+
+@media (max-width: 800px) {
+  .student-transcription-workspace,
+  .student-transcription-letter-review {
+    grid-template-columns: 1fr;
+  }
+
+  .student-transcription-progress dl {
+    grid-template-columns: 1fr;
+  }
+
+  .student-transcription-comparison > header {
+    display: block;
+  }
+
+  .student-transcription-comparison__controls {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .student-transcription-comparison__lines dl {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 480px) {
   .student-letter-stages ol {
     grid-template-columns: 1fr;

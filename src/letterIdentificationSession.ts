@@ -1,5 +1,6 @@
 import type { LetterIdentificationComparison } from './letterIdentificationComparison'
 import type { LetterRegion } from './letterRegions'
+import type { TranscriptionComparison } from './transcriptionComparison'
 
 export type LetterIdentificationStageStatus =
   | 'in-progress'
@@ -7,10 +8,11 @@ export type LetterIdentificationStageStatus =
   | 'complete'
 
 /**
- * Plain in-memory data for the RIB 785 letter-identification stage.
+ * Plain in-memory case-session data for the implemented RIB 785 stages.
  *
- * The UI may be replaced later without changing the future reporting input.
- * No browser storage, accounts, export, or network persistence is used.
+ * Letter Identification and Transcription share this object so future stages
+ * and reporting can be added without reading component-specific state. No
+ * browser storage, accounts, export, or network persistence is used.
  */
 export type LetterIdentificationSession = {
   caseId: string
@@ -24,6 +26,12 @@ export type LetterIdentificationSession = {
   comparisonCurrent: boolean
   instructorReferenceRevealed: boolean
   stageStatus: LetterIdentificationStageStatus
+  studentTranscription: [string, string, string, string, string]
+  transcriptionCheckCount: number
+  transcriptionComparison: TranscriptionComparison | null
+  transcriptionComparisonCurrent: boolean
+  transcriptionReferenceRevealed: boolean
+  transcriptionStageStatus: LetterIdentificationStageStatus
 }
 
 export function createLetterIdentificationSession(
@@ -45,6 +53,12 @@ export function createLetterIdentificationSession(
     comparisonCurrent: false,
     instructorReferenceRevealed: false,
     stageStatus: 'in-progress',
+    studentTranscription: ['', '', '', '', ''],
+    transcriptionCheckCount: 0,
+    transcriptionComparison: null,
+    transcriptionComparisonCurrent: false,
+    transcriptionReferenceRevealed: false,
+    transcriptionStageStatus: 'in-progress',
   }
 }
 
@@ -57,6 +71,18 @@ export function snapshotLetterIdentificationSession(
     studentRegions: session.studentRegions.map((region) => ({ ...region })),
     comparisonCounts: session.comparisonCounts
       ? { ...session.comparisonCounts }
+      : null,
+    studentTranscription: [...session.studentTranscription],
+    transcriptionComparison: session.transcriptionComparison
+      ? {
+          ...session.transcriptionComparison,
+          lines: session.transcriptionComparison.lines.map((line) => ({
+            ...line,
+            characters: line.characters.map((character) => ({
+              ...character,
+            })),
+          })),
+        }
       : null,
   }
 }

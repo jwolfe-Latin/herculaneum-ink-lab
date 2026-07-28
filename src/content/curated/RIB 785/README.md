@@ -1,8 +1,8 @@
 # RIB 785 curated case data
 
-RIB 785 is available from the student homepage for **Letter Identification**
-only. Transcription, Word Segmentation, and Translation remain locked and
-labeled **Coming Later**.
+RIB 785 is available from the student homepage for **Letter Identification**.
+**Transcription** unlocks after Letter Identification is completed. Word
+Segmentation and Translation remain locked and labeled **Coming Later**.
 
 ## Permanent letter reference
 
@@ -64,7 +64,15 @@ Student work is stored only in the current React session and is never written
 to `localStorage` or `sessionStorage`. The instructor editor's separate local
 draft remains unaffected.
 
+## Student transcription stage
+
+The five-line diplomatic instructor reference is read from the case data and
+is not exposed before the first student check. Ordinary spaces are optional
+for the main sequence comparison, but V/U, letters, notation, order, and line
+boundaries remain distinct. Results use categorical line statuses rather than
+a score. Student text and comparison state remain in the same in-memory case
+session as student letter regions.
+
 ## Later stages
 
-Transcription is the next planned student stage, but it has not been built or
-unlocked. Word Segmentation and Translation also remain **Coming Later**.
+Word Segmentation and Translation remain **Coming Later**.

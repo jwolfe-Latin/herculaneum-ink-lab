@@ -24,6 +24,12 @@ describe('letter-identification session data', () => {
       comparisonCurrent: false,
       instructorReferenceRevealed: false,
       stageStatus: 'in-progress',
+      studentTranscription: ['', '', '', '', ''],
+      transcriptionCheckCount: 0,
+      transcriptionComparison: null,
+      transcriptionComparisonCurrent: false,
+      transcriptionReferenceRevealed: false,
+      transcriptionStageStatus: 'in-progress',
     })
   })
 

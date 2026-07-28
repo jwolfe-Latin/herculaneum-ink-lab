@@ -196,7 +196,8 @@ describe('Ancient Texts Lab', () => {
     expect(screen.getByRole('button', { name: 'Likely Ink brush' })).toBeEnabled()
   })
 
-  it('shows RIB 785 under Latin investigations but prevents students from beginning it', () => {
+  it('shows RIB 785 under Latin investigations and opens its first stage', async () => {
+    const user = userEvent.setup()
     render(<App />)
 
     expect(
@@ -215,15 +216,23 @@ describe('Ancient Texts Lab', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', {
-        name: 'RIB 785: Funerary Inscription for Crescentinus: In Development',
+        name: 'RIB 785: Funerary Inscription for Crescentinus: Begin Investigation',
       }),
-    ).toBeDisabled()
+    ).toBeEnabled()
     expect(
       document.querySelector('[data-case-id="RIB 785"]'),
     ).toHaveAttribute(
       'data-source-image',
       '/herculaneum-ink-lab/cases/RIB%20785/source.png',
     )
+    await user.click(
+      screen.getByRole('button', {
+        name: 'RIB 785: Funerary Inscription for Crescentinus: Begin Investigation',
+      }),
+    )
+    expect(
+      screen.getByRole('heading', { name: 'Letter Identification' }),
+    ).toBeInTheDocument()
   })
 
   it('keeps the experimental AI workspace placeholder disabled', () => {

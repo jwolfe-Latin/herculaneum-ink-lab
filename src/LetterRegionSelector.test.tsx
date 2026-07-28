@@ -343,7 +343,7 @@ describe('LetterRegionSelector', () => {
       '/herculaneum-ink-lab/cases/RIB%20785/source.png',
     )
     expect(
-      screen.getByText(/not an active RIB 785 student investigation/i),
+      screen.getByText(/separate from the RIB 785 student investigation/i),
     ).toBeInTheDocument()
   })
 })

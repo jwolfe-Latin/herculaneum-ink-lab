@@ -2009,12 +2009,496 @@ h1 {
   font: 700 16px system-ui, sans-serif;
 }
 
+.student-letter-investigation {
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: #173831;
+  background:
+    radial-gradient(circle at 10% 5%, rgba(184, 82, 43, 0.1), transparent 34rem),
+    #f4f0e8;
+}
+
+.student-letter-investigation > * {
+  width: min(100%, 92rem);
+  margin-inline: auto;
+}
+
+.student-letter-investigation button,
+.student-letter-investigation input,
+.student-letter-investigation select {
+  font: inherit;
+}
+
+.student-letter-investigation button:focus-visible,
+.student-letter-investigation input:focus-visible,
+.student-letter-investigation select:focus-visible {
+  outline: 3px solid #d77b20;
+  outline-offset: 3px;
+}
+
+.student-letter-investigation__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.student-letter-investigation__header h1 {
+  max-width: 20ch;
+  margin-block: 0.25rem 0.65rem;
+  font-size: clamp(2.25rem, 5vw, 4.75rem);
+  line-height: 0.98;
+}
+
+.student-letter-investigation__header p {
+  max-width: 68rem;
+  margin-block: 0.35rem;
+  line-height: 1.55;
+}
+
+.student-letter-investigation__credit {
+  color: #526660;
+  font-size: 0.82rem;
+}
+
+.student-letter-investigation__header-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.student-letter-investigation__start-over {
+  color: #8b3523;
+}
+
+.student-letter-stages {
+  margin-top: 1.2rem;
+}
+
+.student-letter-stages ol {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.student-letter-stage {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.1rem 0.55rem;
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid #a6b0ac;
+  border-radius: 0.7rem;
+  background: #fffdf8;
+}
+
+.student-letter-stage > span {
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  grid-row: 1 / 3;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: #687873;
+  font-weight: 800;
+}
+
+.student-letter-stage strong,
+.student-letter-stage small {
+  overflow-wrap: anywhere;
+}
+
+.student-letter-stage small {
+  color: #5a6965;
+}
+
+.student-letter-stage--active {
+  border: 2px solid #285e53;
+  background: #edf4ef;
+}
+
+.student-letter-stage--active > span {
+  background: #285e53;
+}
+
+.student-letter-stage--locked {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #f3f0e9,
+      #f3f0e9 8px,
+      #ebe7de 8px,
+      #ebe7de 16px
+    );
+}
+
+.student-letter-prompt,
+.student-letter-progress,
+.student-letter-feedback,
+.student-letter-comparison {
+  margin-top: 1rem;
+  padding: clamp(0.9rem, 2vw, 1.35rem);
+  border: 1px solid rgba(23, 56, 49, 0.18);
+  border-radius: 1rem;
+  background: #fffdf8;
+  box-shadow: 0 0.6rem 1.8rem rgba(23, 56, 49, 0.08);
+}
+
+.student-letter-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.student-letter-prompt h2,
+.student-letter-prompt p,
+.student-letter-progress h2,
+.student-letter-feedback h2,
+.student-letter-comparison h2 {
+  margin-block: 0.2rem;
+}
+
+.student-letter-complete {
+  padding: 0.65rem 0.8rem;
+  border: 2px solid #285e53;
+  border-radius: 0.6rem;
+  color: #173831;
+  background: #e5f2e9;
+  font-weight: 800;
+}
+
+.student-letter-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 0.72fr);
+  align-items: start;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.student-letter-workspace__viewer {
+  min-width: 0;
+}
+
+.student-letter-workspace__viewer .letter-region-selector {
+  width: 100%;
+}
+
+.student-letter-metadata {
+  position: sticky;
+  top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(23, 56, 49, 0.18);
+  border-radius: 1rem;
+  background: #fffdf8;
+  box-shadow: 0 0.6rem 1.8rem rgba(23, 56, 49, 0.08);
+}
+
+.student-letter-metadata h2 {
+  margin-top: 0;
+}
+
+.student-letter-metadata__form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.student-letter-metadata__form label {
+  display: grid;
+  gap: 0.3rem;
+  font-weight: 800;
+}
+
+.student-letter-metadata input,
+.student-letter-metadata select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #78918a;
+  border-radius: 0.45rem;
+  color: #173831;
+  background: #fff;
+}
+
+.student-letter-metadata input {
+  text-transform: uppercase;
+}
+
+.student-letter-metadata__form p {
+  margin: 0;
+  color: #526660;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.student-letter-progress dl,
+.student-letter-feedback dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.65rem;
+  margin-block: 1rem;
+}
+
+.student-letter-progress dl > div,
+.student-letter-feedback dl > div {
+  padding: 0.7rem;
+  border: 1px solid #d2d9d5;
+  border-left: 5px solid #687873;
+  border-radius: 0.55rem;
+  background: #f7f5ef;
+}
+
+.student-letter-progress dt,
+.student-letter-feedback dt {
+  color: #526660;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.student-letter-progress dd,
+.student-letter-feedback dd {
+  margin: 0.15rem 0 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+}
+
+.student-letter-progress__actions,
+.student-letter-comparison__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.student-letter-progress__actions .begin-button {
+  min-height: 2.8rem;
+  border: 0;
+}
+
+.student-letter-progress__notice {
+  margin-bottom: 0;
+  color: #6b4c20;
+  font-weight: 700;
+}
+
+.student-letter-comparison > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.student-letter-comparison__controls button {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #285e53;
+  border-radius: 0.55rem;
+  color: #173831;
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.student-letter-comparison__controls button[aria-pressed='true'] {
+  color: #fff;
+  background: #285e53;
+}
+
+.student-letter-comparison__panels {
+  width: min(100%, 52rem);
+  margin: 1rem auto 0;
+}
+
+.student-letter-comparison__panels--side-by-side {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+}
+
+.student-letter-comparison__panel {
+  min-width: 0;
+  margin: 0;
+}
+
+.student-letter-comparison__panel figcaption {
+  display: grid;
+  gap: 0.15rem;
+  margin-bottom: 0.4rem;
+}
+
+.student-letter-comparison__panel figcaption span {
+  color: #526660;
+  font-size: 0.82rem;
+}
+
+.student-letter-comparison__stage {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #285e53;
+  border-radius: 0.7rem;
+  background: #292c2a;
+}
+
+.student-letter-comparison__stage img,
+.student-letter-comparison__stage svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.student-letter-comparison__stage img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.student-letter-comparison__stage svg {
+  color: #197f91;
+}
+
+.student-letter-comparison__stage rect {
+  vector-effect: non-scaling-stroke;
+}
+
+.student-letter-comparison__stage text {
+  fill: #fff;
+  stroke: #173831;
+  stroke-width: 4;
+  paint-order: stroke;
+  font: 800 16px system-ui, sans-serif;
+}
+
+.student-letter-reference rect {
+  stroke: #197f91;
+  stroke-width: 3;
+}
+
+.student-letter-selection rect {
+  fill: rgba(184, 82, 43, 0.14);
+  stroke: #b84f2b;
+  stroke-width: 4;
+}
+
+.student-letter-region--matched rect {
+  stroke-dasharray: none;
+}
+
+.student-letter-selection.student-letter-region--student-only rect {
+  stroke-dasharray: 14 5 3 5;
+}
+
+.student-letter-region--mismatch rect {
+  stroke: #7d3d90;
+  stroke-dasharray: 2 7;
+}
+
+.student-letter-reference.student-letter-region--missed rect {
+  stroke: #0d6f80;
+  stroke-dasharray: 10 5;
+}
+
+.student-letter-comparison__legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.55rem;
+  padding: 0;
+  list-style: none;
+}
+
+.student-letter-comparison__legend li {
+  padding: 0.65rem;
+  border: 2px solid #687873;
+  border-radius: 0.5rem;
+  background: #f7f5ef;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.student-letter-comparison__legend [data-category='missed'] {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #f7f5ef,
+      #f7f5ef 7px,
+      #dcecef 7px,
+      #dcecef 11px
+    );
+}
+
+.student-letter-comparison__legend [data-category='student-only'] {
+  border: 4px double #b84f2b;
+}
+
+.student-letter-comparison__legend [data-category='mismatch'] {
+  border-style: dotted;
+}
+
+.student-letter-feedback dl > [data-category='matched'] {
+  border-left-style: solid;
+  border-left-color: #285e53;
+}
+
+.student-letter-feedback dl > [data-category='missed'] {
+  border-left-color: #197f91;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #f7f5ef,
+      #f7f5ef 8px,
+      #e3eff1 8px,
+      #e3eff1 12px
+    );
+}
+
+.student-letter-feedback dl > [data-category='student-only'] {
+  border-left: 5px double #b84f2b;
+}
+
+.student-letter-feedback dl > [data-category='mismatch'] {
+  border-left: 5px dotted #7d3d90;
+}
+
+.student-letter-feedback__mismatches {
+  padding-left: 1.25rem;
+}
+
+.student-letter-feedback__method {
+  margin-bottom: 0;
+  color: #526660;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.case-card__begin {
+  align-self: stretch;
+  min-height: 3.4rem;
+  border: 0;
+}
+
 @media (max-width: 960px) {
   .reference-editor__workspace {
     grid-template-columns: 1fr;
   }
 
   .reference-editor__metadata {
+    position: static;
+  }
+
+  .student-letter-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .student-letter-metadata {
     position: static;
   }
 }
@@ -2044,6 +2528,32 @@ h1 {
   .reference-editor__list-actions button,
   .reference-editor__export-controls > * {
     flex: 1 1 10rem;
+  }
+
+  .student-letter-investigation__header,
+  .student-letter-prompt,
+  .student-letter-comparison > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .student-letter-stages ol {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .student-letter-comparison__panels--side-by-side {
+    grid-template-columns: 1fr;
+  }
+
+  .student-letter-comparison__controls button,
+  .student-letter-progress__actions > * {
+    flex: 1 1 12rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-letter-stages ol {
+    grid-template-columns: 1fr;
   }
 }
 

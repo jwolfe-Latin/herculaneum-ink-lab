@@ -10,8 +10,8 @@ export function LetterRegionDemo() {
           <h1>Reusable Letter-Region Selection Tool</h1>
           <p>
             This hidden workspace demonstrates reusable selection behavior. It
-            is not an active RIB 785 student investigation and contains no
-            instructor-authored regions.
+            is separate from the RIB 785 student investigation and contains no
+            instructor-authored or saved student regions.
           </p>
         </div>
         <a className="control-button" href={publicAssetUrl('')}>

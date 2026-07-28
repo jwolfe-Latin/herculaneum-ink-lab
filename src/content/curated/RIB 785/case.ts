@@ -28,9 +28,31 @@ export const RIB_785_CASE = {
     'word-segmentation',
     'translation',
   ],
-  developmentStatus: 'in-development',
-  statusLabel: 'In Development',
-  enabled: false,
+  stageAvailability: [
+    {
+      activity: 'letter-identification',
+      label: 'Letter Identification',
+      status: 'available',
+    },
+    {
+      activity: 'transcription',
+      label: 'Transcription',
+      status: 'coming-later',
+    },
+    {
+      activity: 'word-segmentation',
+      label: 'Word Segmentation',
+      status: 'coming-later',
+    },
+    {
+      activity: 'translation',
+      label: 'Translation',
+      status: 'coming-later',
+    },
+  ],
+  developmentStatus: 'available',
+  statusLabel: 'Begin Investigation',
+  enabled: true,
   sourceImage: {
     publicPath: 'cases/RIB 785/source.png',
     width: 832,
@@ -144,8 +166,21 @@ export function validateRib785Case(
   ) {
     errors.push('RIB 785 source-image dimensions must be 832 × 1084.')
   }
-  if (investigation.developmentStatus !== 'in-development') {
-    errors.push('RIB 785 must remain in development for this milestone.')
+  if (investigation.developmentStatus !== 'available') {
+    errors.push('RIB 785 letter identification must be available.')
+  }
+  if (!investigation.enabled) {
+    errors.push('RIB 785 must be openable for letter identification.')
+  }
+  if (
+    investigation.stageAvailability[0]?.status !== 'available' ||
+    investigation.stageAvailability
+      .slice(1)
+      .some((stage) => stage.status !== 'coming-later')
+  ) {
+    errors.push(
+      'Only RIB 785 letter identification may be available.',
+    )
   }
   if (!investigation.letterReferenceAvailable) {
     errors.push('RIB 785 must advertise its reviewed letter reference.')

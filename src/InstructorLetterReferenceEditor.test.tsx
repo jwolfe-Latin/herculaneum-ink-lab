@@ -371,7 +371,7 @@ describe('Instructor Letter-Reference Editor', () => {
     expect(screen.getByText('600%')).toBeInTheDocument()
   })
 
-  it('keeps the editor absent from the student homepage and RIB 785 disabled', () => {
+  it('keeps the editor absent from the student homepage while RIB 785 opens only its student stage', () => {
     render(<App />)
 
     expect(
@@ -381,9 +381,9 @@ describe('Instructor Letter-Reference Editor', () => {
     ).not.toBeInTheDocument()
     expect(
       screen.getByRole('button', {
-        name: 'RIB 785: Funerary Inscription for Crescentinus: In Development',
+        name: 'RIB 785: Funerary Inscription for Crescentinus: Begin Investigation',
       }),
-    ).toBeDisabled()
+    ).toBeEnabled()
     expect(
       document.querySelector(
         'a[href*="letter-reference-editor"]',

@@ -1,8 +1,8 @@
 # RIB 785 curated case data
 
-RIB 785 remains **In Development** and disabled on the student homepage. This
-milestone imports reviewed instructor letter regions; it does not begin the
-student investigation.
+RIB 785 is available from the student homepage for **Letter Identification**
+only. Transcription, Word Segmentation, and Translation remain locked and
+labeled **Coming Later**.
 
 ## Permanent letter reference
 
@@ -46,8 +46,25 @@ JSON. Importing the permanent file into the repository does not replace,
 clear, or alter an existing browser draft. The permanent JSON is authoritative
 for future case development; the local draft remains an instructor work area.
 
-## Next milestone
+## Student letter-identification stage
 
-The next milestone may consume these reviewed regions in the RIB 785 student
-workflow. That work has not started. The case remains disabled until the
-remaining instructional workflow is deliberately implemented and reviewed.
+Student boxes use the reusable source-coordinate selector and require only an
+uppercase Latin letter plus line number 1–5. Before the first check, the
+permanent instructor reference is hidden and no expected letter or line totals
+are shown.
+
+Checking uses a `0.35` intersection-over-union threshold. Spatial candidates
+are paired from highest overlap downward, and each student or instructor
+region can be paired only once. Matching also requires the same label and line.
+Feedback remains categorical: Matched Letters, Missed Reference Letters,
+Student-Only Selections, and Label or Line Mismatches. No numerical score,
+percentage, grade, or pass/fail result is calculated.
+
+Student work is stored only in the current React session and is never written
+to `localStorage` or `sessionStorage`. The instructor editor's separate local
+draft remains unaffected.
+
+## Later stages
+
+Transcription is the next planned student stage, but it has not been built or
+unlocked. Word Segmentation and Translation also remain **Coming Later**.

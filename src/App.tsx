@@ -31,6 +31,7 @@ import { LATIN_TEXT_INVESTIGATIONS } from './investigationCatalog'
 import { LetterRegionDemo } from './LetterRegionDemo'
 import { InstructorLetterReferenceEditor } from './InstructorLetterReferenceEditor'
 import { InstructorLetterReferenceReview } from './InstructorLetterReferenceReview'
+import { Rib785LetterIdentification } from './Rib785LetterIdentification'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -1317,7 +1318,13 @@ function EvaluationResults({ metrics }: { metrics: EvaluationMetrics }) {
   )
 }
 
-function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
+function Home({
+  onBeginTutorial,
+  onBeginRib785,
+}: {
+  onBeginTutorial: () => void
+  onBeginRib785: () => void
+}) {
   return (
     <main className="platform-home">
       <header className="platform-header">
@@ -1402,12 +1409,24 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
                   <p>{investigation.shortDescription}</p>
                 </div>
                 <button
-                  className="placeholder-button"
+                  className={
+                    investigation.enabled
+                      ? 'begin-button case-card__begin'
+                      : 'placeholder-button'
+                  }
                   type="button"
                   disabled={!investigation.enabled}
                   aria-label={`${investigation.title}: ${investigation.statusLabel}`}
+                  onClick={
+                    investigation.id === 'RIB 785'
+                      ? onBeginRib785
+                      : undefined
+                  }
                 >
                   {investigation.statusLabel}
+                  {investigation.enabled && (
+                    <span aria-hidden="true">→</span>
+                  )}
                 </button>
               </article>
             ))}
@@ -1438,7 +1457,9 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
 
 function App() {
   const query = new URLSearchParams(window.location.search)
-  const [screen, setScreen] = useState<'home' | 'investigation'>('home')
+  const [screen, setScreen] = useState<
+    'home' | 'investigation' | 'rib-785-letter-identification'
+  >('home')
   if (query.get('dev') === 'letter-regions') {
     return <LetterRegionDemo />
   }
@@ -1458,9 +1479,24 @@ function App() {
   const teacherMode =
     query.get('teacher') === '1'
 
-  return screen === 'home' ? (
-    <Home onBeginTutorial={() => setScreen('investigation')} />
-  ) : (
+  if (screen === 'home') {
+    return (
+      <Home
+        onBeginTutorial={() => setScreen('investigation')}
+        onBeginRib785={() =>
+          setScreen('rib-785-letter-identification')
+        }
+      />
+    )
+  }
+  if (screen === 'rib-785-letter-identification') {
+    return (
+      <Rib785LetterIdentification
+        onReturnHome={() => setScreen('home')}
+      />
+    )
+  }
+  return (
     <Investigation
       onBack={() => setScreen('home')}
       teacherMode={teacherMode}

@@ -37,14 +37,36 @@ describe('investigation catalog architecture', () => {
     expect(HERCULANEUM_TUTORIAL.assetStorage).toBe('packaged-with-site')
   })
 
-  it('registers RIB 785 as the first disabled Latin investigation', () => {
+  it('registers RIB 785 with only letter identification available', () => {
     expect(LATIN_TEXT_INVESTIGATIONS).toHaveLength(1)
     expect(LATIN_TEXT_INVESTIGATIONS[0]).toMatchObject({
       id: 'RIB 785',
       language: 'Latin',
       sourceType: 'inscription',
-      developmentStatus: 'in-development',
-      enabled: false,
+      developmentStatus: 'available',
+      enabled: true,
     })
+    expect(LATIN_TEXT_INVESTIGATIONS[0].stageAvailability).toEqual([
+      {
+        activity: 'letter-identification',
+        label: 'Letter Identification',
+        status: 'available',
+      },
+      {
+        activity: 'transcription',
+        label: 'Transcription',
+        status: 'coming-later',
+      },
+      {
+        activity: 'word-segmentation',
+        label: 'Word Segmentation',
+        status: 'coming-later',
+      },
+      {
+        activity: 'translation',
+        label: 'Translation',
+        status: 'coming-later',
+      },
+    ])
   })
 })

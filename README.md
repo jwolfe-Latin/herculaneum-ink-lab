@@ -475,18 +475,15 @@ corner handles, deleted, undone, redone, cleared, shown, or hidden. The data
 is kept only in browser memory.
 
 The hidden development demonstration uses the approved 832 × 1084 RIB 785
-source image without adding instructor regions or exposing the case to
-students. Start the app and open:
+source image without adding instructor regions or changing student work.
+Start the app and open:
 
 `http://localhost:5173/herculaneum-ink-lab/?dev=letter-regions`
 
-The same component can later receive instructor regions or student regions
-for other inscriptions, papyri, parchment, and manuscripts. This milestone
-does not compare or score them. It includes no OCR or automatic letter
-recognition because selections must remain deliberate human observations.
-RIB 785 remains marked **In Development** and disabled on the student home
-screen until its later instructional stages and reviewed reference data are
-ready.
+The same component now supports the RIB 785 student letter-identification
+stage and can later support other inscriptions, papyri, parchment, and
+manuscripts. It includes no OCR or automatic letter recognition because
+selections must remain deliberate human observations.
 
 ## Instructor Letter-Reference Editor
 
@@ -548,16 +545,54 @@ JSON or the editor's case-keyed `localStorage` draft. The permanent JSON is the
 authoritative project data; the local draft remains separate instructor work.
 
 See `src/content/curated/RIB 785/README.md` for the case-specific validation
-record. RIB 785 remains **In Development** and unavailable to students. The
-student investigation is reserved for a later milestone.
+record.
+
+## Student Letter Identification
+
+Students enter RIB 785 from the **Latin Paleography Training** card on the
+normal homepage by choosing **Begin Investigation**. Only **Letter
+Identification** is active. Transcription, Word Segmentation, and Translation
+remain visibly labeled **Coming Later** and cannot be opened.
+
+In the active stage, a student chooses **Select Letter mode** and drags a box
+around one visible letter. The selected box can be moved, resized, deleted,
+undone, redone, cleared after confirmation, shown, or hidden. The student
+enters one uppercase Latin letter and assigns line 1–5. Visible V remains V
+and is not normalized to U. Navigate mode provides mouse, touch, stylus,
+trackpad, zoom, pan, and reset behavior using source-image coordinates.
+
+**Check Letter Identification** remains disabled until at least one box exists
+and every box has both a valid label and line number. Checking compares student
+boxes with the permanent instructor reference using a named
+intersection-over-union threshold of `0.35`. Candidate pairs are considered
+from strongest overlap downward, and each student and reference box may be
+used only once. A spatial pair is a match only when its letter and line also
+agree.
+
+The neutral feedback reports counts for Matched Letters, Missed Reference
+Letters, Student-Only Selections, and Label or Line Mismatches. It does not
+produce a percentage, grade, pass/fail result, or combined score. After
+checking, students may show or hide either layer, use overlay or side-by-side
+comparison, return to editing, revise their work, and check again.
+
+The stage can be marked complete only after a current check and with no label
+or line mismatches. Remaining missed or student-only regions require the
+explicit confirmation **Finish this stage with remaining differences?**.
+Completion does not unlock transcription during this milestone.
+
+Student letter work exists only in current browser memory. Refreshing or
+closing the page may clear it. The application warns before leaving, returning
+to the homepage, or starting over after work begins. It does not use
+`localStorage`, `sessionStorage`, accounts, cloud storage, or export for this
+stage.
 
 ## Current limitations
 
 - Student work is kept only in browser memory and is lost when the page is
   refreshed or closed.
 - The full image is used for scoring; there is no separate evaluation mask.
-- The application currently opens one sample case; there is no case-selection
-  screen.
+- RIB 785 currently includes only Letter Identification; its later language
+  stages are intentionally locked.
 - There are no saved student accounts, class reports, or exported results.
 - Reports can only be saved by printing to PDF; there is no JSON export or
   import.

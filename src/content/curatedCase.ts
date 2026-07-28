@@ -24,6 +24,13 @@ export type InvestigationDifficulty =
   | 'advanced'
 
 export type CuratedDevelopmentStatus = 'in-development' | 'available'
+export type CuratedStageStatus = 'available' | 'coming-later'
+
+export type CuratedStageAvailability = {
+  activity: ActivityType
+  label: string
+  status: CuratedStageStatus
+}
 
 export type CuratedSourceImage = {
   publicPath: string
@@ -95,6 +102,7 @@ export type CuratedInvestigation = {
   objectType: string
   language: string
   stages: ActivityType[]
+  stageAvailability: CuratedStageAvailability[]
   difficulty: InvestigationDifficulty
   estimatedMinutes: number
   developmentStatus: CuratedDevelopmentStatus
@@ -150,6 +158,18 @@ export function validateCuratedInvestigation(
     investigation.stages.some((stage) => !isActivityType(stage))
   ) {
     errors.push('Activity stages must contain only supported activity types.')
+  }
+  if (
+    investigation.stageAvailability.length !==
+      investigation.stages.length ||
+    investigation.stageAvailability.some(
+      (stage, index) =>
+        stage.activity !== investigation.stages[index],
+    )
+  ) {
+    errors.push(
+      'Stage availability must describe every activity in its approved order.',
+    )
   }
   if (
     !Number.isInteger(investigation.sourceImage.width) ||

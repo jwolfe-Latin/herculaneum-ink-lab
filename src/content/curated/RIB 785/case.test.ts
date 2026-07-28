@@ -99,10 +99,19 @@ describe('RIB 785 curated case data', () => {
     expect(RIB_785_CASE.imageSource.creditLine).not.toContain('RIB Online')
   })
 
-  it('keeps the case disabled while its workflow is incomplete', () => {
-    expect(RIB_785_CASE.developmentStatus).toBe('in-development')
-    expect(RIB_785_CASE.statusLabel).toBe('In Development')
-    expect(RIB_785_CASE.enabled).toBe(false)
+  it('opens only the completed letter-identification stage', () => {
+    expect(RIB_785_CASE.developmentStatus).toBe('available')
+    expect(RIB_785_CASE.statusLabel).toBe('Begin Investigation')
+    expect(RIB_785_CASE.enabled).toBe(true)
+    expect(RIB_785_CASE.stageAvailability[0]).toMatchObject({
+      activity: 'letter-identification',
+      status: 'available',
+    })
+    expect(
+      RIB_785_CASE.stageAvailability
+        .slice(1)
+        .every((stage) => stage.status === 'coming-later'),
+    ).toBe(true)
   })
 
   it('advertises the reviewed permanent letter-reference capability', () => {

@@ -39,6 +39,7 @@ type LetterRegionSelectorProps = {
   showLabels?: boolean
   visibleRegionIds?: ReadonlySet<string>
   zoomToRegionRequest?: { id: string; requestId: number } | null
+  studentFacing?: boolean
 }
 
 type RegionInteraction =
@@ -87,6 +88,7 @@ export function LetterRegionSelector({
   showLabels = true,
   visibleRegionIds,
   zoomToRegionRequest,
+  studentFacing = false,
 }: LetterRegionSelectorProps) {
   const viewerRef = useRef<HTMLDivElement>(null)
   const activePointers = useRef(new Map<number, Point>())
@@ -564,15 +566,27 @@ export function LetterRegionSelector({
     >
       <header className="letter-region-selector__header">
         <div>
-          <p className="eyebrow">Reusable source-image tool</p>
-          <h2 id="letter-region-selector-title">Letter-region selector</h2>
+          <p className="eyebrow">
+            {studentFacing ? 'Current tool' : 'Reusable source-image tool'}
+          </p>
+          <h2 id="letter-region-selector-title">
+            {studentFacing ? 'Select visible letters' : 'Letter-region selector'}
+          </h2>
           <p>
-            Select rectangular letter regions in source-image pixels. Regions
-            exist only in current browser memory.
+            {studentFacing
+              ? 'Choose Select Letter, then drag a box around one visible letter.'
+              : 'Select rectangular letter regions in source-image pixels. Regions exist only in current browser memory.'}
           </p>
         </div>
         <p className="letter-region-count" aria-live="polite">
-          {regions.length} {regions.length === 1 ? 'region' : 'regions'}
+          {regions.length}{' '}
+          {studentFacing
+            ? regions.length === 1
+              ? 'letter selected'
+              : 'letters selected'
+            : regions.length === 1
+              ? 'region'
+              : 'regions'}
         </p>
       </header>
 
@@ -779,9 +793,18 @@ export function LetterRegionSelector({
       </div>
 
       <p className="letter-region-help">
-        Minimum region size: {MIN_LETTER_REGION_SIZE} ×{' '}
-        {MIN_LETTER_REGION_SIZE} source-image pixels. Select a region to move,
-        resize, or delete it.
+        {studentFacing ? (
+          <>
+            Select a box to label, move, resize, or delete it. Your work stays
+            only in this browser tab.
+          </>
+        ) : (
+          <>
+            Minimum region size: {MIN_LETTER_REGION_SIZE} ×{' '}
+            {MIN_LETTER_REGION_SIZE} source-image pixels. Select a region to
+            move, resize, or delete it.
+          </>
+        )}
       </p>
     </section>
   )

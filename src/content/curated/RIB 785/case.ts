@@ -3,6 +3,11 @@ import {
   validateCuratedInvestigation,
   type CuratedInvestigation,
 } from '../../curatedCase'
+import {
+  RIB_785_LETTER_REFERENCE_ASSET_URL,
+  RIB_785_LETTER_REFERENCE_REGION_COUNT,
+  RIB_785_LETTER_REFERENCE_SOURCE_PATH,
+} from './letterReference'
 
 export const RIB_785_OFFICIAL_ID = 'RIB 785'
 export const RIB_785_PUBLIC_FOLDER = 'RIB 785'
@@ -31,6 +36,13 @@ export const RIB_785_CASE = {
     width: 832,
     height: 1084,
     format: 'png',
+  },
+  letterReferenceAvailable: true,
+  letterReference: {
+    sourcePath: RIB_785_LETTER_REFERENCE_SOURCE_PATH,
+    assetUrl: RIB_785_LETTER_REFERENCE_ASSET_URL,
+    schemaVersion: 1,
+    regionCount: RIB_785_LETTER_REFERENCE_REGION_COUNT,
   },
   diplomaticTranscription: `D M
 CRESCENTINV
@@ -134,6 +146,12 @@ export function validateRib785Case(
   }
   if (investigation.developmentStatus !== 'in-development') {
     errors.push('RIB 785 must remain in development for this milestone.')
+  }
+  if (!investigation.letterReferenceAvailable) {
+    errors.push('RIB 785 must advertise its reviewed letter reference.')
+  }
+  if (investigation.letterReference.regionCount !== 47) {
+    errors.push('RIB 785 letter reference must contain exactly 47 regions.')
   }
 
   return errors

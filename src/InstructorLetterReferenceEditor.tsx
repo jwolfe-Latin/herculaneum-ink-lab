@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { publicAssetUrl } from './assetPaths'
 import { RIB_785_CASE } from './content/curated/RIB 785/case'
+import { RIB_785_LETTER_REFERENCE_CONTEXT } from './content/curated/RIB 785/letterReference'
 import { LetterRegionSelector } from './LetterRegionSelector'
 import {
   LETTER_REFERENCE_UNCERTAINTIES,
@@ -11,27 +12,19 @@ import {
   parseLetterReferenceDraft,
   parseLetterReferenceJson,
   validateLetterReference,
-  type LetterReferenceContext,
 } from './letterReference'
 import type {
   LetterRegion,
   LetterRegionUncertainty,
 } from './letterRegions'
 
-const VALID_LINE_NUMBERS = [1, 2, 3, 4, 5] as const
+const VALID_LINE_NUMBERS =
+  RIB_785_LETTER_REFERENCE_CONTEXT.validLineNumbers
 const PERMANENT_REFERENCE_PATH =
   'src/content/curated/RIB 785/letter-reference.json'
 const EXPORT_FILENAME = 'RIB 785-letter-reference.json'
 
-const CONTEXT: LetterReferenceContext = {
-  caseId: RIB_785_CASE.id,
-  sourceSize: {
-    width: RIB_785_CASE.sourceImage.width,
-    height: RIB_785_CASE.sourceImage.height,
-  },
-  transcriptionLines: RIB_785_CASE.diplomaticTranscription.split('\n'),
-  validLineNumbers: VALID_LINE_NUMBERS,
-}
+const CONTEXT = RIB_785_LETTER_REFERENCE_CONTEXT
 
 function downloadJson(filename: string, value: unknown) {
   const blob = new Blob([`${JSON.stringify(value, null, 2)}\n`], {

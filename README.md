@@ -531,11 +531,25 @@ path:
 
 `src/content/curated/RIB 785/letter-reference.json`
 
-The browser cannot safely overwrite source-code files, so it only downloads
-the JSON. Codex can review and import that file in a later milestone. No
-reference regions have been generated automatically, and RIB 785 remains
-**In Development** and unavailable to students until the student workflow and
-reviewed reference set are ready.
+The reviewed export is now stored permanently at that path. It contains 47
+instructor-created regions for the 832 × 1084 source image. The stable IDs
+`letter-region-25`, `letter-region-26`, and `letter-region-27` were intentionally
+skipped and were not renumbered. The five ordered line readings match the
+diplomatic transcription and there are no acknowledged mismatches.
+
+The hidden read-only review is available at:
+
+`https://jwolfe-latin.github.io/herculaneum-ink-lab/?dev=letter-reference-review&case=RIB%20785`
+
+It displays the permanent regions over the source image, reports validation
+and line counts, and can filter the overlay by line. **Return to Editable
+Editor** opens the authoring workspace. The review never changes the permanent
+JSON or the editor's case-keyed `localStorage` draft. The permanent JSON is the
+authoritative project data; the local draft remains separate instructor work.
+
+See `src/content/curated/RIB 785/README.md` for the case-specific validation
+record. RIB 785 remains **In Development** and unavailable to students. The
+student investigation is reserved for a later milestone.
 
 ## Current limitations
 

@@ -32,6 +32,13 @@ export type CuratedSourceImage = {
   format: 'png'
 }
 
+export type CuratedLetterReference = {
+  sourcePath: string
+  assetUrl: string
+  schemaVersion: 1
+  regionCount: number
+}
+
 export type SimplifiedNotation = {
   missingText: string
   insecureLetter: string
@@ -93,6 +100,8 @@ export type CuratedInvestigation = {
   developmentStatus: CuratedDevelopmentStatus
   statusLabel: string
   sourceImage: CuratedSourceImage
+  letterReferenceAvailable: boolean
+  letterReference: CuratedLetterReference
   diplomaticTranscription: string
   normalizedInstructorReading: string
   wordSegmentationReference: string
@@ -156,6 +165,14 @@ export function validateCuratedInvestigation(
   ) {
     errors.push(
       'The source-image path must use the exact public folder name and source.png.',
+    )
+  }
+  if (
+    investigation.letterReferenceAvailable &&
+    investigation.letterReference.regionCount <= 0
+  ) {
+    errors.push(
+      'An available letter reference must contain at least one region.',
     )
   }
   if (

@@ -30,6 +30,7 @@ import { publicAssetUrl } from './assetPaths'
 import { LATIN_TEXT_INVESTIGATIONS } from './investigationCatalog'
 import { LetterRegionDemo } from './LetterRegionDemo'
 import { InstructorLetterReferenceEditor } from './InstructorLetterReferenceEditor'
+import { InstructorLetterReferenceReview } from './InstructorLetterReferenceReview'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -1446,6 +1447,12 @@ function App() {
     query.get('case') === 'RIB 785'
   ) {
     return <InstructorLetterReferenceEditor />
+  }
+  if (
+    query.get('dev') === 'letter-reference-review' &&
+    query.get('case') === 'RIB 785'
+  ) {
+    return <InstructorLetterReferenceReview />
   }
 
   const teacherMode =

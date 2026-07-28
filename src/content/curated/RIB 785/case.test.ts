@@ -104,4 +104,17 @@ describe('RIB 785 curated case data', () => {
     expect(RIB_785_CASE.statusLabel).toBe('In Development')
     expect(RIB_785_CASE.enabled).toBe(false)
   })
+
+  it('advertises the reviewed permanent letter-reference capability', () => {
+    expect(RIB_785_CASE.letterReferenceAvailable).toBe(true)
+    expect(RIB_785_CASE.letterReference).toMatchObject({
+      sourcePath:
+        'src/content/curated/RIB 785/letter-reference.json',
+      schemaVersion: 1,
+      regionCount: 47,
+    })
+    expect(RIB_785_CASE.letterReference.assetUrl).toMatch(
+      /letter-reference.*\.json$/,
+    )
+  })
 })

@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "caseId": "RIB 785",
+  "sourceImage": {
+    "width": 832,
+    "height": 1084
+  },
+  "exportedAt": "2026-07-28T18:34:00.683Z",
+  "regions": [
+    {
+      "id": "letter-region-1",
+      "x": 255.41945623037475,
+      "y": 193.00154930795344,
+      "width": 89.76248991510505,
+      "height": 117.08150858491962,
+      "uncertainty": "certain",
+      "label": "D",
+      "lineNumber": 1
+    },
+    {
+      "id": "letter-region-2",
+      "x": 477.874322541722,
+      "y": 196.90426626078408,
+      "width": 147.00229885613157,
+      "height": 115.78062278422095,
+      "uncertainty": "certain",
+      "label": "M",
+      "lineNumber": 1
+    },
+    {
+      "id": "letter-region-3",
+      "x": 117.5234175298685,
+      "y": 421.96096372426337,
+      "width": 79.35528440804647,
+      "height": 114.47967743278764,
+      "uncertainty": "certain",
+      "label": "C",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-4",
+      "x": 198.17958773861358,
+      "y": 421.96096372426337,
+      "width": 52.03620618749716,
+      "height": 115.78062278422101,
+      "uncertainty": "certain",
+      "label": "R",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-5",
+      "x": 250.21579392611073,
+      "y": 428.4655118292261,
+      "width": 55.938982691062506,
+      "height": 106.67430307786105,
+      "uncertainty": "certain",
+      "lineNumber": 2,
+      "label": "E"
+    },
+    {
+      "id": "letter-region-6",
+      "x": 303.55294546504126,
+      "y": 431.0672834306234,
+      "width": 54.638037339629136,
+      "height": 109.27607467925822,
+      "uncertainty": "certain",
+      "label": "S",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-7",
+      "x": 358.1909828046704,
+      "y": 432.36822878205675,
+      "width": 57.23986849176117,
+      "height": 104.07241237499426,
+      "uncertainty": "certain",
+      "label": "C",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-8",
+      "x": 419.33356824926227,
+      "y": 432.36822878205675,
+      "width": 49.434375035365065,
+      "height": 107.97512932782485,
+      "uncertainty": "certain",
+      "label": "E",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-9",
+      "x": 459.6616831290022,
+      "y": 434.970000383454,
+      "width": 93.6652068679357,
+      "height": 94.96615221936906,
+      "uncertainty": "certain",
+      "label": "N",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-10",
+      "x": 553.3268899969379,
+      "y": 432.36822878205675,
+      "width": 41.628941129703776,
+      "height": 104.07241237499426,
+      "uncertainty": "certain",
+      "label": "T",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-11",
+      "x": 588.4513425724138,
+      "y": 437.571831535586,
+      "width": 29.9207902712119,
+      "height": 93.66526641867046,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-12",
+      "x": 618.3721328436256,
+      "y": 434.970000383454,
+      "width": 66.34618819812113,
+      "height": 101.47064077359698,
+      "uncertainty": "certain",
+      "label": "N",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-13",
+      "x": 686.0192663931801,
+      "y": 432.36822878205675,
+      "width": 48.133429683931695,
+      "height": 113.17879163208903,
+      "uncertainty": "certain",
+      "label": "V",
+      "lineNumber": 2
+    },
+    {
+      "id": "letter-region-14",
+      "x": 101.91254971854589,
+      "y": 542.945129711279,
+      "width": 67.64707399881975,
+      "height": 96.26697846933303,
+      "uncertainty": "certain",
+      "label": "S",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-15",
+      "x": 173.46240022093104,
+      "y": 540.3433581098816,
+      "width": 72.85067675234902,
+      "height": 101.4706407735971,
+      "uncertainty": "certain",
+      "label": "V",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-16",
+      "x": 238.50764306761877,
+      "y": 542.9452488127484,
+      "width": 27.31901866981454,
+      "height": 93.6652068679357,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-17",
+      "x": 261.9239447846027,
+      "y": 548.148792015543,
+      "width": 66.34618819812107,
+      "height": 85.85977296227429,
+      "uncertainty": "certain",
+      "label": "X",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-18",
+      "x": 324.36741602989315,
+      "y": 546.847965765579,
+      "width": 24.717247068417294,
+      "height": 84.55882761084104,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-19",
+      "x": 355.58915165253836,
+      "y": 545.5470204141458,
+      "width": 49.434494136834644,
+      "height": 85.85977296227429,
+      "uncertainty": "certain",
+      "label": "T",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-20",
+      "x": 390.7136042280143,
+      "y": 542.9452488127484,
+      "width": 58.54075429245978,
+      "height": 91.06331616506884,
+      "uncertainty": "certain",
+      "label": "A",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-21",
+      "x": 446.65258691907684,
+      "y": 541.6443034613151,
+      "width": 66.34618819812113,
+      "height": 93.6652068679357,
+      "uncertainty": "certain",
+      "label": "N",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-22",
+      "x": 510.39700351580075,
+      "y": 542.9452488127484,
+      "width": 72.85067675234905,
+      "height": 96.26697846933291,
+      "uncertainty": "certain",
+      "label": "N",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-23",
+      "x": 578.0440179638857,
+      "y": 542.9452488127484,
+      "width": 36.42539792690923,
+      "height": 91.06331616506884,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-24",
+      "x": 604.0622103837364,
+      "y": 548.148792015543,
+      "width": 52.03614663676228,
+      "height": 87.16071831370778,
+      "uncertainty": "certain",
+      "label": "S",
+      "lineNumber": 3
+    },
+    {
+      "id": "letter-region-28",
+      "x": 108.41709782350856,
+      "y": 635.3095103292507,
+      "width": 74.15162210378242,
+      "height": 78.05433905661312,
+      "uncertainty": "certain",
+      "label": "X",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-29",
+      "x": 182.56871992729097,
+      "y": 640.5131726335147,
+      "width": 74.15162210378239,
+      "height": 72.85067675234905,
+      "uncertainty": "certain",
+      "label": "V",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-30",
+      "x": 255.41945623037475,
+      "y": 639.2122272820814,
+      "width": 24.71718751768259,
+      "height": 74.15162210378242,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-31",
+      "x": 276.23392679522664,
+      "y": 636.6104556806841,
+      "width": 32.52262142334388,
+      "height": 76.75339370517963,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-32",
+      "x": 307.4556624178719,
+      "y": 637.9112819306481,
+      "width": 33.82356677477725,
+      "height": 80.65622975947974,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-33",
+      "x": 372.50096481529437,
+      "y": 635.3095103292508,
+      "width": 76.75339370517969,
+      "height": 84.55882761084104,
+      "uncertainty": "certain",
+      "label": "V",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-34",
+      "x": 446.65258691907684,
+      "y": 640.5131726335147,
+      "width": 32.52268097407864,
+      "height": 78.05433905661312,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-35",
+      "x": 468.76794328462734,
+      "y": 639.2122272820814,
+      "width": 63.74441659672391,
+      "height": 78.05433905661312,
+      "uncertainty": "certain",
+      "label": "D",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-36",
+      "x": 527.3086975770872,
+      "y": 643.1149442349121,
+      "width": 66.34618819812113,
+      "height": 88.46154456367162,
+      "uncertainty": "certain",
+      "label": "A",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-37",
+      "x": 583.2476802681498,
+      "y": 640.5131726335147,
+      "width": 65.04524284668776,
+      "height": 87.16059921223837,
+      "uncertainty": "certain",
+      "label": "R",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-38",
+      "x": 639.1866629592123,
+      "y": 639.2122272820814,
+      "width": 41.628941129703776,
+      "height": 85.85977296227452,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-39",
+      "x": 673.0101701832548,
+      "y": 641.8139988834787,
+      "width": 55.93898269106262,
+      "height": 89.762489915105,
+      "uncertainty": "certain",
+      "label": "S",
+      "lineNumber": 4
+    },
+    {
+      "id": "letter-region-40",
+      "x": 107.1162120228099,
+      "y": 719.8683379400918,
+      "width": 66.34618819812114,
+      "height": 92.36438061797185,
+      "uncertainty": "certain",
+      "label": "P",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-41",
+      "x": 174.76328602162968,
+      "y": 726.3729455957891,
+      "width": 53.3371515389305,
+      "height": 94.96603311789966,
+      "uncertainty": "certain",
+      "label": "A",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-42",
+      "x": 208.5868527964069,
+      "y": 725.0720002443559,
+      "width": 46.83260343396785,
+      "height": 92.36426151650232,
+      "uncertainty": "certain",
+      "label": "T",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-43",
+      "x": 255.41945623037475,
+      "y": 727.6737718457531,
+      "width": 44.23077228183581,
+      "height": 87.16071831370778,
+      "uncertainty": "certain",
+      "label": "E",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-44",
+      "x": 291.8447946065493,
+      "y": 731.5764887985837,
+      "width": 66.34618819812107,
+      "height": 87.16071831370778,
+      "uncertainty": "certain",
+      "label": "R",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-45",
+      "x": 360.79281395680243,
+      "y": 727.6737718457531,
+      "width": 44.23083183257057,
+      "height": 88.46166366514115,
+      "uncertainty": "certain",
+      "label": "P",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-46",
+      "x": 405.023645789373,
+      "y": 731.5764887985837,
+      "width": 65.0452428466877,
+      "height": 89.7624899151051,
+      "uncertainty": "certain",
+      "label": "O",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-47",
+      "x": 468.76794328462734,
+      "y": 730.2756625486198,
+      "width": 59.84169964389321,
+      "height": 89.762489915105,
+      "uncertainty": "certain",
+      "label": "S",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-48",
+      "x": 529.910588279954,
+      "y": 739.3819227042451,
+      "width": 71.54973140091568,
+      "height": 80.65622975947974,
+      "uncertainty": "certain",
+      "label": "V",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-49",
+      "x": 597.557602728039,
+      "y": 738.0810964542811,
+      "width": 39.02716952830656,
+      "height": 83.25788225940767,
+      "uncertainty": "certain",
+      "label": "I",
+      "lineNumber": 5
+    },
+    {
+      "id": "letter-region-50",
+      "x": 633.9830006549482,
+      "y": 736.7801511028478,
+      "width": 62.44347124529054,
+      "height": 81.9570560094437,
+      "uncertainty": "certain",
+      "label": "T",
+      "lineNumber": 5
+    }
+  ],
+  "acknowledgedMismatches": []
+}

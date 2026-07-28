@@ -100,8 +100,9 @@ page also clears them.
 The home screen separates three student experiences:
 
 1. **Herculaneum Ink Tutorial** — the complete introductory Greek activity;
-2. **Latin Text Investigations** — disabled until curated Latin cases are
-   prepared by the instructor;
+2. **Latin Text Investigations** — contains instructor-curated Latin cases;
+   incomplete cases remain visibly marked **In Development** and cannot be
+   opened;
 3. **Experimental AI Workspace** — a disabled, isolated area reserved for
    future experiments.
 
@@ -112,10 +113,23 @@ although stage sequencing is not implemented yet. Transliteration is not a
 separate activity; future Latin transcription can normalize unfamiliar
 letterforms into ordinary Latin characters.
 
-Tutorial assets are permanently packaged with the website. Future curated
-Latin assets will also be permanently packaged. A future student-provided
+Tutorial assets and curated Latin source images are permanently packaged with
+the website. A future student-provided
 image should initially remain only in browser memory. Uploads and persistence
 are intentionally not implemented.
+
+### First curated Latin case
+
+`RIB 785` is the first curated Latin case. Its permanent public source image is
+stored at `public/cases/RIB 785/source.png`, and its approved metadata is stored
+at `src/content/curated/RIB 785/case.ts`. The official ID and public folder
+retain the exact instructor-assigned form `RIB 785`.
+
+The case card is visible under **Latin Text Investigations**, but it is marked
+**In Development** and cannot be opened. This milestone adds only the approved
+case data and the 832 × 1084 source image from Bruce's 1875 public-domain
+illustration. Letter identification is the next activity interface to be
+built.
 
 ## Herculaneum Ink Tutorial
 

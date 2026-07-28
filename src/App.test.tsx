@@ -187,14 +187,34 @@ describe('Ancient Texts Lab', () => {
     expect(screen.getByRole('button', { name: 'Likely Ink brush' })).toBeEnabled()
   })
 
-  it('keeps the Latin investigation placeholder disabled', () => {
+  it('shows RIB 785 under Latin investigations but prevents students from beginning it', () => {
     render(<App />)
 
     expect(
+      screen.getByRole('heading', {
+        name: 'RIB 785: Funerary Inscription for Crescentinus',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Inscription')).toBeInTheDocument()
+    expect(screen.getByText('Latin')).toBeInTheDocument()
+    expect(screen.getByText('Introductory')).toBeInTheDocument()
+    expect(screen.getByText('5 minutes')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'A Roman funerary inscription from Brougham, England.',
+      ),
+    ).toBeInTheDocument()
+    expect(
       screen.getByRole('button', {
-        name: 'First Latin Investigation — Coming Soon',
+        name: 'RIB 785: Funerary Inscription for Crescentinus: In Development',
       }),
     ).toBeDisabled()
+    expect(
+      document.querySelector('[data-case-id="RIB 785"]'),
+    ).toHaveAttribute(
+      'data-source-image',
+      '/herculaneum-ink-lab/cases/RIB%20785/source.png',
+    )
   })
 
   it('keeps the experimental AI workspace placeholder disabled', () => {

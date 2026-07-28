@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   ACTIVITY_TYPES,
   HERCULANEUM_TUTORIAL,
+  LATIN_TEXT_INVESTIGATIONS,
   isActivityType,
-  type CuratedInvestigation,
 } from './investigationCatalog'
 
 describe('investigation catalog architecture', () => {
@@ -37,25 +37,14 @@ describe('investigation catalog architecture', () => {
     expect(HERCULANEUM_TUTORIAL.assetStorage).toBe('packaged-with-site')
   })
 
-  it('allows a curated Latin case without mask-based scoring', () => {
-    const futureCase = {
-      id: 'future-case',
-      title: 'Future case',
-      shortDescription: 'Not yet populated',
-      sourceType: 'inscription',
+  it('registers RIB 785 as the first disabled Latin investigation', () => {
+    expect(LATIN_TEXT_INVESTIGATIONS).toHaveLength(1)
+    expect(LATIN_TEXT_INVESTIGATIONS[0]).toMatchObject({
+      id: 'RIB 785',
       language: 'Latin',
-      stages: [
-        'letter-identification',
-        'transcription',
-        'word-segmentation',
-        'translation',
-      ],
-      difficulty: 'introductory',
-      estimatedMinutes: 30,
+      sourceType: 'inscription',
+      developmentStatus: 'in-development',
       enabled: false,
-    } satisfies CuratedInvestigation
-
-    expect(futureCase).not.toHaveProperty('instructorComparison')
-    expect(futureCase.stages).toHaveLength(4)
+    })
   })
 })

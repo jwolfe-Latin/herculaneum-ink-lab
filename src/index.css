@@ -139,6 +139,68 @@ button {
   border-top: 0.4rem solid #a8492d;
 }
 
+.case-card-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.case-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(24, 47, 43, 0.16);
+  border-radius: 0.75rem;
+  background: #fffdf8;
+}
+
+.case-card__identifier {
+  margin: 0 0 0.35rem !important;
+  color: #8f4028 !important;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-card h3 {
+  margin: 0;
+  color: #173b35;
+  font-family: Georgia, serif;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1.2;
+}
+
+.case-card__metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 0.85rem 0 0;
+}
+
+.case-card__metadata div {
+  min-width: 5.5rem;
+}
+
+.case-card__metadata dt {
+  color: #697772;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.case-card__metadata dd {
+  margin: 0.15rem 0 0;
+  color: #29443e;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.case-card p:not(.case-card__identifier) {
+  margin-top: 0.8rem;
+  font-size: 0.92rem;
+}
+
 .experience-card--experimental {
   border-top: 0.4rem solid #637f8d;
 }

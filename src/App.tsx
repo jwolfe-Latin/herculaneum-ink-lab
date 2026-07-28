@@ -27,6 +27,7 @@ import {
 } from './investigationSession'
 import { StudentReport } from './StudentReport'
 import { publicAssetUrl } from './assetPaths'
+import { LATIN_TEXT_INVESTIGATIONS } from './investigationCatalog'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -1348,7 +1349,7 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
 
         <article className="experience-card experience-card--latin">
           <div>
-            <p className="experience-kicker">Coming Soon</p>
+            <p className="experience-kicker">Curated cases</p>
             <h2>Latin Text Investigations</h2>
             <p>
               Practice identifying letters, transcribing Latin texts, finding
@@ -1356,9 +1357,56 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
               instructor.
             </p>
           </div>
-          <button className="placeholder-button" type="button" disabled>
-            First Latin Investigation — Coming Soon
-          </button>
+          <div className="case-card-list" aria-label="Latin investigation cases">
+            {LATIN_TEXT_INVESTIGATIONS.map((investigation) => (
+              <article
+                className="case-card"
+                data-case-id={investigation.id}
+                data-source-image={publicAssetUrl(
+                  investigation.sourceImage.publicPath,
+                )}
+                key={investigation.id}
+              >
+                <div>
+                  <p className="case-card__identifier">{investigation.id}</p>
+                  <h3>{investigation.title}</h3>
+                  <dl className="case-card__metadata">
+                    <div>
+                      <dt>Source</dt>
+                      <dd>
+                        {investigation.sourceType[0].toUpperCase() +
+                          investigation.sourceType.slice(1)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Language</dt>
+                      <dd>{investigation.language}</dd>
+                    </div>
+                    <div>
+                      <dt>Level</dt>
+                      <dd>
+                        {investigation.difficulty[0].toUpperCase() +
+                          investigation.difficulty.slice(1)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Time</dt>
+                      <dd>{investigation.estimatedMinutes} minutes</dd>
+                    </div>
+                  </dl>
+                  <p>{investigation.shortDescription}</p>
+                </div>
+                <button
+                  className="placeholder-button"
+                  type="button"
+                  disabled={!investigation.enabled}
+                  aria-label={`${investigation.title}: ${investigation.statusLabel}`}
+                >
+                  {investigation.statusLabel}
+                </button>
+              </article>
+            ))}
+          </div>
         </article>
 
         <article className="experience-card experience-card--experimental">

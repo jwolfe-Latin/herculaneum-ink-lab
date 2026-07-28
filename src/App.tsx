@@ -1318,12 +1318,14 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
   return (
     <main className="platform-home">
       <header className="platform-header">
-        <p className="eyebrow">Instructor-guided workspace</p>
+        <p className="eyebrow">A Classical Languages Workspace</p>
         <h1 id="page-title">Ancient Texts Lab</h1>
-        <p className="platform-subtitle">Identify. Transcribe. Interpret.</p>
+        <p className="platform-subtitle">
+          Identify. Transcribe. Translate. Analyze.
+        </p>
         <p className="platform-introduction">
-          Explore source images and record observations using materials and
-          guidance selected by your instructor.
+          Learn the basics of paleography by analyzing real texts from the
+          ancient world.
         </p>
       </header>
 
@@ -1349,8 +1351,8 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
 
         <article className="experience-card experience-card--latin">
           <div>
-            <p className="experience-kicker">Curated cases</p>
-            <h2>Latin Text Investigations</h2>
+            <p className="experience-kicker">Annotated Texts</p>
+            <h2>Latin Paleography Training</h2>
             <p>
               Practice identifying letters, transcribing Latin texts, finding
               word boundaries, and translating sources selected by your

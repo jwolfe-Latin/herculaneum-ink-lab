@@ -2,7 +2,7 @@
 
 Ancient Texts Lab is an instructor-guided, browser-based workspace for
 identifying, transcribing, and interpreting ancient texts. Its subtitle is
-**Identify. Transcribe. Interpret.**
+**Identify. Transcribe. Translate. Analyze.**
 
 The current working activity is the **Herculaneum Ink Tutorial**. Students can
 inspect a papyrus image, label regions that may contain ink, and compare their
@@ -100,7 +100,7 @@ page also clears them.
 The home screen separates three student experiences:
 
 1. **Herculaneum Ink Tutorial** — the complete introductory Greek activity;
-2. **Latin Text Investigations** — contains instructor-curated Latin cases;
+2. **Latin Paleography Training** — contains instructor-curated Latin cases;
    incomplete cases remain visibly marked **In Development** and cannot be
    opened;
 3. **Experimental AI Workspace** — a disabled, isolated area reserved for
@@ -125,7 +125,7 @@ stored at `public/cases/RIB 785/source.png`, and its approved metadata is stored
 at `src/content/curated/RIB 785/case.ts`. The official ID and public folder
 retain the exact instructor-assigned form `RIB 785`.
 
-The case card is visible under **Latin Text Investigations**, but it is marked
+The case card is visible under **Latin Paleography Training**, but it is marked
 **In Development** and cannot be opened. This milestone adds only the approved
 case data and the 832 × 1084 source image from Bruce's 1875 public-domain
 illustration. Letter identification is the next activity interface to be

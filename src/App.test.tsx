@@ -142,13 +142,22 @@ describe('Ancient Texts Lab', () => {
     expect(
       screen.getByRole('heading', { name: 'Ancient Texts Lab' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Identify. Transcribe. Interpret.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Identify. Transcribe. Translate. Analyze.'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Learn the basics of paleography by analyzing real texts from the ancient world.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByText('A Classical Languages Workspace')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: 'Herculaneum Ink Tutorial' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { name: 'Latin Text Investigations' }),
+      screen.getByRole('heading', { name: 'Latin Paleography Training' }),
     ).toBeInTheDocument()
+    expect(screen.getByText('Annotated Texts')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: 'Experimental AI Workspace' }),
     ).toBeInTheDocument()

@@ -55,7 +55,7 @@ The curated case module stores these instructor-approved fields separately:
 ## Why the case is disabled
 
 This milestone adds permanent assets and metadata only. The case card appears
-under **Latin Text Investigations**, but the **In Development** control is
+under **Latin Paleography Training**, but the **In Development** control is
 disabled so students cannot enter a partial workflow.
 
 Letter identification is the next activity interface to be built. No

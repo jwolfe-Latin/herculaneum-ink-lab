@@ -30,6 +30,136 @@ button {
     linear-gradient(135deg, #f8f4ec 0%, #eee6d8 100%);
 }
 
+.platform-home {
+  min-height: 100vh;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(170, 77, 45, 0.14), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(31, 91, 80, 0.13), transparent 30%),
+    #f5f1e8;
+}
+
+.platform-header,
+.experience-grid {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+}
+
+.platform-header {
+  padding: clamp(1rem, 3vw, 2.5rem) 0 clamp(2rem, 5vw, 3.5rem);
+}
+
+.platform-header h1 {
+  max-width: none;
+  font-size: clamp(2.8rem, 8vw, 6.4rem);
+}
+
+.platform-subtitle {
+  margin: 0.8rem 0 0;
+  color: #9b4c2f;
+  font-family: Georgia, serif;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.platform-introduction {
+  max-width: 45rem;
+  margin: 1.25rem 0 0;
+  color: #4b5e59;
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.experience-card {
+  min-height: 21rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid rgba(24, 47, 43, 0.15);
+  border-radius: 1.25rem;
+  background: rgba(255, 253, 248, 0.92);
+  box-shadow: 0 1rem 2.6rem rgba(56, 45, 31, 0.08);
+}
+
+.experience-card--tutorial {
+  grid-row: span 2;
+  min-height: 43.25rem;
+  color: #fffdf8;
+  border-color: #173b35;
+  background:
+    linear-gradient(rgba(23, 59, 53, 0.91), rgba(23, 59, 53, 0.97)),
+    repeating-linear-gradient(
+      7deg,
+      transparent 0 21px,
+      rgba(242, 223, 183, 0.14) 22px 24px
+    );
+}
+
+.experience-card h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(1.65rem, 3vw, 2.45rem);
+  line-height: 1.08;
+}
+
+.experience-card p:not(.experience-kicker) {
+  max-width: 39rem;
+  margin: 1rem 0 0;
+  color: #4b5e59;
+  line-height: 1.65;
+}
+
+.experience-card--tutorial p:not(.experience-kicker) {
+  color: #dfe9e5;
+}
+
+.experience-kicker {
+  margin: 0 0 0.7rem;
+  color: #a8492d;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.experience-card--tutorial .experience-kicker {
+  color: #f1c996;
+}
+
+.experience-card--latin {
+  border-top: 0.4rem solid #a8492d;
+}
+
+.experience-card--experimental {
+  border-top: 0.4rem solid #637f8d;
+}
+
+.experience-note {
+  font-size: 0.9rem;
+}
+
+.placeholder-button {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px dashed rgba(24, 47, 43, 0.3);
+  border-radius: 0.6rem;
+  color: #596762;
+  background: #ebe7de;
+  font: inherit;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
 .hero {
   width: min(100%, 72rem);
   min-height: min(42rem, calc(100vh - 4rem));
@@ -915,6 +1045,16 @@ h1 {
 }
 
 @media (max-width: 760px) {
+  .experience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-card,
+  .experience-card--tutorial {
+    min-height: auto;
+    grid-row: auto;
+  }
+
   .hero {
     grid-template-columns: 1fr;
   }

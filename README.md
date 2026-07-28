@@ -1,13 +1,14 @@
-# Herculaneum Ink Lab
+# Ancient Texts Lab
 
-Herculaneum Ink Lab is a browser-based educational application about the
-ancient papyri of Herculaneum. Students can inspect a papyrus image, label
-regions that may contain ink, and compare their labels with an expert reference
-annotation.
+Ancient Texts Lab is an instructor-guided, browser-based workspace for
+identifying, transcribing, and interpreting ancient texts. Its subtitle is
+**Identify. Transcribe. Interpret.**
 
-Students can compare their work with the expert annotation as a translucent
-overlay or in synchronized side-by-side panels. This version does not include
-machine-learning predictions, student accounts, a database, or cloud storage.
+The current working activity is the **Herculaneum Ink Tutorial**. Students can
+inspect a papyrus image, label regions that may contain ink, and compare their
+labels with an expert reference annotation. Curated Latin investigations and
+an experimental AI workspace are represented architecturally but are not yet
+implemented.
 
 ## What you need
 
@@ -45,7 +46,7 @@ PowerShell to stop it.
 
 ## Use the investigation
 
-1. Select **Begin Investigation**.
+1. Select **Begin Tutorial**.
 2. Use **Navigate mode** to zoom or pan around the papyrus.
 3. Select **Label mode**, then paint with the **Likely Ink brush**.
 4. Use the eraser, Undo, Redo, Clear Labels, and brush-size control as needed.
@@ -93,6 +94,90 @@ The student identifier and report exist only in the current page's memory.
 They are not uploaded and are not written to local storage, session storage,
 cookies, analytics, or an external tracking service. Refreshing or closing the
 page also clears them.
+
+## Ancient Texts Lab Structure
+
+The home screen separates three student experiences:
+
+1. **Herculaneum Ink Tutorial** — the complete introductory Greek activity;
+2. **Latin Text Investigations** — disabled until curated Latin cases are
+   prepared by the instructor;
+3. **Experimental AI Workspace** — a disabled, isolated area reserved for
+   future experiments.
+
+The only supported activity types are `ink-identification`,
+`letter-identification`, `transcription`, `word-segmentation`, and
+`translation`. An investigation can declare an ordered list of these stages,
+although stage sequencing is not implemented yet. Transliteration is not a
+separate activity; future Latin transcription can normalize unfamiliar
+letterforms into ordinary Latin characters.
+
+Tutorial assets are permanently packaged with the website. Future curated
+Latin assets will also be permanently packaged. A future student-provided
+image should initially remain only in browser memory. Uploads and persistence
+are intentionally not implemented.
+
+## Herculaneum Ink Tutorial
+
+The Herculaneum tutorial is a short introduction to image navigation,
+annotation, comparison, and the role of human labels. It is the platform's
+only Greek text and remains separate from the main Latin investigations. Its
+single declared activity stage is `ink-identification`, and its source type is
+`papyrus`.
+
+All existing image loading, navigation, annotation, scoring,
+expert-reference, comparison, report, printing, and Start Over behavior is
+preserved. Its scoring methodology has not changed.
+
+## Curated Latin Investigations
+
+Future permanent Latin investigations can use inscriptions, papyri,
+parchment, manuscripts, or another source type. The general case model can
+store an id, title, description, source type, language, ordered activity
+stages, difficulty, estimated time, source image, optional instructor
+comparison data, normalized transcription, word segmentation, translation,
+uncertainty markers, credits, license, and enabled status.
+
+The case model does not require a reference mask or mask-based scoring. No
+Latin source, image, transcription, segmentation, translation, historical
+claim, credit, or license has been invented for the disabled placeholder.
+
+Future introductory transcription may use only simple notation:
+
+- square brackets for missing text;
+- a question mark for an insecure letter;
+- a dash for an unreadable character.
+
+Detailed Leiden conventions are outside the current scope.
+
+## Experimental AI Workspace
+
+The experimental workspace is architecturally separate from the tutorial and
+curated cases. It is disabled and contains no upload, model, prediction, OCR,
+handwriting recognition, transcription, translation, API, backend, or cloud
+storage functionality. If student-provided images are added later, their first
+implementation should keep them local to the browser.
+
+## Instructor-Guided Design
+
+The instructor supplies historical context, paleographic and epigraphic
+instruction, vocabulary, grammar, demonstrations, scaffolding, discussion, and
+feedback. The application supplies source images, image and response tools,
+instructor-provided comparison materials, optional metrics, and reports where
+appropriate.
+
+The platform is not an independent course, tutor, adaptive coach, grammar or
+vocabulary guide, or automated correction system.
+
+## Future Machine-Learning Integration
+
+Machine-learning integration will be designed separately from tutorials,
+curated cases, and temporary browser-local investigations. The likely first
+target is a probability map for probable writing or ink regions—not automatic
+transcription or translation.
+
+No machine-learning library, provider, server, model architecture, or external
+API has been selected or added.
 
 ## Run the tests
 
@@ -210,7 +295,7 @@ Start the application normally, then open:
 http://localhost:5173/?teacher=1
 ```
 
-Select **Begin Investigation**. The teacher panel is only enabled by this
+Select **Begin Tutorial**. The teacher panel is only enabled by this
 special address and does not appear in the normal student workflow.
 
 The panel lets you independently show or hide:
@@ -253,6 +338,8 @@ single overall score.
 ## Project map
 
 - `src/App.tsx` — student workflow and composition of the separate modules
+- `src/investigationCatalog.ts` — approved activity types and the separate
+  tutorial, curated-case, and experimental-workspace definitions
 - `src/caseData.ts` — case metadata, image loading, and reference validation
 - `src/coordinates.ts` — shared conversion between browser pointer positions
   and source-image pixels

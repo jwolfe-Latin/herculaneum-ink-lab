@@ -9,7 +9,7 @@ async function openInvestigation() {
   const user = userEvent.setup()
   render(<App />)
   await user.click(
-    screen.getByRole('button', { name: 'Begin Investigation' }),
+    screen.getByRole('button', { name: 'Begin Tutorial' }),
   )
   return user
 }
@@ -135,19 +135,29 @@ afterEach(() => {
   window.history.pushState({}, '', '/')
 })
 
-describe('Herculaneum Ink Lab', () => {
-  it('shows the application title and investigation button', () => {
+describe('Ancient Texts Lab', () => {
+  it('shows the platform title, subtitle, and three student experiences', () => {
     render(<App />)
 
     expect(
-      screen.getByRole('heading', { name: 'Herculaneum Ink Lab' }),
+      screen.getByRole('heading', { name: 'Ancient Texts Lab' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Identify. Transcribe. Interpret.')).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Herculaneum Ink Tutorial' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Begin Investigation' }),
+      screen.getByRole('heading', { name: 'Latin Text Investigations' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Experimental AI Workspace' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Begin Tutorial' }),
     ).toBeInTheDocument()
   })
 
-  it('opens the investigation screen', async () => {
+  it('opens the preserved Herculaneum tutorial', async () => {
     await openInvestigation()
 
     expect(
@@ -165,7 +175,7 @@ describe('Herculaneum Ink Lab', () => {
   it('supports keyboard activation of the investigation and mode controls', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const begin = screen.getByRole('button', { name: 'Begin Investigation' })
+    const begin = screen.getByRole('button', { name: 'Begin Tutorial' })
     begin.focus()
     await user.keyboard('{Enter}')
 
@@ -175,6 +185,26 @@ describe('Herculaneum Ink Lab', () => {
 
     expect(labelMode).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Likely Ink brush' })).toBeEnabled()
+  })
+
+  it('keeps the Latin investigation placeholder disabled', () => {
+    render(<App />)
+
+    expect(
+      screen.getByRole('button', {
+        name: 'First Latin Investigation — Coming Soon',
+      }),
+    ).toBeDisabled()
+  })
+
+  it('keeps the experimental AI workspace placeholder disabled', () => {
+    render(<App />)
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Experimental Workspace — Future Expansion',
+      }),
+    ).toBeDisabled()
   })
 
   it('keeps the expert reference hidden when an investigation begins', async () => {

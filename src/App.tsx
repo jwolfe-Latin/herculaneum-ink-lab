@@ -1313,27 +1313,71 @@ function EvaluationResults({ metrics }: { metrics: EvaluationMetrics }) {
   )
 }
 
-function Home({ onBegin }: { onBegin: () => void }) {
+function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
   return (
-    <main className="app-shell">
-      <section className="hero" aria-labelledby="page-title">
-        <div className="artifact" aria-hidden="true">
-          <div className="artifact__fragment" />
-          <span className="artifact__label">79 CE</span>
-        </div>
+    <main className="platform-home">
+      <header className="platform-header">
+        <p className="eyebrow">Instructor-guided workspace</p>
+        <h1 id="page-title">Ancient Texts Lab</h1>
+        <p className="platform-subtitle">Identify. Transcribe. Interpret.</p>
+        <p className="platform-introduction">
+          Explore source images and record observations using materials and
+          guidance selected by your instructor.
+        </p>
+      </header>
 
-        <div className="hero__content">
-          <p className="eyebrow">Ancient text • Modern discovery</p>
-          <h1 id="page-title">Herculaneum Ink Lab</h1>
-          <p className="introduction">
-            Investigate a papyrus buried by Mount Vesuvius. Look closely,
-            gather evidence, and help uncover words hidden for centuries.
-          </p>
-          <button className="begin-button" type="button" onClick={onBegin}>
-            Begin Investigation
+      <section className="experience-grid" aria-label="Student experiences">
+        <article className="experience-card experience-card--tutorial">
+          <div>
+            <p className="experience-kicker">Introductory tutorial</p>
+            <h2>Herculaneum Ink Tutorial</h2>
+            <p>
+              Practice identifying possible ink on a carbonized papyrus and
+              compare your annotations with an expert reference.
+            </p>
+          </div>
+          <button
+            className="begin-button"
+            type="button"
+            onClick={onBeginTutorial}
+          >
+            Begin Tutorial
             <span aria-hidden="true">→</span>
           </button>
-        </div>
+        </article>
+
+        <article className="experience-card experience-card--latin">
+          <div>
+            <p className="experience-kicker">Coming Soon</p>
+            <h2>Latin Text Investigations</h2>
+            <p>
+              Practice identifying letters, transcribing Latin texts, finding
+              word boundaries, and translating sources selected by your
+              instructor.
+            </p>
+          </div>
+          <button className="placeholder-button" type="button" disabled>
+            First Latin Investigation — Coming Soon
+          </button>
+        </article>
+
+        <article className="experience-card experience-card--experimental">
+          <div>
+            <p className="experience-kicker">Future Expansion</p>
+            <h2>Experimental AI Workspace</h2>
+            <p>
+              Analyze an instructor-approved image and compare human
+              observations with a future machine-generated prediction.
+            </p>
+            <p className="experience-note">
+              This disabled area is reserved for future student-provided images
+              and experimental prediction tools.
+            </p>
+          </div>
+          <button className="placeholder-button" type="button" disabled>
+            Experimental Workspace — Future Expansion
+          </button>
+        </article>
       </section>
     </main>
   )
@@ -1345,7 +1389,7 @@ function App() {
     new URLSearchParams(window.location.search).get('teacher') === '1'
 
   return screen === 'home' ? (
-    <Home onBegin={() => setScreen('investigation')} />
+    <Home onBeginTutorial={() => setScreen('investigation')} />
   ) : (
     <Investigation
       onBack={() => setScreen('home')}

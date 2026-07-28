@@ -358,6 +358,11 @@ single overall score.
 - `src/coordinates.ts` — shared conversion between browser pointer positions
   and source-image pixels
 - `src/viewerState.ts` — zoom, pan, reset state, and viewport bounds
+- `src/letterRegions.ts` — reusable typed letter-region data and source-pixel
+  geometry
+- `src/LetterRegionSelector.tsx` — reusable region creation and editing
+  interface
+- `src/LetterRegionDemo.tsx` — hidden development demonstration
 - `src/evaluation.ts` — annotation rasterization and metric calculations only
 - `src/investigationSession.ts` — documented in-memory report data structure
 - `src/StudentReport.tsx` — report rendering and print controls
@@ -440,6 +445,44 @@ metadata. Its result can describe a source-aligned probability map, model
 status, training-round identifier, and structured error information. There is
 deliberately no classifier implementation, model dependency, API, server, or
 persistence at this checkpoint.
+
+## Letter-Region Selection Architecture
+
+A letter region is a rectangle around one visible letterform in a source
+image. The reusable `LetterRegion` type is defined in
+`src/letterRegions.ts`. Every region has a unique ID plus `x`, `y`, `width`,
+and `height`. It can also hold a future Latin-character label, line number,
+uncertainty status, and instructor note. A rectangle works without any of
+those optional details.
+
+The rectangle measurements are stored in pixels from the original source
+image, not pixels on the screen. For example, `x: 0, y: 0` always means the
+source image's exact top-left corner. The selector uses the same shared
+coordinate conversion in `src/coordinates.ts` as the Herculaneum annotation
+viewer. Zoom and pan change only how the image and selection layer are
+displayed; they never rewrite the stored rectangle coordinates. This keeps
+regions aligned after zooming, panning, resetting, resizing, and tablet
+orientation changes.
+
+`src/LetterRegionSelector.tsx` owns the reusable interaction. Navigate mode
+supports zooming and panning. Select Letter mode creates rectangles in any
+drag direction and lets a selected rectangle be moved, resized with its
+corner handles, deleted, undone, redone, cleared, shown, or hidden. The data
+is kept only in browser memory.
+
+The hidden development demonstration uses the approved 832 × 1084 RIB 785
+source image without adding instructor regions or exposing the case to
+students. Start the app and open:
+
+`http://localhost:5173/herculaneum-ink-lab/?dev=letter-regions`
+
+The same component can later receive instructor regions or student regions
+for other inscriptions, papyri, parchment, and manuscripts. This milestone
+does not compare or score them. It includes no OCR or automatic letter
+recognition because selections must remain deliberate human observations.
+RIB 785 remains marked **In Development** and disabled on the student home
+screen until its later instructional stages and reviewed reference data are
+ready.
 
 ## Current limitations
 

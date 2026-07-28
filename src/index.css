@@ -1257,6 +1257,255 @@ h1 {
   }
 }
 
+.letter-region-demo {
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: var(--ink, #173831);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(184, 82, 43, 0.1), transparent 34rem),
+    #f4f0e8;
+}
+
+.letter-region-demo__header,
+.letter-region-selector {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+}
+
+.letter-region-demo__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.letter-region-demo__header h1,
+.letter-region-selector__header h2 {
+  margin-block: 0.2rem 0.5rem;
+}
+
+.letter-region-demo__header p,
+.letter-region-selector__header p {
+  max-width: 52rem;
+  margin-block: 0.35rem;
+}
+
+.letter-region-demo__header .control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.letter-region-selector {
+  padding: clamp(0.8rem, 2vw, 1.35rem);
+  border: 1px solid rgba(23, 56, 49, 0.18);
+  border-radius: 1.25rem;
+  background: #fffdf8;
+  box-shadow: 0 1rem 3rem rgba(23, 56, 49, 0.12);
+}
+
+.letter-region-selector__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.letter-region-count {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  color: #fff;
+  background: #285e53;
+  font-weight: 700;
+}
+
+.letter-region-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-block: 1rem;
+}
+
+.letter-region-toolbar button {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #285e53;
+  border-radius: 0.55rem;
+  color: #173831;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.letter-region-toolbar button[aria-pressed='true'] {
+  color: #fff;
+  background: #285e53;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.letter-region-toolbar button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.letter-region-toolbar button:focus-visible,
+.letter-region-layer rect[role='button']:focus-visible {
+  outline: 3px solid #ffbd5c;
+  outline-offset: 2px;
+}
+
+.letter-region-viewer {
+  position: relative;
+  height: min(64vh, 42rem);
+  min-height: 26rem;
+  overflow: hidden;
+  border: 2px solid #285e53;
+  border-radius: 0.8rem;
+  background: #292c2a;
+  overscroll-behavior: contain;
+  touch-action: none;
+  user-select: none;
+}
+
+.letter-region-viewer--navigate {
+  cursor: grab;
+}
+
+.letter-region-viewer--navigate:active {
+  cursor: grabbing;
+}
+
+.letter-region-viewer--select {
+  cursor: crosshair;
+}
+
+.letter-region-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.letter-region-stage > img,
+.letter-region-layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.letter-region-stage > img {
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.letter-region-layer {
+  overflow: visible;
+  touch-action: none;
+}
+
+.letter-region {
+  color: #ffcc6a;
+}
+
+.letter-region > rect {
+  fill: rgba(255, 204, 106, 0.18);
+  stroke: currentColor;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.letter-region > text {
+  fill: #fff;
+  stroke: #173831;
+  stroke-width: 3;
+  paint-order: stroke;
+  font: 700 12px system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.letter-region--selected {
+  color: #54e4ff;
+}
+
+.letter-region--selected > rect {
+  fill: rgba(84, 228, 255, 0.2);
+  stroke-dasharray: 6 4;
+}
+
+.letter-region circle {
+  fill: #fff;
+  stroke: #173831;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  cursor: nwse-resize;
+}
+
+.letter-region circle[data-handle='ne'],
+.letter-region circle[data-handle='sw'] {
+  cursor: nesw-resize;
+}
+
+.letter-region-draft {
+  fill: rgba(255, 204, 106, 0.22);
+  stroke: #ffcc6a;
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.letter-region-view-controls {
+  margin-top: 0.75rem;
+}
+
+.letter-region-help {
+  margin: 0.75rem 0 0;
+  color: #4d625d;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 760px) {
+  .letter-region-demo__header,
+  .letter-region-selector__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .letter-region-demo__header .control-button {
+    align-self: start;
+  }
+
+  .letter-region-viewer {
+    height: 60vh;
+    min-height: 22rem;
+  }
+
+  .letter-region-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .letter-region-toolbar button {
+    min-height: 3rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .letter-region-viewer {
+    height: 60vh;
+    min-height: 18rem;
+  }
+}
+
 @page {
   size: letter;
   margin: 0.45in;

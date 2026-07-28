@@ -28,6 +28,7 @@ import {
 import { StudentReport } from './StudentReport'
 import { publicAssetUrl } from './assetPaths'
 import { LATIN_TEXT_INVESTIGATIONS } from './investigationCatalog'
+import { LetterRegionDemo } from './LetterRegionDemo'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -1434,9 +1435,14 @@ function Home({ onBeginTutorial }: { onBeginTutorial: () => void }) {
 }
 
 function App() {
+  const query = new URLSearchParams(window.location.search)
   const [screen, setScreen] = useState<'home' | 'investigation'>('home')
+  if (query.get('dev') === 'letter-regions') {
+    return <LetterRegionDemo />
+  }
+
   const teacherMode =
-    new URLSearchParams(window.location.search).get('teacher') === '1'
+    query.get('teacher') === '1'
 
   return screen === 'home' ? (
     <Home onBeginTutorial={() => setScreen('investigation')} />

@@ -363,6 +363,10 @@ single overall score.
 - `src/LetterRegionSelector.tsx` — reusable region creation and editing
   interface
 - `src/LetterRegionDemo.tsx` — hidden development demonstration
+- `src/letterReference.ts` — instructor-reference ordering, comparison,
+  validation, draft, import, and export rules
+- `src/InstructorLetterReferenceEditor.tsx` — hidden RIB 785 instructor
+  authoring workspace
 - `src/evaluation.ts` — annotation rasterization and metric calculations only
 - `src/investigationSession.ts` — documented in-memory report data structure
 - `src/StudentReport.tsx` — report rendering and print controls
@@ -483,6 +487,55 @@ recognition because selections must remain deliberate human observations.
 RIB 785 remains marked **In Development** and disabled on the student home
 screen until its later instructional stages and reviewed reference data are
 ready.
+
+## Instructor Letter-Reference Editor
+
+The hidden instructor editor turns the reusable rectangle selector into an
+authoring workspace for official letter-reference data. It is not linked from
+the student homepage. To open the deployed RIB 785 editor, use:
+
+`https://jwolfe-latin.github.io/herculaneum-ink-lab/?dev=letter-reference-editor&case=RIB%20785`
+
+For local development, start the app and open:
+
+`http://localhost:5173/herculaneum-ink-lab/?dev=letter-reference-editor&case=RIB%20785`
+
+Choose **Select Letter mode**, then drag around one visible letter. The new
+rectangle is stored in pixels from the original 832 × 1084 image. Use the
+metadata panel to enter its Latin letter label, select inscription line 1–5,
+choose `certain`, `insecure`, `damaged`, or `unreadable`, and optionally add
+an instructor note. Uppercase V is kept as V and is never changed to U.
+
+The ordered review list groups regions by line. RIB 785 starts with automatic
+left-to-right ordering based on each rectangle's source-image `x` coordinate.
+Use **Earlier** or **Later** when a line needs a manual override, or return it
+to automatic order.
+
+After meaningful changes, the editor saves a case-keyed draft in this
+browser's `localStorage` and displays **Draft saved locally**. **Restore
+Draft** reloads that copy, and **Clear Local Draft** removes it. An existing
+draft is never overwritten without a warning. This persistence applies only
+to the hidden instructor editor; student activities still do not use browser
+storage.
+
+The transcription panel compares ordered region labels with the stored
+five-line diplomatic transcription. Spaces are ignored, but visible V is
+preserved. Mismatches are shown without changing or creating regions. A
+genuine discrepancy can be acknowledged, and that acknowledgment is recorded
+in the export.
+
+**Export Reference JSON** downloads validated data as
+`RIB 785-letter-reference.json`. **Generate Case Reference Data** downloads
+the same developer-ready format and identifies its intended permanent project
+path:
+
+`src/content/curated/RIB 785/letter-reference.json`
+
+The browser cannot safely overwrite source-code files, so it only downloads
+the JSON. Codex can review and import that file in a later milestone. No
+reference regions have been generated automatically, and RIB 785 remains
+**In Development** and unavailable to students until the student workflow and
+reviewed reference set are ready.
 
 ## Current limitations
 

@@ -32,7 +32,13 @@ type LetterRegionSelectorProps = {
   sourceImageAlt: string
   sourceSize: Size
   initialRegions?: LetterRegion[]
+  regions?: LetterRegion[]
   onRegionsChange?: (regions: LetterRegion[]) => void
+  selectedRegionId?: string | null
+  onSelectedRegionChange?: (regionId: string | null) => void
+  showLabels?: boolean
+  visibleRegionIds?: ReadonlySet<string>
+  zoomToRegionRequest?: { id: string; requestId: number } | null
 }
 
 type RegionInteraction =
@@ -74,29 +80,50 @@ export function LetterRegionSelector({
   sourceImageAlt,
   sourceSize,
   initialRegions = [],
+  regions: controlledRegions,
   onRegionsChange,
+  selectedRegionId: controlledSelectedId,
+  onSelectedRegionChange,
+  showLabels = true,
+  visibleRegionIds,
+  zoomToRegionRequest,
 }: LetterRegionSelectorProps) {
   const viewerRef = useRef<HTMLDivElement>(null)
   const activePointers = useRef(new Map<number, Point>())
   const viewRef = useRef<ViewState>(INITIAL_VIEW)
   const stageSizeRef = useRef<Size>(sourceSize)
   const nextRegionId = useRef(initialRegions.length + 1)
+  const lastZoomRequestId = useRef<number | null>(null)
 
   const [mode, setMode] = useState<'navigate' | 'select'>('navigate')
   const [view, setView] = useState(INITIAL_VIEW)
   const [stageSize, setStageSize] = useState(sourceSize)
-  const [regions, setRegions] = useState<LetterRegion[]>(initialRegions)
+  const [localRegions, setLocalRegions] =
+    useState<LetterRegion[]>(initialRegions)
   const [past, setPast] = useState<LetterRegion[][]>([])
   const [future, setFuture] = useState<LetterRegion[][]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [localSelectedId, setLocalSelectedId] = useState<string | null>(null)
   const [interaction, setInteraction] = useState<RegionInteraction | null>(
     null,
   )
   const [selectionsVisible, setSelectionsVisible] = useState(true)
+  const regions = controlledRegions ?? localRegions
+  const selectedId =
+    controlledSelectedId !== undefined
+      ? controlledSelectedId
+      : localSelectedId
+
+  const selectRegion = useCallback(
+    (regionId: string | null) => {
+      setLocalSelectedId(regionId)
+      onSelectedRegionChange?.(regionId)
+    },
+    [onSelectedRegionChange],
+  )
 
   const publishRegions = useCallback(
     (next: LetterRegion[]) => {
-      setRegions(next)
+      setLocalRegions(next)
       onRegionsChange?.(next)
     },
     [onRegionsChange],
@@ -209,9 +236,13 @@ export function LetterRegionSelector({
   const beginCreate = (event: ReactPointerEvent<SVGSVGElement>) => {
     if (mode !== 'select' || interaction) return
     const point = getSourcePoint(event)
-    const id = `letter-region-${nextRegionId.current}`
+    let id = `letter-region-${nextRegionId.current}`
+    while (regions.some((region) => region.id === id)) {
+      nextRegionId.current += 1
+      id = `letter-region-${nextRegionId.current}`
+    }
     event.currentTarget.setPointerCapture?.(event.pointerId)
-    setSelectedId(null)
+    selectRegion(null)
     setInteraction({
       kind: 'create',
       pointerId: event.pointerId,
@@ -226,7 +257,7 @@ export function LetterRegionSelector({
     region: LetterRegion,
   ) => {
     event.stopPropagation()
-    setSelectedId(region.id)
+    selectRegion(region.id)
     if (mode !== 'select' || interaction) return
     const point = getSourcePoint(
       event as unknown as ReactPointerEvent<SVGSVGElement>,
@@ -254,7 +285,7 @@ export function LetterRegionSelector({
     )
     const layer = event.currentTarget.ownerSVGElement
     layer?.setPointerCapture?.(event.pointerId)
-    setSelectedId(region.id)
+    selectRegion(region.id)
     setInteraction({
       kind: 'resize',
       pointerId: event.pointerId,
@@ -307,7 +338,7 @@ export function LetterRegionSelector({
       if (created) {
         nextRegionId.current += 1
         commit([...regions, created])
-        setSelectedId(created.id)
+        selectRegion(created.id)
       }
     } else {
       const finalRegion =
@@ -327,13 +358,13 @@ export function LetterRegionSelector({
               sourceSize,
             )
       if (!sameRegion(interaction.original, finalRegion)) {
-      commit(
-        regions.map((region) =>
-          region.id === interaction.original.id
+        commit(
+          regions.map((region) =>
+            region.id === interaction.original.id
               ? finalRegion
-            : region,
-        ),
-      )
+              : region,
+          ),
+        )
       }
     }
     setInteraction(null)
@@ -345,7 +376,7 @@ export function LetterRegionSelector({
     setFuture((current) => [regions, ...current])
     setPast((current) => current.slice(0, -1))
     publishRegions(previous)
-    setSelectedId(null)
+    selectRegion(null)
   }
 
   const redo = () => {
@@ -354,14 +385,14 @@ export function LetterRegionSelector({
     setPast((current) => [...current, regions])
     setFuture((current) => current.slice(1))
     publishRegions(next)
-    setSelectedId(null)
+    selectRegion(null)
   }
 
   const deleteSelected = useCallback(() => {
     if (!selectedId) return
     commit(regions.filter((region) => region.id !== selectedId))
-    setSelectedId(null)
-  }, [commit, regions, selectedId])
+    selectRegion(null)
+  }, [commit, regions, selectRegion, selectedId])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -383,7 +414,7 @@ export function LetterRegionSelector({
       window.confirm('Clear all letter selections? This cannot be undone.')
     ) {
       commit([])
-      setSelectedId(null)
+      selectRegion(null)
     }
   }
 
@@ -480,6 +511,51 @@ export function LetterRegionSelector({
   const handleRadius =
     (16 * sourceSize.width) /
     Math.max(1, stageSize.width * view.scale)
+
+  useEffect(() => {
+    if (!zoomToRegionRequest) return
+    if (lastZoomRequestId.current === zoomToRegionRequest.requestId) return
+    lastZoomRequestId.current = zoomToRegionRequest.requestId
+    const region = regions.find(
+      (candidate) => candidate.id === zoomToRegionRequest.id,
+    )
+    if (!region) return
+    selectRegion(region.id)
+    const rect = viewerRef.current?.getBoundingClientRect()
+    if (!rect?.width || !rect.height) return
+
+    const regionStageWidth =
+      (region.width / sourceSize.width) * stageSizeRef.current.width
+    const regionStageHeight =
+      (region.height / sourceSize.height) * stageSizeRef.current.height
+    const scale = Math.min(
+      MAX_SCALE,
+      Math.max(
+        MIN_SCALE,
+        Math.min(
+          (rect.width * 0.65) / Math.max(1, regionStageWidth),
+          (rect.height * 0.65) / Math.max(1, regionStageHeight),
+        ),
+      ),
+    )
+    const centerX =
+      ((region.x + region.width / 2) / sourceSize.width) *
+      stageSizeRef.current.width
+    const centerY =
+      ((region.y + region.height / 2) / sourceSize.height) *
+      stageSizeRef.current.height
+    updateView({
+      scale,
+      x: -(centerX - stageSizeRef.current.width / 2) * scale,
+      y: -(centerY - stageSizeRef.current.height / 2) * scale,
+    })
+  }, [
+    regions,
+    selectRegion,
+    sourceSize,
+    updateView,
+    zoomToRegionRequest,
+  ])
 
   return (
     <section
@@ -593,7 +669,12 @@ export function LetterRegionSelector({
             onPointerCancel={() => setInteraction(null)}
           >
             {selectionsVisible &&
-              displayedRegions.map((region, index) => {
+              displayedRegions
+                .filter(
+                  (region) =>
+                    !visibleRegionIds || visibleRegionIds.has(region.id),
+                )
+                .map((region, index) => {
                 const selected = selectedId === region.id
                 return (
                   <g
@@ -620,11 +701,13 @@ export function LetterRegionSelector({
                       onPointerDown={(event) =>
                         beginMove(event, region)
                       }
-                      onFocus={() => setSelectedId(region.id)}
+                      onFocus={() => selectRegion(region.id)}
                     />
-                    <text x={region.x + 3} y={region.y + 12}>
-                      {region.label || index + 1}
-                    </text>
+                    {showLabels && (
+                      <text x={region.x + 3} y={region.y + 12}>
+                        {region.label || index + 1}
+                      </text>
+                    )}
                     {selected &&
                       HANDLES.map((handle) => {
                         const point = handlePosition(region, handle)

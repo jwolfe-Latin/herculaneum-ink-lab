@@ -62,7 +62,7 @@ describe('letter-region source geometry', () => {
       height: 25,
       label: 'A',
       lineNumber: 2,
-      uncertainty: 'uncertain',
+      uncertainty: 'insecure',
       note: 'Possible diagonal',
     }
     expect(
@@ -72,7 +72,7 @@ describe('letter-region source geometry', () => {
       y: 55,
       label: 'A',
       lineNumber: 2,
-      uncertainty: 'uncertain',
+      uncertainty: 'insecure',
       note: 'Possible diagonal',
     })
   })

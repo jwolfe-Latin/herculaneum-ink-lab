@@ -29,6 +29,7 @@ import { StudentReport } from './StudentReport'
 import { publicAssetUrl } from './assetPaths'
 import { LATIN_TEXT_INVESTIGATIONS } from './investigationCatalog'
 import { LetterRegionDemo } from './LetterRegionDemo'
+import { InstructorLetterReferenceEditor } from './InstructorLetterReferenceEditor'
 import {
   INITIAL_VIEW,
   MAX_SCALE,
@@ -1439,6 +1440,12 @@ function App() {
   const [screen, setScreen] = useState<'home' | 'investigation'>('home')
   if (query.get('dev') === 'letter-regions') {
     return <LetterRegionDemo />
+  }
+  if (
+    query.get('dev') === 'letter-reference-editor' &&
+    query.get('case') === 'RIB 785'
+  ) {
+    return <InstructorLetterReferenceEditor />
   }
 
   const teacherMode =

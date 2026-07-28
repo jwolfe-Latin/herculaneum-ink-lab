@@ -2,7 +2,8 @@ import type { Point, Size } from './coordinates'
 
 export type LetterRegionUncertainty =
   | 'certain'
-  | 'uncertain'
+  | 'insecure'
+  | 'damaged'
   | 'unreadable'
 
 export type LetterRegion = {
@@ -15,6 +16,7 @@ export type LetterRegion = {
   lineNumber?: number
   uncertainty?: LetterRegionUncertainty
   note?: string
+  manualOrder?: number
 }
 
 export type LetterRegionResizeHandle = 'nw' | 'ne' | 'sw' | 'se'

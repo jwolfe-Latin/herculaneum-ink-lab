@@ -65,7 +65,7 @@ describe('investigation catalog architecture', () => {
       {
         activity: 'translation',
         label: 'Translation',
-        status: 'coming-later',
+        status: 'available',
       },
     ])
   })

@@ -113,7 +113,9 @@ describe('RIB 785 student transcription', () => {
     expect(
       screen.getByRole('button', { name: 'Transcription' }),
     ).toBeEnabled()
-    expect(screen.getAllByText('Coming Later')).toHaveLength(1)
+    expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
+      'Locked',
+    )
   })
 
   it('shows five labeled fields and keeps checking disabled for blank lines', async () => {
@@ -304,7 +306,9 @@ describe('RIB 785 student transcription', () => {
     expect(screen.getAllByText('Transcription Complete').length).toBeGreaterThan(
       0,
     )
-    expect(screen.getAllByText('Coming Later')).toHaveLength(1)
+    expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
+      'Locked',
+    )
   })
 
   it('clears letter and transcription work with case-level Start Over', async () => {

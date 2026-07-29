@@ -122,11 +122,10 @@ describe('RIB 785 curated case data', () => {
       activity: 'word-segmentation',
       status: 'available',
     })
-    expect(
-      RIB_785_CASE.stageAvailability
-        .slice(3)
-        .every((stage) => stage.status === 'coming-later'),
-    ).toBe(true)
+    expect(RIB_785_CASE.stageAvailability[3]).toMatchObject({
+      activity: 'translation',
+      status: 'available',
+    })
   })
 
   it('advertises the reviewed permanent letter-reference capability', () => {

@@ -553,8 +553,8 @@ Students enter RIB 785 from the **Latin Paleography Training** card on the
 normal homepage by choosing **Begin Investigation**. Only **Letter
 Identification** is active when the case begins. Transcription unlocks only
 after Letter Identification is completed, and Word Segmentation unlocks only
-after Transcription is completed. Translation remains visibly labeled
-**Coming Later** and cannot be opened.
+after Transcription is completed. Translation unlocks only after Word
+Segmentation is completed.
 
 In the active stage, a student chooses **Select Letter mode** and drags a box
 around one visible letter. The selected box can be moved, resized, deleted,
@@ -621,7 +621,7 @@ pass/fail result is produced.
 Completion requires five nonblank lines and a current check. Remaining
 differences require the neutral confirmation **Finish this stage with
 remaining differences?**. Completing Transcription unlocks Word Segmentation;
-Translation remains locked and labeled **Coming Later**.
+Translation remains locked until Word Segmentation is complete.
 
 The student transcription, check history, comparison state, reveal state, and
 completion state are part of the same current-memory case session as Letter
@@ -660,20 +660,67 @@ confirmation **Finish this stage with remaining boundary differences?**.
 If the student returns to Transcription and changes it, the transcription
 version changes and any earlier segmentation comparison or completion state
 is invalidated. Re-completing Transcription creates a new spacing workspace
-from the revised student text. Translation remains locked and labeled
-**Coming Later**.
+from the revised student text. Translation remains locked until the revised
+Word Segmentation stage is completed.
 
 Word Segmentation shares the same current-memory case session as the earlier
-stages. Case-level **Start Over** clears all three stages. No student work is
+stages. Case-level **Start Over** clears all four stages. No student work is
 written to browser storage, an account, or a server.
+
+## Student Translation
+
+**Translation** unlocks only after Word Segmentation is complete, preserving
+the required sequence from Letter Identification through Transcription and
+Word Segmentation. Students can review the same source image, show or hide
+their letter selections, diplomatic transcription, and segmented Latin text,
+then write ordinary English prose in **Your Translation**. The field preserves
+the student's capitalization, punctuation, sentences, and wording without
+automatic correction, rewriting, vocabulary help, grammar hints, or machine
+translation.
+
+**Review Translation** remains disabled until the student enters nonblank
+text. Reviewing opens a structured workspace containing the student's
+translation, segmented Latin text, the separately stored normalized instructor
+reading, and the **Instructor Reference Translation**. Instructor material is
+hidden before the first review. It is presented as supporting classroom
+comparison, not as the only possible English wording.
+
+The software does not attempt semantic grading. It performs no exact-match,
+keyword, grammar, or automated accuracy judgment and produces no score,
+percentage, grade, or pass/fail result. Instead, students complete five
+student-controlled content checkboxes after comparing their work with the
+instructor or classroom guidance. The application never selects these items
+from the prose automatically. An optional **Revision note** records what the
+student revised or confirmed.
+
+Students can hide or show the instructor translation and normalized reading,
+return to editing, revise freely, and review again. The session records the
+translation text, review count, reveal states, checklist choices, optional
+note, completion state, and the versions of the earlier text work used by the
+current review. If Transcription or Word Segmentation changes, the typed
+translation is preserved when practical, but its review and completion become
+outdated. The message **Earlier text work has changed. Review your translation
+again.** appears, and another review is required.
+
+**Complete Translation Stage** requires nonblank text and at least one current
+review. If content checklist items remain unselected, the student must confirm
+**Complete this stage with unresolved content items?** under instructor
+direction. Stylistic differences never block completion automatically. After
+completion, a simple non-numerical summary lists all four stages as complete
+and displays **RIB 785 Investigation Complete**.
+
+Translation work remains only in the current browser-memory session.
+Case-level **Start Over** clears all four student stages and reveal states
+without changing permanent instructor data. The final combined printable
+report is intentionally reserved for a later milestone.
 
 ## Current limitations
 
 - Student work is kept only in browser memory and is lost when the page is
   refreshed or closed.
 - The full image is used for scoring; there is no separate evaluation mask.
-- RIB 785 currently includes Letter Identification, Transcription, and Word
-  Segmentation. Translation is intentionally locked.
+- RIB 785 includes the complete four-stage student sequence, but its combined
+  final report is not yet implemented.
 - There are no saved student accounts, class reports, or exported results.
 - Reports can only be saved by printing to PDF; there is no JSON export or
   import.

@@ -3078,6 +3078,249 @@ h1 {
   }
 }
 
+.student-translation-dependency-warning {
+  margin: 0;
+  border: 2px dashed var(--rust);
+  border-radius: 0.75rem;
+  background: #fff6ee;
+  padding: 0.85rem 1rem;
+  font-weight: 800;
+}
+
+.student-translation-evidence {
+  display: grid;
+  grid-template-columns: minmax(19rem, 1.05fr) minmax(20rem, 0.95fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.student-translation-prior-work,
+.student-translation-entry,
+.student-translation-comparison,
+.student-translation-self-review,
+.student-translation-complete {
+  border: 1px solid var(--line-color);
+  border-radius: 1.15rem;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 0.75rem 2rem rgba(32, 52, 45, 0.08);
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.student-translation-prior-work h2,
+.student-translation-entry h2,
+.student-translation-comparison h2,
+.student-translation-self-review h2,
+.student-translation-complete h2 {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.student-translation-prior-work__controls,
+.student-translation-comparison__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.student-translation-prior-work__controls button,
+.student-translation-comparison__controls button {
+  min-height: 2.75rem;
+  border: 1px solid var(--forest);
+  border-radius: 0.55rem;
+  background: #fff;
+  color: var(--forest);
+  font: inherit;
+  font-weight: 800;
+  padding: 0.55rem 0.75rem;
+}
+
+.student-translation-prior-work__controls button[aria-pressed='true'],
+.student-translation-comparison__controls button[aria-pressed='true'] {
+  background: var(--forest);
+  color: #fff;
+}
+
+.student-translation-prior-work > div + div {
+  margin-top: 1rem;
+}
+
+.student-translation-prior-work ol,
+.student-translation-comparison ol {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+
+.student-translation-prior-work li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  border-bottom: 1px dashed var(--line-color);
+  padding: 0.35rem 0;
+}
+
+.student-translation-prior-work li span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.student-translation-prior-work li strong,
+.student-translation-comparison li {
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.student-translation-entry,
+.student-translation-comparison,
+.student-translation-self-review,
+.student-translation-complete {
+  margin-top: 1.25rem;
+}
+
+.student-translation-entry label,
+.student-translation-self-review > label {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.student-translation-entry textarea,
+.student-translation-self-review textarea {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+  border: 2px solid #a6aca5;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.55;
+  padding: 0.75rem;
+}
+
+.student-translation-entry textarea {
+  min-height: 11rem;
+}
+
+.student-translation-character-count {
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+  text-align: right;
+}
+
+.student-translation-comparison > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.student-translation-comparison__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.student-translation-comparison__grid article {
+  min-width: 0;
+  border: 1px solid var(--line-color);
+  border-left: 0.4rem solid var(--forest);
+  border-radius: 0.7rem;
+  background: #f5f1e8;
+  padding: 0.9rem;
+}
+
+.student-translation-comparison__grid h3 {
+  margin: 0 0 0.6rem;
+}
+
+.student-translation-comparison__grid p {
+  overflow-wrap: anywhere;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.student-translation-self-review fieldset {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  border: 1px solid var(--line-color);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.student-translation-self-review legend {
+  padding: 0 0.35rem;
+  font-weight: 900;
+}
+
+.student-translation-self-review fieldset label {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+  min-height: 2.75rem;
+  border-bottom: 1px dashed var(--line-color);
+  padding: 0.45rem 0;
+}
+
+.student-translation-self-review input[type='checkbox'] {
+  width: 1.35rem;
+  height: 1.35rem;
+  margin: 0.1rem 0 0;
+  accent-color: var(--forest);
+}
+
+.student-translation-self-review > label span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.student-translation-complete {
+  border: 3px double var(--forest);
+  background:
+    linear-gradient(rgba(255, 253, 248, 0.94), rgba(255, 253, 248, 0.94)),
+    repeating-linear-gradient(
+      135deg,
+      var(--forest) 0 5px,
+      transparent 5px 10px
+    );
+}
+
+.student-translation-complete ul {
+  display: grid;
+  gap: 0.5rem;
+  list-style: '✓  ';
+  padding-left: 1.5rem;
+  font-weight: 800;
+}
+
+@media (max-width: 800px) {
+  .student-translation-evidence,
+  .student-translation-comparison__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-translation-comparison > header {
+    display: block;
+  }
+
+  .student-translation-comparison__controls {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-translation-prior-work li {
+    grid-template-columns: 1fr;
+  }
+}
+
 @page {
   size: letter;
   margin: 0.45in;

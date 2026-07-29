@@ -47,7 +47,7 @@ export const RIB_785_CASE = {
     {
       activity: 'translation',
       label: 'Translation',
-      status: 'coming-later',
+      status: 'available',
     },
   ],
   developmentStatus: 'available',
@@ -177,12 +177,10 @@ export function validateRib785Case(
     investigation.stageAvailability[0]?.status !== 'available' ||
     investigation.stageAvailability[1]?.status !== 'available' ||
     investigation.stageAvailability[2]?.status !== 'available' ||
-    investigation.stageAvailability
-      .slice(3)
-      .some((stage) => stage.status !== 'coming-later')
+    investigation.stageAvailability[3]?.status !== 'available'
   ) {
     errors.push(
-      'RIB 785 letter identification, transcription, and word segmentation must be available.',
+      'All four RIB 785 student stages must be available.',
     )
   }
   if (!investigation.letterReferenceAvailable) {

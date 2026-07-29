@@ -120,7 +120,9 @@ describe('RIB 785 student letter identification', () => {
     expect(stages.querySelectorAll('.student-letter-stage--locked')).toHaveLength(
       3,
     )
-    expect(screen.getAllByText('Coming Later')).toHaveLength(1)
+    expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
+      'Locked',
+    )
     expect(screen.getByText('Transcription').closest('li')).toHaveTextContent(
       'Locked',
     )
@@ -401,7 +403,9 @@ describe('RIB 785 student letter identification', () => {
     expect(
       screen.getAllByText('Letter Identification Complete').length,
     ).toBeGreaterThan(0)
-    expect(screen.getAllByText('Coming Later')).toHaveLength(1)
+    expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
+      'Locked',
+    )
   })
 
   it('clears only student session data after Start Over confirmation', async () => {

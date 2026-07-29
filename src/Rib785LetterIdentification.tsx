@@ -14,6 +14,7 @@ import {
 import type { LetterRegion } from './letterRegions'
 import { LetterRegionSelector } from './LetterRegionSelector'
 import { Rib785Transcription } from './Rib785Transcription'
+import { Rib785Translation } from './Rib785Translation'
 import { Rib785WordSegmentation } from './Rib785WordSegmentation'
 
 type ComparisonMode = 'editing' | 'overlay' | 'side-by-side'
@@ -21,6 +22,7 @@ type StudentStage =
   | 'letter-identification'
   | 'transcription'
   | 'word-segmentation'
+  | 'translation'
 
 const VALID_LINES = [1, 2, 3, 4, 5] as const
 
@@ -221,7 +223,11 @@ export function Rib785LetterIdentification({
     session.studentTranscription.some((line) => line.length > 0) ||
     session.transcriptionCheckCount > 0 ||
     session.studentSegmentation.some((line) => line.length > 0) ||
-    session.segmentationCheckCount > 0
+    session.segmentationCheckCount > 0 ||
+    session.studentTranslation.trim().length > 0 ||
+    session.translationReviewCount > 0 ||
+    session.translationChecklist.some(Boolean) ||
+    session.translationRevisionNote.trim().length > 0
   useEffect(() => {
     if (!hasWork) return
     const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -376,7 +382,9 @@ export function Rib785LetterIdentification({
               ? 'Letter Identification'
               : activeStage === 'transcription'
                 ? 'Transcription'
-                : 'Word Segmentation'}
+                : activeStage === 'word-segmentation'
+                  ? 'Word Segmentation'
+                  : 'Translation'}
           </p>
           <h1>{RIB_785_CASE.title}</h1>
           <p>{RIB_785_CASE.studentContext.text}</p>
@@ -408,19 +416,23 @@ export function Rib785LetterIdentification({
             const isLetterStage = index === 0
             const isTranscriptionStage = index === 1
             const isSegmentationStage = index === 2
+            const isTranslationStage = index === 3
             const isAvailable =
               isLetterStage ||
               (isTranscriptionStage &&
                 session.stageStatus === 'complete') ||
               (isSegmentationStage &&
-                session.transcriptionStageStatus === 'complete')
+                session.transcriptionStageStatus === 'complete') ||
+              (isTranslationStage &&
+                session.segmentationStageStatus === 'complete')
             const isCurrent =
               (isLetterStage &&
                 activeStage === 'letter-identification') ||
               (isTranscriptionStage &&
                 activeStage === 'transcription') ||
               (isSegmentationStage &&
-                activeStage === 'word-segmentation')
+                activeStage === 'word-segmentation') ||
+              (isTranslationStage && activeStage === 'translation')
 
             return (
               <li
@@ -443,7 +455,9 @@ export function Rib785LetterIdentification({
                           ? 'letter-identification'
                           : isTranscriptionStage
                             ? 'transcription'
-                            : 'word-segmentation',
+                            : isSegmentationStage
+                              ? 'word-segmentation'
+                              : 'translation',
                       )
                     }
                   >
@@ -475,7 +489,13 @@ export function Rib785LetterIdentification({
                             : isCurrent
                               ? 'Current Stage'
                               : 'Available'
-                        : 'Coming Later'}
+                        : session.segmentationStageStatus !== 'complete'
+                          ? 'Locked'
+                          : session.translationStageStatus === 'complete'
+                            ? 'Translation Complete'
+                            : isCurrent
+                              ? 'Current Stage'
+                              : 'Available'}
                 </small>
               </li>
             )
@@ -827,12 +847,20 @@ export function Rib785LetterIdentification({
             setActiveStage('letter-identification')
           }
         />
-      ) : (
+      ) : activeStage === 'word-segmentation' ? (
         <Rib785WordSegmentation
           session={session}
           setSession={setSession}
           onReturnToTranscription={() =>
             setActiveStage('transcription')
+          }
+        />
+      ) : (
+        <Rib785Translation
+          session={session}
+          setSession={setSession}
+          onReturnToWordSegmentation={() =>
+            setActiveStage('word-segmentation')
           }
         />
       )}

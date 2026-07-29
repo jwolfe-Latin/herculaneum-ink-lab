@@ -2,8 +2,8 @@
 
 RIB 785 is available from the student homepage for **Letter Identification**.
 **Transcription** unlocks after Letter Identification is completed. Word
-Segmentation unlocks after Transcription is completed. Translation remains
-locked and labeled **Coming Later**.
+Segmentation unlocks after Transcription is completed. Translation unlocks
+after Word Segmentation is completed.
 
 ## Permanent letter reference
 
@@ -88,6 +88,23 @@ The session records the transcription version used by segmentation. Changing
 and re-completing Transcription resets stale segmentation comparison state and
 starts from the revised student text.
 
-## Later stages
+## Student translation stage
 
-Translation remains **Coming Later**.
+Translation uses the student's completed diplomatic transcription and word
+segmentation as prior evidence. The permanent normalized reading and English
+translation stay separate in the curated case data and remain hidden until
+the student selects **Review Translation** after writing nonblank English
+prose.
+
+Review is a student- and instructor-guided comparison rather than semantic
+grading. The application does not infer ideas from the prose or calculate a
+score. Students control five content-review checkboxes and may keep an
+optional revision note. The session tracks review attempts, reveal states,
+checklist state, completion, and the transcription and segmentation versions
+used for the review.
+
+Changing either earlier text stage invalidates Translation review and
+completion while preserving the student's typed prose when practical.
+Completing Translation displays a four-stage case-completion summary. Student
+state remains browser-memory only, and the combined final report is reserved
+for a later milestone.

@@ -204,7 +204,9 @@ describe('RIB 785 student word segmentation', () => {
         }),
       ).toHaveValue(line)
     }
-    expect(screen.getAllByText('Coming Later')).toHaveLength(1)
+    expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
+      'Locked',
+    )
   })
 
   it('keeps the instructor segmentation hidden initially', () => {
@@ -395,10 +397,10 @@ describe('RIB 785 student word segmentation', () => {
     expect(state.segmentationStageStatus).toBe('in-progress')
   })
 
-  it('keeps Translation locked, developer tools hidden, and session storage empty', async () => {
+  it('keeps Translation gated, developer tools hidden, and session storage empty', async () => {
     await openWordSegmentation()
     expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
-      'Coming Later',
+      'Locked',
     )
     expect(document.querySelector('a[href*="dev"]')).not.toBeInTheDocument()
     expect(localStorage.length).toBe(0)

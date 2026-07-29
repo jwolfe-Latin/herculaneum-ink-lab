@@ -2,7 +2,8 @@
 
 RIB 785 is available from the student homepage for **Letter Identification**.
 **Transcription** unlocks after Letter Identification is completed. Word
-Segmentation and Translation remain locked and labeled **Coming Later**.
+Segmentation unlocks after Transcription is completed. Translation remains
+locked and labeled **Coming Later**.
 
 ## Permanent letter reference
 
@@ -73,6 +74,20 @@ boundaries remain distinct. Results use categorical line statuses rather than
 a score. Student text and comparison state remain in the same in-memory case
 session as student letter regions.
 
+## Student word-segmentation stage
+
+The student's completed five-line diplomatic transcription becomes the
+spacing workspace. Comparison uses boundary positions counted between
+non-space characters. Repeated or outside spaces are normalized, while changed
+letters, V/U differences, punctuation, order, and line boundaries remain
+significant. The instructor reference is the five-line inscriptional reading
+`D M / CRESCENTINVS / S VIXIT ANNIS / XVIII VIDARIS / PATER POSVIT`; it is
+hidden before the first check and is never expanded or normalized.
+
+The session records the transcription version used by segmentation. Changing
+and re-completing Transcription resets stale segmentation comparison state and
+starts from the revised student text.
+
 ## Later stages
 
-Word Segmentation and Translation remain **Coming Later**.
+Translation remains **Coming Later**.

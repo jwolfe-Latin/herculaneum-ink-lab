@@ -68,6 +68,13 @@ describe('RIB 785 curated case data', () => {
     )
     expect(RIB_785_CASE.wordSegmentationReference).toContain('CRESCENTINVS')
     expect(RIB_785_CASE.wordSegmentationReference).not.toContain('D(IS)')
+    expect(RIB_785_CASE.wordSegmentationReference.split('\n')).toEqual([
+      'D M',
+      'CRESCENTINVS',
+      'S VIXIT ANNIS',
+      'XVIII VIDARIS',
+      'PATER POSVIT',
+    ])
     expect(RIB_785_CASE.translation).toContain('lived eighteen years')
   })
 
@@ -99,7 +106,7 @@ describe('RIB 785 curated case data', () => {
     expect(RIB_785_CASE.imageSource.creditLine).not.toContain('RIB Online')
   })
 
-  it('advertises letter identification and transcription availability', () => {
+  it('advertises the first three student stages as available', () => {
     expect(RIB_785_CASE.developmentStatus).toBe('available')
     expect(RIB_785_CASE.statusLabel).toBe('Begin Investigation')
     expect(RIB_785_CASE.enabled).toBe(true)
@@ -111,9 +118,13 @@ describe('RIB 785 curated case data', () => {
       activity: 'transcription',
       status: 'available',
     })
+    expect(RIB_785_CASE.stageAvailability[2]).toMatchObject({
+      activity: 'word-segmentation',
+      status: 'available',
+    })
     expect(
       RIB_785_CASE.stageAvailability
-        .slice(2)
+        .slice(3)
         .every((stage) => stage.status === 'coming-later'),
     ).toBe(true)
   })

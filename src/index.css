@@ -2845,6 +2845,233 @@ h1 {
   }
 }
 
+.student-segmentation-workspace {
+  display: grid;
+  grid-template-columns: minmax(19rem, 1.05fr) minmax(20rem, 0.95fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.student-segmentation-entry,
+.student-segmentation-comparison,
+.student-segmentation-review {
+  border: 1px solid var(--line-color);
+  border-radius: 1.15rem;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 0.75rem 2rem rgba(32, 52, 45, 0.08);
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.student-segmentation-entry header h2,
+.student-segmentation-comparison h2,
+.student-segmentation-review h2 {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.student-segmentation-fields {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.student-segmentation-fields label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.student-segmentation-fields textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.25rem;
+  resize: vertical;
+  border: 2px solid #a6aca5;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: var(--ink);
+  font: 700 1.05rem/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 0.75rem;
+}
+
+.student-segmentation-fields textarea[aria-invalid='true'] {
+  border-style: dashed;
+  border-width: 3px;
+  border-color: var(--rust);
+  background: repeating-linear-gradient(
+    135deg,
+    #fff 0 8px,
+    rgba(172, 72, 40, 0.08) 8px 16px
+  );
+}
+
+.student-segmentation-fields small {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.student-segmentation-warning {
+  margin: 1rem 0 0;
+  border: 2px dashed var(--rust);
+  border-radius: 0.65rem;
+  background: #fff6ee;
+  padding: 0.75rem;
+  font-weight: 800;
+}
+
+.student-segmentation-comparison,
+.student-segmentation-review {
+  margin-top: 1.25rem;
+}
+
+.student-segmentation-comparison > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.student-segmentation-comparison__lines {
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.student-segmentation-comparison__lines > li {
+  border: 1px solid var(--line-color);
+  border-left: 0.45rem solid var(--forest);
+  border-radius: 0.75rem;
+  padding: 0.9rem;
+}
+
+.student-segmentation-comparison__lines
+  > li[data-changed-letters='true'] {
+  border-left-color: var(--rust);
+  border-left-style: dashed;
+}
+
+.student-segmentation-comparison__lines h3 {
+  margin: 0 0 0.6rem;
+}
+
+.student-segmentation-comparison__lines dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.student-segmentation-comparison__lines dl div {
+  min-width: 0;
+  border-radius: 0.55rem;
+  background: #f5f1e8;
+  padding: 0.65rem;
+}
+
+.student-segmentation-comparison__lines dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.student-segmentation-comparison__lines dd {
+  overflow-wrap: anywhere;
+  margin: 0.35rem 0 0;
+  font: 700 1rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.student-segmentation-comparison__lines ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.student-segmentation-comparison__lines ul li {
+  border: 1px dashed var(--line-color);
+  border-radius: 0.45rem;
+  padding: 0.5rem;
+}
+
+.student-segmentation-boundary-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.student-segmentation-boundary-text > span {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.student-segmentation-boundary-text b,
+.student-segmentation-boundary-detail > span {
+  color: var(--rust);
+  font-size: 1.25em;
+  font-weight: 900;
+}
+
+.student-segmentation-boundary-detail {
+  color: var(--muted);
+  margin: 0.7rem 0 0;
+}
+
+.student-segmentation-review {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.7fr) minmax(20rem, 1.3fr);
+  gap: 1rem;
+}
+
+.student-segmentation-review ol {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.student-segmentation-review li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.25rem 0.55rem;
+  border-bottom: 1px dashed var(--line-color);
+  padding: 0.45rem 0;
+}
+
+.student-segmentation-review li small {
+  grid-column: 2;
+  color: var(--muted);
+}
+
+@media (max-width: 800px) {
+  .student-segmentation-workspace,
+  .student-segmentation-review {
+    grid-template-columns: 1fr;
+  }
+
+  .student-segmentation-comparison > header {
+    display: block;
+  }
+
+  .student-segmentation-comparison__lines ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .student-segmentation-comparison__lines dl,
+  .student-segmentation-comparison__lines ul {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 480px) {
   .student-letter-stages ol {
     grid-template-columns: 1fr;

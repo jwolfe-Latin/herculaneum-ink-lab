@@ -1,6 +1,7 @@
 import type { LetterIdentificationComparison } from './letterIdentificationComparison'
 import type { LetterRegion } from './letterRegions'
 import type { TranscriptionComparison } from './transcriptionComparison'
+import type { WordSegmentationComparison } from './wordSegmentationComparison'
 
 export type LetterIdentificationStageStatus =
   | 'in-progress'
@@ -32,6 +33,21 @@ export type LetterIdentificationSession = {
   transcriptionComparisonCurrent: boolean
   transcriptionReferenceRevealed: boolean
   transcriptionStageStatus: LetterIdentificationStageStatus
+  transcriptionVersion: number
+  studentSegmentation: [string, string, string, string, string]
+  segmentationSourceTranscription: [
+    string,
+    string,
+    string,
+    string,
+    string,
+  ]
+  segmentationSourceVersion: number | null
+  segmentationCheckCount: number
+  segmentationComparison: WordSegmentationComparison | null
+  segmentationComparisonCurrent: boolean
+  segmentationReferenceRevealed: boolean
+  segmentationStageStatus: LetterIdentificationStageStatus
 }
 
 export function createLetterIdentificationSession(
@@ -59,6 +75,15 @@ export function createLetterIdentificationSession(
     transcriptionComparisonCurrent: false,
     transcriptionReferenceRevealed: false,
     transcriptionStageStatus: 'in-progress',
+    transcriptionVersion: 0,
+    studentSegmentation: ['', '', '', '', ''],
+    segmentationSourceTranscription: ['', '', '', '', ''],
+    segmentationSourceVersion: null,
+    segmentationCheckCount: 0,
+    segmentationComparison: null,
+    segmentationComparisonCurrent: false,
+    segmentationReferenceRevealed: false,
+    segmentationStageStatus: 'in-progress',
   }
 }
 
@@ -81,6 +106,23 @@ export function snapshotLetterIdentificationSession(
             characters: line.characters.map((character) => ({
               ...character,
             })),
+          })),
+        }
+      : null,
+    studentSegmentation: [...session.studentSegmentation],
+    segmentationSourceTranscription: [
+      ...session.segmentationSourceTranscription,
+    ],
+    segmentationComparison: session.segmentationComparison
+      ? {
+          ...session.segmentationComparison,
+          lines: session.segmentationComparison.lines.map((line) => ({
+            ...line,
+            studentBoundaries: [...line.studentBoundaries],
+            referenceBoundaries: [...line.referenceBoundaries],
+            matchingBoundaries: [...line.matchingBoundaries],
+            missingBoundaries: [...line.missingBoundaries],
+            extraBoundaries: [...line.extraBoundaries],
           })),
         }
       : null,

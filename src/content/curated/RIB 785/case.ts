@@ -42,7 +42,7 @@ export const RIB_785_CASE = {
     {
       activity: 'word-segmentation',
       label: 'Word Segmentation',
-      status: 'coming-later',
+      status: 'available',
     },
     {
       activity: 'translation',
@@ -76,7 +76,8 @@ CRESCENTINUS VIXIT ANNIS
 XVIII VIDARIS
 PATER POSUIT`,
   wordSegmentationReference: `D M
-CRESCENTINVS VIXIT ANNIS
+CRESCENTINVS
+S VIXIT ANNIS
 XVIII VIDARIS
 PATER POSVIT`,
   translation:
@@ -175,12 +176,13 @@ export function validateRib785Case(
   if (
     investigation.stageAvailability[0]?.status !== 'available' ||
     investigation.stageAvailability[1]?.status !== 'available' ||
+    investigation.stageAvailability[2]?.status !== 'available' ||
     investigation.stageAvailability
-      .slice(2)
+      .slice(3)
       .some((stage) => stage.status !== 'coming-later')
   ) {
     errors.push(
-      'RIB 785 letter identification and transcription must be available.',
+      'RIB 785 letter identification, transcription, and word segmentation must be available.',
     )
   }
   if (!investigation.letterReferenceAvailable) {

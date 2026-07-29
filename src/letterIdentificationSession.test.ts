@@ -30,6 +30,15 @@ describe('letter-identification session data', () => {
       transcriptionComparisonCurrent: false,
       transcriptionReferenceRevealed: false,
       transcriptionStageStatus: 'in-progress',
+      transcriptionVersion: 0,
+      studentSegmentation: ['', '', '', '', ''],
+      segmentationSourceTranscription: ['', '', '', '', ''],
+      segmentationSourceVersion: null,
+      segmentationCheckCount: 0,
+      segmentationComparison: null,
+      segmentationComparisonCurrent: false,
+      segmentationReferenceRevealed: false,
+      segmentationStageStatus: 'in-progress',
     })
   })
 

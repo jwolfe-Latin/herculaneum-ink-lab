@@ -5,6 +5,7 @@ import type { LetterIdentificationSession } from './letterIdentificationSession'
 import { LetterRegionSelector } from './LetterRegionSelector'
 import {
   compareTranscription,
+  normalizeTranscriptionDisplay,
   type TranscriptionLineStatus,
 } from './transcriptionComparison'
 
@@ -80,6 +81,10 @@ export function Rib785Transcription({
         ...current,
         studentTranscription,
         transcriptionComparisonCurrent: false,
+        transcriptionVersion: current.transcriptionVersion + 1,
+        segmentationComparisonCurrent: false,
+        segmentationReferenceRevealed: false,
+        segmentationStageStatus: 'in-progress',
         transcriptionStageStatus:
           current.transcriptionStageStatus === 'complete'
             ? 'in-progress'
@@ -122,10 +127,31 @@ export function Rib785Transcription({
     ) {
       return
     }
-    setSession((current) => ({
-      ...current,
-      transcriptionStageStatus: 'complete',
-    }))
+    setSession((current) => {
+      const dependencyChanged =
+        current.segmentationSourceVersion !== current.transcriptionVersion
+      if (!dependencyChanged) {
+        return {
+          ...current,
+          transcriptionStageStatus: 'complete',
+        }
+      }
+      const startingLines = current.studentTranscription.map(
+        normalizeTranscriptionDisplay,
+      ) as LetterIdentificationSession['studentSegmentation']
+      return {
+        ...current,
+        transcriptionStageStatus: 'complete',
+        studentSegmentation: startingLines,
+        segmentationSourceTranscription: [...startingLines],
+        segmentationSourceVersion: current.transcriptionVersion,
+        segmentationCheckCount: 0,
+        segmentationComparison: null,
+        segmentationComparisonCurrent: false,
+        segmentationReferenceRevealed: false,
+        segmentationStageStatus: 'in-progress',
+      }
+    })
   }
 
   const toggleInstructorReference = () => {

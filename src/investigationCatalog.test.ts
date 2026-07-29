@@ -60,7 +60,7 @@ describe('investigation catalog architecture', () => {
       {
         activity: 'word-segmentation',
         label: 'Word Segmentation',
-        status: 'coming-later',
+        status: 'available',
       },
       {
         activity: 'translation',

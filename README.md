@@ -552,8 +552,9 @@ record.
 Students enter RIB 785 from the **Latin Paleography Training** card on the
 normal homepage by choosing **Begin Investigation**. Only **Letter
 Identification** is active when the case begins. Transcription unlocks only
-after Letter Identification is completed. Word Segmentation and Translation
-remain visibly labeled **Coming Later** and cannot be opened.
+after Letter Identification is completed, and Word Segmentation unlocks only
+after Transcription is completed. Translation remains visibly labeled
+**Coming Later** and cannot be opened.
 
 In the active stage, a student chooses **Select Letter mode** and drags a box
 around one visible letter. The selected box can be moved, resized, deleted,
@@ -619,21 +620,60 @@ pass/fail result is produced.
 
 Completion requires five nonblank lines and a current check. Remaining
 differences require the neutral confirmation **Finish this stage with
-remaining differences?**. Word Segmentation and Translation remain locked and
-labeled **Coming Later** even after Transcription is completed.
+remaining differences?**. Completing Transcription unlocks Word Segmentation;
+Translation remains locked and labeled **Coming Later**.
 
 The student transcription, check history, comparison state, reveal state, and
 completion state are part of the same current-memory case session as Letter
 Identification. They are cleared by case-level **Start Over** and are never
 written to `localStorage`, `sessionStorage`, an account, or a server.
 
+## Student Word Segmentation
+
+**Word Segmentation** unlocks only after the student completes Transcription.
+Its five fields are prepopulated from the student's completed diplomatic
+transcription—not from the instructor reference. Leading and trailing
+whitespace may be trimmed for safe display, but all five source lines and
+visible characters remain the student's own starting text.
+
+Students add or remove ordinary spaces to mark probable word boundaries.
+Every non-space character is checked against the completed transcription.
+Changing a letter, changing V to U, inserting punctuation, reordering letters,
+or expanding an abbreviation blocks **Check Word Segmentation** until the
+original character sequence is restored. `D M` therefore remains two visible
+abbreviations and `POSVIT` remains unchanged.
+
+The reusable comparison utility represents each proposed word boundary by its
+position between visible letters. For example, the boundaries in
+`S VIXIT ANNIS` occur after character 1 and character 6. Repeated spaces and
+outside spaces do not create extra boundaries. Results report Matching Word
+Boundaries, Missing Word Boundaries, Extra Word Boundaries, and Changed
+Letters for each source line without a percentage, grade, score, or pass/fail
+result.
+
+After checking, students may reveal or hide the instructor segmentation, hide
+their own segmentation, inspect visible `│` boundary markers, return to
+editing, revise, and check again. Completion requires a current check and no
+changed-letter errors. Remaining boundary differences require the neutral
+confirmation **Finish this stage with remaining boundary differences?**.
+
+If the student returns to Transcription and changes it, the transcription
+version changes and any earlier segmentation comparison or completion state
+is invalidated. Re-completing Transcription creates a new spacing workspace
+from the revised student text. Translation remains locked and labeled
+**Coming Later**.
+
+Word Segmentation shares the same current-memory case session as the earlier
+stages. Case-level **Start Over** clears all three stages. No student work is
+written to browser storage, an account, or a server.
+
 ## Current limitations
 
 - Student work is kept only in browser memory and is lost when the page is
   refreshed or closed.
 - The full image is used for scoring; there is no separate evaluation mask.
-- RIB 785 currently includes Letter Identification and Transcription. Word
-  Segmentation and Translation are intentionally locked.
+- RIB 785 currently includes Letter Identification, Transcription, and Word
+  Segmentation. Translation is intentionally locked.
 - There are no saved student accounts, class reports, or exported results.
 - Reports can only be saved by printing to PDF; there is no JSON export or
   import.

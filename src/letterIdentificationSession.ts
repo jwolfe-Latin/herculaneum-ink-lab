@@ -54,7 +54,6 @@ export type LetterIdentificationSession = {
   translationReviewCurrent: boolean
   translationInstructorReferenceRevealed: boolean
   translationNormalizedReadingRevealed: boolean
-  translationChecklist: [boolean, boolean, boolean, boolean, boolean]
   translationRevisionNote: string
   translationStageStatus: LetterIdentificationStageStatus
   translationSourceTranscriptionVersion: number | null
@@ -102,7 +101,6 @@ export function createLetterIdentificationSession(
     translationReviewCurrent: false,
     translationInstructorReferenceRevealed: false,
     translationNormalizedReadingRevealed: false,
-    translationChecklist: [false, false, false, false, false],
     translationRevisionNote: '',
     translationStageStatus: 'in-progress',
     translationSourceTranscriptionVersion: null,
@@ -134,7 +132,6 @@ export function snapshotLetterIdentificationSession(
         }
       : null,
     studentSegmentation: [...session.studentSegmentation],
-    translationChecklist: [...session.translationChecklist],
     segmentationSourceTranscription: [
       ...session.segmentationSourceTranscription,
     ],

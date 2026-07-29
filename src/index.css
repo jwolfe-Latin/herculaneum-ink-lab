@@ -3097,7 +3097,7 @@ h1 {
 .student-translation-prior-work,
 .student-translation-entry,
 .student-translation-comparison,
-.student-translation-self-review,
+.student-translation-revision-note,
 .student-translation-complete {
   border: 1px solid var(--line-color);
   border-radius: 1.15rem;
@@ -3109,7 +3109,7 @@ h1 {
 .student-translation-prior-work h2,
 .student-translation-entry h2,
 .student-translation-comparison h2,
-.student-translation-self-review h2,
+.student-translation-revision-note h2,
 .student-translation-complete h2 {
   margin: 0.15rem 0 0.65rem;
 }
@@ -3174,13 +3174,13 @@ h1 {
 
 .student-translation-entry,
 .student-translation-comparison,
-.student-translation-self-review,
+.student-translation-revision-note,
 .student-translation-complete {
   margin-top: 1.25rem;
 }
 
 .student-translation-entry label,
-.student-translation-self-review > label {
+.student-translation-revision-note > label {
   display: grid;
   gap: 0.4rem;
   margin-top: 1rem;
@@ -3189,7 +3189,7 @@ h1 {
 }
 
 .student-translation-entry textarea,
-.student-translation-self-review textarea {
+.student-translation-revision-note textarea {
   box-sizing: border-box;
   width: 100%;
   resize: vertical;
@@ -3243,42 +3243,6 @@ h1 {
   overflow-wrap: anywhere;
   margin: 0;
   white-space: pre-wrap;
-}
-
-.student-translation-self-review fieldset {
-  display: grid;
-  gap: 0.65rem;
-  margin-top: 1rem;
-  border: 1px solid var(--line-color);
-  border-radius: 0.75rem;
-  padding: 1rem;
-}
-
-.student-translation-self-review legend {
-  padding: 0 0.35rem;
-  font-weight: 900;
-}
-
-.student-translation-self-review fieldset label {
-  display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
-  gap: 0.65rem;
-  align-items: start;
-  min-height: 2.75rem;
-  border-bottom: 1px dashed var(--line-color);
-  padding: 0.45rem 0;
-}
-
-.student-translation-self-review input[type='checkbox'] {
-  width: 1.35rem;
-  height: 1.35rem;
-  margin: 0.1rem 0 0;
-  accent-color: var(--forest);
-}
-
-.student-translation-self-review > label span {
-  color: var(--muted);
-  font-weight: 600;
 }
 
 .student-translation-complete {

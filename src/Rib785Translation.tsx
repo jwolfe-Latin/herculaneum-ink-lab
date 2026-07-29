@@ -5,14 +5,6 @@ import type { LetterIdentificationSession } from './letterIdentificationSession'
 import { LetterRegionSelector } from './LetterRegionSelector'
 import { normalizeSegmentationDisplay } from './wordSegmentationComparison'
 
-const CONTENT_CHECKS = [
-  'I included that the inscription is dedicated to the spirits of the departed.',
-  'I identified Crescentinus as the person who died.',
-  'I included his age as eighteen years.',
-  'I identified Vidaris as his father.',
-  'I included that Vidaris set up the monument.',
-] as const
-
 const NORMALIZED_READING_LINES =
   RIB_785_CASE.normalizedInstructorReading.split('\n')
 
@@ -29,7 +21,6 @@ export function Rib785Translation({
   const [showTranscription, setShowTranscription] = useState(true)
   const [showSegmentation, setShowSegmentation] = useState(true)
   const canReview = session.studentTranslation.trim().length > 0
-  const checklistComplete = session.translationChecklist.every(Boolean)
 
   const updateTranslation = (value: string) => {
     setSession((current) => ({
@@ -61,27 +52,11 @@ export function Rib785Translation({
     setEditing(false)
   }
 
-  const updateChecklist = (index: number, checked: boolean) => {
-    setSession((current) => {
-      const translationChecklist = [
-        ...current.translationChecklist,
-      ] as LetterIdentificationSession['translationChecklist']
-      translationChecklist[index] = checked
-      return { ...current, translationChecklist }
-    })
-  }
-
   const finishStage = () => {
     if (
       !canReview ||
       session.translationReviewCount < 1 ||
       !session.translationReviewCurrent
-    ) {
-      return
-    }
-    if (
-      !checklistComplete &&
-      !window.confirm('Complete this stage with unresolved content items?')
     ) {
       return
     }
@@ -331,41 +306,22 @@ export function Rib785Translation({
 
       {session.translationReviewCount > 0 && (
         <section
-          className="student-translation-self-review"
-          aria-labelledby="student-translation-self-review-title"
+          className="student-translation-revision-note"
+          aria-labelledby="student-translation-revision-note-title"
         >
           <div>
-            <p className="eyebrow">Content self-review</p>
-            <h2 id="student-translation-self-review-title">
-              Review the ideas in your translation
+            <p className="eyebrow">Optional reflection</p>
+            <h2 id="student-translation-revision-note-title">
+              Revision Note
             </h2>
             <p>
-              Select each item yourself after comparing the translations or
-              discussing your work with your instructor.
+              What did you revise or confirm after comparing the translations?
             </p>
           </div>
-          <fieldset>
-            <legend>Content checklist</legend>
-            {CONTENT_CHECKS.map((label, index) => (
-              <label key={label}>
-                <input
-                  type="checkbox"
-                  checked={session.translationChecklist[index]}
-                  onChange={(event) =>
-                    updateChecklist(index, event.target.checked)
-                  }
-                />
-                <span>{label}</span>
-              </label>
-            ))}
-          </fieldset>
           <label>
-            Revision note
-            <span>
-              What did you revise or confirm after comparing the translations?
-            </span>
+            Revision Note
             <textarea
-              aria-label="Revision note"
+              aria-label="Revision Note"
               rows={4}
               value={session.translationRevisionNote}
               onChange={(event) =>
@@ -393,10 +349,6 @@ export function Rib785Translation({
           <div>
             <dt>Review attempts</dt>
             <dd>{session.translationReviewCount}</dd>
-          </div>
-          <div>
-            <dt>Content items selected</dt>
-            <dd>{session.translationChecklist.filter(Boolean).length} of 5</dd>
           </div>
           <div>
             <dt>Current review</dt>

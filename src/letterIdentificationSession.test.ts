@@ -45,7 +45,6 @@ describe('letter-identification session data', () => {
       translationReviewCurrent: false,
       translationInstructorReferenceRevealed: false,
       translationNormalizedReadingRevealed: false,
-      translationChecklist: [false, false, false, false, false],
       translationRevisionNote: '',
       translationStageStatus: 'in-progress',
       translationSourceTranscriptionVersion: null,

@@ -321,23 +321,22 @@ describe('RIB 785 student translation', () => {
     }
   })
 
-  it('shows five unchecked student-controlled self-review items after review', async () => {
+  it('never shows a content checklist or translation-review checkboxes', async () => {
     const user = userEvent.setup()
     render(<TranslationHarness />)
+    expect(
+      screen.queryByRole('group', { name: 'Content checklist' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
     await enterTranslation()
     await user.click(
       screen.getByRole('button', { name: 'Review Translation' }),
     )
-    const checklist = screen.getByRole('group', { name: 'Content checklist' })
-    const checkboxes = within(checklist).getAllByRole('checkbox')
-    expect(checkboxes).toHaveLength(5)
-    checkboxes.forEach((checkbox) => expect(checkbox).not.toBeChecked())
-    expect(checklist).toHaveTextContent(
-      'I included that the inscription is dedicated to the spirits of the departed.',
-    )
-    expect(checklist).toHaveTextContent(
-      'I included that Vidaris set up the monument.',
-    )
+    expect(
+      screen.queryByRole('group', { name: 'Content checklist' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
+    expect(screen.queryByText(/content items selected/i)).not.toBeInTheDocument()
   })
 
   it('allows reference controls, revision, re-review, and an optional note', async () => {
@@ -368,11 +367,16 @@ describe('RIB 785 student translation', () => {
       ' Revised.',
     )
     expect(sessionState().translationReviewCurrent).toBe(false)
+    expect(
+      screen.getByRole('button', {
+        name: 'Complete Translation Stage',
+      }),
+    ).toBeDisabled()
     await user.click(
       screen.getByRole('button', { name: 'Review Translation' }),
     )
     await user.type(
-      screen.getByRole('textbox', { name: 'Revision note' }),
+      screen.getByRole('textbox', { name: 'Revision Note' }),
       'I confirmed the age and relationship.',
     )
     expect(sessionState()).toMatchObject({
@@ -381,39 +385,33 @@ describe('RIB 785 student translation', () => {
     })
   })
 
-  it('requires review and confirms unresolved checklist items', async () => {
+  it('requires a current review and allows a blank revision note', async () => {
     const user = userEvent.setup()
     render(<TranslationHarness />)
-    await enterTranslation()
     const complete = screen.getByRole('button', {
       name: 'Complete Translation Stage',
     })
+    expect(complete).toBeDisabled()
+    await enterTranslation()
     expect(complete).toBeDisabled()
     await user.click(
       screen.getByRole('button', { name: 'Review Translation' }),
     )
     expect(complete).toBeEnabled()
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
-    await user.click(complete)
-    expect(confirm).toHaveBeenCalledWith(
-      'Complete this stage with unresolved content items?',
-    )
-    expect(screen.queryByText('Translation Complete')).not.toBeInTheDocument()
-    confirm.mockReturnValue(true)
+    expect(
+      screen.getByRole('textbox', { name: 'Revision Note' }),
+    ).toHaveValue('')
     await user.click(complete)
     expect(screen.getByText('Translation Complete')).toBeInTheDocument()
   })
 
-  it('allows stylistically different prose when all checklist items are selected', async () => {
+  it('allows stylistically different prose after a current review', async () => {
     const user = userEvent.setup()
     render(<TranslationHarness />)
     await enterTranslation('A student uses different English phrasing here.')
     await user.click(
       screen.getByRole('button', { name: 'Review Translation' }),
     )
-    for (const checkbox of screen.getAllByRole('checkbox')) {
-      await user.click(checkbox)
-    }
     await user.click(
       screen.getByRole('button', {
         name: 'Complete Translation Stage',
@@ -430,9 +428,6 @@ describe('RIB 785 student translation', () => {
     initial.translationReviewCount = 1
     initial.translationReviewCurrent = true
     render(<TranslationHarness initial={initial} />)
-    for (const checkbox of screen.getAllByRole('checkbox')) {
-      await user.click(checkbox)
-    }
     await user.click(
       screen.getByRole('button', {
         name: 'Complete Translation Stage',
@@ -490,11 +485,8 @@ describe('RIB 785 student translation', () => {
     await user.click(
       screen.getByRole('button', { name: 'Review Translation' }),
     )
-    await user.click(screen.getByRole('checkbox', {
-      name: /spirits of the departed/,
-    }))
     await user.type(
-      screen.getByRole('textbox', { name: 'Revision note' }),
+      screen.getByRole('textbox', { name: 'Revision Note' }),
       'A note.',
     )
     await user.click(screen.getByRole('button', { name: 'Start Over' }))
@@ -522,7 +514,10 @@ describe('RIB 785 student translation', () => {
       screen.getByRole('button', { name: 'Review Translation' }),
     )
     expect(container.querySelector('.student-translation-evidence')).toBeInTheDocument()
-    expect(screen.getByRole('group', { name: 'Content checklist' })).toBeInTheDocument()
+    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
+    expect(
+      screen.getByRole('textbox', { name: 'Revision Note' }),
+    ).toBeInTheDocument()
     await user.click(
       screen.getByRole('button', { name: 'Return to Editing' }),
     )

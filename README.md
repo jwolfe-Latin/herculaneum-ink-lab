@@ -687,27 +687,27 @@ comparison, not as the only possible English wording.
 
 The software does not attempt semantic grading. It performs no exact-match,
 keyword, grammar, or automated accuracy judgment and produces no score,
-percentage, grade, or pass/fail result. Instead, students complete five
-student-controlled content checkboxes after comparing their work with the
-instructor or classroom guidance. The application never selects these items
-from the prose automatically. An optional **Revision note** records what the
-student revised or confirmed.
+percentage, grade, or pass/fail result. The stage does not use a content
+checklist or substitute another set of prompts or automated checks. The
+instructor guides discussion and evaluates the quality of the translation. An
+optional **Revision Note** records what the student revised or confirmed and
+may remain blank.
 
 Students can hide or show the instructor translation and normalized reading,
 return to editing, revise freely, and review again. The session records the
-translation text, review count, reveal states, checklist choices, optional
-note, completion state, and the versions of the earlier text work used by the
-current review. If Transcription or Word Segmentation changes, the typed
+translation text, review count, reveal states, optional note, completion
+state, and the versions of the earlier text work used by the current review.
+If Transcription or Word Segmentation changes, the typed
 translation is preserved when practical, but its review and completion become
 outdated. The message **Earlier text work has changed. Review your translation
 again.** appears, and another review is required.
 
 **Complete Translation Stage** requires nonblank text and at least one current
-review. If content checklist items remain unselected, the student must confirm
-**Complete this stage with unresolved content items?** under instructor
-direction. Stylistic differences never block completion automatically. After
-completion, a simple non-numerical summary lists all four stages as complete
-and displays **RIB 785 Investigation Complete**.
+review. Editing the translation after review requires another review before
+completion. Stylistic differences and a blank Revision Note never block
+completion automatically. After completion, a simple non-numerical summary
+lists all four stages as complete and displays **RIB 785 Investigation
+Complete**.
 
 Translation work remains only in the current browser-memory session.
 Case-level **Start Over** clears all four student stages and reveal states

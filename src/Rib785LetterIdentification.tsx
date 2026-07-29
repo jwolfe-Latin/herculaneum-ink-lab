@@ -226,7 +226,6 @@ export function Rib785LetterIdentification({
     session.segmentationCheckCount > 0 ||
     session.studentTranslation.trim().length > 0 ||
     session.translationReviewCount > 0 ||
-    session.translationChecklist.some(Boolean) ||
     session.translationRevisionNote.trim().length > 0
   useEffect(() => {
     if (!hasWork) return

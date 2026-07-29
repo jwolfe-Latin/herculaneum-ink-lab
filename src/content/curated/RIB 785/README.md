@@ -98,10 +98,11 @@ prose.
 
 Review is a student- and instructor-guided comparison rather than semantic
 grading. The application does not infer ideas from the prose or calculate a
-score. Students control five content-review checkboxes and may keep an
-optional revision note. The session tracks review attempts, reveal states,
-checklist state, completion, and the transcription and segmentation versions
-used for the review.
+score, and it does not use a content checklist. Students may keep an optional
+revision note, which may remain blank. The session tracks review attempts,
+reveal states, completion, and the transcription and segmentation versions
+used for the review. Completing Translation requires a nonblank translation
+and a current review; editing after review requires another review.
 
 Changing either earlier text stage invalidates Translation review and
 completion while preserving the student's typed prose when practical.

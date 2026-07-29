@@ -90,16 +90,7 @@ export function Rib785WordSegmentation({
       return {
         ...current,
         studentSegmentation,
-        segmentationVersion: current.segmentationVersion + 1,
         segmentationComparisonCurrent: false,
-        translationReviewCurrent: false,
-        translationInstructorReferenceRevealed: false,
-        translationNormalizedReadingRevealed: false,
-        translationStageStatus: 'in-progress',
-        translationEarlierWorkChanged:
-          current.translationReviewCount > 0 ||
-          current.studentTranslation.trim().length > 0 ||
-          current.translationStageStatus === 'complete',
         segmentationStageStatus:
           current.segmentationStageStatus === 'complete'
             ? 'in-progress'
@@ -146,33 +137,10 @@ export function Rib785WordSegmentation({
     ) {
       return
     }
-    setSession((current) => {
-      const dependencyChanged =
-        current.translationSourceTranscriptionVersion !==
-          current.transcriptionVersion ||
-        current.translationSourceSegmentationVersion !==
-          current.segmentationVersion
-      return {
-        ...current,
-        segmentationStageStatus: 'complete',
-        translationSourceTranscriptionVersion:
-          current.transcriptionVersion,
-        translationSourceSegmentationVersion:
-          current.segmentationVersion,
-        translationReviewCurrent: dependencyChanged
-          ? false
-          : current.translationReviewCurrent,
-        translationInstructorReferenceRevealed: dependencyChanged
-          ? false
-          : current.translationInstructorReferenceRevealed,
-        translationNormalizedReadingRevealed: dependencyChanged
-          ? false
-          : current.translationNormalizedReadingRevealed,
-        translationStageStatus: dependencyChanged
-          ? 'in-progress'
-          : current.translationStageStatus,
-      }
-    })
+    setSession((current) => ({
+      ...current,
+      segmentationStageStatus: 'complete',
+    }))
   }
 
   const toggleInstructorReference = () => {

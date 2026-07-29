@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
@@ -7,11 +13,10 @@ import { RIB_785_CASE } from './content/curated/RIB 785/case'
 import { RIB_785_LETTER_REFERENCE } from './content/curated/RIB 785/letterReference'
 import {
   createLetterIdentificationSession,
+  snapshotLetterIdentificationSession,
   type LetterIdentificationSession,
 } from './letterIdentificationSession'
-import { Rib785Transcription } from './Rib785Transcription'
 import { Rib785Translation } from './Rib785Translation'
-import { Rib785WordSegmentation } from './Rib785WordSegmentation'
 
 const transcription = [
   'D M',
@@ -48,9 +53,6 @@ function seededSession(): LetterIdentificationSession {
     segmentationSourceVersion: 5,
     segmentationCheckCount: 1,
     segmentationStageStatus: 'complete',
-    segmentationVersion: 4,
-    translationSourceTranscriptionVersion: 5,
-    translationSourceSegmentationVersion: 4,
   }
 }
 
@@ -74,41 +76,9 @@ function TranslationHarness({
   )
 }
 
-function TranscriptionDependencyHarness() {
-  const initial = seededSession()
-  initial.studentTranslation = 'A student translation.'
-  initial.translationReviewCount = 1
-  initial.translationReviewCurrent = true
-  initial.translationStageStatus = 'complete'
-  const [session, setSession] = useState(initial)
-  return (
-    <>
-      <Rib785Transcription
-        session={session}
-        setSession={setSession}
-        onReturnToLetterIdentification={() => undefined}
-      />
-      <output data-testid="dependency-session">{JSON.stringify(session)}</output>
-    </>
-  )
-}
-
-function SegmentationDependencyHarness() {
-  const initial = seededSession()
-  initial.studentTranslation = 'A student translation.'
-  initial.translationReviewCount = 1
-  initial.translationReviewCurrent = true
-  initial.translationStageStatus = 'complete'
-  const [session, setSession] = useState(initial)
-  return (
-    <>
-      <Rib785WordSegmentation
-        session={session}
-        setSession={setSession}
-        onReturnToTranscription={() => undefined}
-      />
-      <output data-testid="dependency-session">{JSON.stringify(session)}</output>
-    </>
+function sessionState() {
+  return JSON.parse(
+    screen.getByTestId('translation-session').textContent ?? '{}',
   )
 }
 
@@ -194,17 +164,44 @@ async function completePriorStages() {
   return user
 }
 
-async function enterTranslation(text = 'Crescentinus died at age eighteen.') {
+async function submitInHarness(
+  text = 'Crescentinus lived eighteen years.',
+) {
   const user = userEvent.setup()
-  await user.type(
+  fireEvent.change(
     screen.getByRole('textbox', { name: 'Your Translation' }),
-    text,
+    { target: { value: text } },
   )
-  return user
+  await user.click(
+    screen.getByRole('button', { name: 'Submit Final Translation' }),
+  )
+  const dialog = screen.getByRole('dialog', {
+    name: 'Submit Final Translation?',
+  })
+  return { user, dialog }
 }
 
-function sessionState(testId = 'translation-session') {
-  return JSON.parse(screen.getByTestId(testId).textContent ?? '{}')
+async function finalizeAppTranslation(
+  text = 'Crescentinus lived eighteen years.',
+) {
+  const user = await completePriorStages()
+  await user.click(screen.getByRole('button', { name: 'Translation' }))
+  fireEvent.change(
+    screen.getByRole('textbox', { name: 'Your Translation' }),
+    { target: { value: text } },
+  )
+  await user.click(
+    screen.getByRole('button', { name: 'Submit Final Translation' }),
+  )
+  const dialog = screen.getByRole('dialog', {
+    name: 'Submit Final Translation?',
+  })
+  await user.click(
+    within(dialog).getByRole('button', {
+      name: 'Submit Final Translation',
+    }),
+  )
+  return user
 }
 
 afterEach(() => {
@@ -214,8 +211,8 @@ afterEach(() => {
   window.history.pushState({}, '', '/')
 })
 
-describe('RIB 785 student translation', () => {
-  it('keeps Translation locked until Word Segmentation is complete', async () => {
+describe('RIB 785 final student translation', () => {
+  it('keeps Translation locked before Word Segmentation and unlocks it afterward', async () => {
     await openRib785()
     expect(
       screen.queryByRole('button', { name: 'Translation' }),
@@ -223,20 +220,20 @@ describe('RIB 785 student translation', () => {
     expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
       'Locked',
     )
-  })
 
-  it('unlocks Translation only after the three earlier stages are complete', async () => {
+    vi.restoreAllMocks()
+    cleanup()
     const user = await completePriorStages()
     expect(
       screen.getByRole('button', { name: 'Translation' }),
     ).toBeEnabled()
     await user.click(screen.getByRole('button', { name: 'Translation' }))
     expect(
-      screen.getByRole('heading', { name: 'Translation' }),
-    ).toBeInTheDocument()
-  })
+      screen.getByRole('textbox', { name: 'Your Translation' }),
+    ).toBeEnabled()
+  }, 20_000)
 
-  it('shows the source image and the student transcription and segmentation', () => {
+  it('keeps the source image and prior student evidence available', () => {
     render(<TranslationHarness />)
     expect(
       screen.getByRole('img', {
@@ -255,182 +252,129 @@ describe('RIB 785 student translation', () => {
     expect(screen.getAllByText('PATER POSVIT').length).toBeGreaterThan(1)
   })
 
-  it('keeps instructor material hidden and blocks a blank review', () => {
+  it('blocks blank and whitespace-only submissions', () => {
     render(<TranslationHarness />)
-    expect(screen.queryByText(RIB_785_CASE.translation)).not.toBeInTheDocument()
-    expect(screen.queryByText('D(IS) M(ANIBUS)')).not.toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    ).toBeDisabled()
-  })
-
-  it('preserves ordinary prose, punctuation, capitalization, and multiple sentences', async () => {
-    render(<TranslationHarness />)
-    const text =
-      'To the spirits, this stone is dedicated. Crescentinus lived eighteen years!'
-    await enterTranslation(text)
-    expect(
-      screen.getByRole('textbox', { name: 'Your Translation' }),
-    ).toHaveValue(text)
-    expect(sessionState().studentTranslation).toBe(text)
-  })
-
-  it('reveals the structured comparison without semantic grading or scores', async () => {
-    const user = userEvent.setup()
-    render(<TranslationHarness />)
-    await enterTranslation('My own stylistically different translation.')
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    const comparison = screen.getByRole('region', {
-      name: 'Review Your Translation',
+    const submit = screen.getByRole('button', {
+      name: 'Submit Final Translation',
     })
-    expect(
-      within(comparison).getByText(RIB_785_CASE.translation),
-    ).toBeInTheDocument()
-    expect(
-      within(comparison).getByText('D(IS) M(ANIBUS)'),
-    ).toBeInTheDocument()
-    expect(
-      within(comparison).getByRole('heading', {
-        name: 'My Segmented Latin Text',
-      }),
-    ).toBeInTheDocument()
-    expect(comparison).not.toHaveTextContent('%')
-    expect(comparison).not.toHaveTextContent(
-      /score|grade|pass|fail|correct answer|ground truth/i,
-    )
-  })
-
-  it('uses the exact instructor reference wording and normalized reading', async () => {
-    const user = userEvent.setup()
-    render(<TranslationHarness />)
-    await enterTranslation()
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    expect(screen.getByText(RIB_785_CASE.translation)).toHaveTextContent(
-      'To the spirits of the departed; Crescentinus lived eighteen years. Vidaris, his father, set this up.',
-    )
-    const normalizedPanel = screen
-      .getByRole('heading', { name: 'Normalized Instructor Reading' })
-      .closest('article')
-    expect(normalizedPanel).not.toBeNull()
-    for (const line of RIB_785_CASE.normalizedInstructorReading.split('\n')) {
-      expect(within(normalizedPanel as HTMLElement).getByText(line)).toBeInTheDocument()
-    }
-  })
-
-  it('never shows a content checklist or translation-review checkboxes', async () => {
-    const user = userEvent.setup()
-    render(<TranslationHarness />)
-    expect(
-      screen.queryByRole('group', { name: 'Content checklist' }),
-    ).not.toBeInTheDocument()
-    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
-    await enterTranslation()
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    expect(
-      screen.queryByRole('group', { name: 'Content checklist' }),
-    ).not.toBeInTheDocument()
-    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
-    expect(screen.queryByText(/content items selected/i)).not.toBeInTheDocument()
-  })
-
-  it('allows reference controls, revision, re-review, and an optional note', async () => {
-    const user = userEvent.setup()
-    render(<TranslationHarness />)
-    await enterTranslation()
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    expect(sessionState().translationReviewCount).toBe(1)
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Hide Instructor Reference Translation',
-      }),
-    )
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Hide Normalized Instructor Reading',
-      }),
-    )
-    expect(screen.queryByText(RIB_785_CASE.translation)).not.toBeInTheDocument()
-    expect(screen.queryByText('D(IS) M(ANIBUS)')).not.toBeInTheDocument()
-    await user.click(
-      screen.getByRole('button', { name: 'Return to Editing' }),
-    )
-    await user.type(
+    expect(submit).toBeDisabled()
+    fireEvent.change(
       screen.getByRole('textbox', { name: 'Your Translation' }),
-      ' Revised.',
+      { target: { value: '  \n\t ' } },
     )
-    expect(sessionState().translationReviewCurrent).toBe(false)
-    expect(
-      screen.getByRole('button', {
-        name: 'Complete Translation Stage',
-      }),
-    ).toBeDisabled()
+    expect(submit).toBeDisabled()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('allows free editing and preserves spelling, capitalization, punctuation, and paragraphs', () => {
+    render(<TranslationHarness />)
+    const response =
+      'To the Spirits, Crescentinus lived 18 years!\n\nHis father sett this up.'
+    const textbox = screen.getByRole('textbox', {
+      name: 'Your Translation',
+    })
+    fireEvent.change(textbox, { target: { value: response } })
+    expect(textbox).toHaveValue(response)
+    fireEvent.change(textbox, {
+      target: { value: `${response}\nA final sentence?` },
+    })
+    expect(sessionState().studentTranslation).toBe(
+      `${response}\nA final sentence?`,
+    )
+  })
+
+  it('opens one accessible dialog and Cancel preserves the editable response and focus', async () => {
+    render(<TranslationHarness />)
+    const response = 'My editable response.'
+    const { user, dialog } = await submitInHarness(response)
+    expect(screen.getAllByRole('dialog')).toHaveLength(1)
+    expect(dialog).toHaveAttribute('aria-modal', 'true')
+    expect(dialog).toHaveTextContent(
+      'You will not be able to revise it afterward during this investigation.',
+    )
+    expect(document.activeElement).toBe(
+      within(dialog).getByRole('button', { name: 'Cancel' }),
+    )
     await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
+      within(dialog).getByRole('button', { name: 'Cancel' }),
     )
-    await user.type(
-      screen.getByRole('textbox', { name: 'Revision Note' }),
-      'I confirmed the age and relationship.',
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('textbox', { name: 'Your Translation' }),
+    ).toHaveValue(response)
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', {
+        name: 'Submit Final Translation',
+      }),
     )
+    expect(sessionState().translationFinallySubmitted).toBe(false)
+  })
+
+  it('submits once, locks the exact response, and records report-ready session data', async () => {
+    render(<TranslationHarness />)
+    const response =
+      'Exact Capitalization, punctuation & speling.\n\nSecond paragraph.'
+    const { user, dialog } = await submitInHarness(response)
+    const confirm = within(dialog).getByRole('button', {
+      name: 'Submit Final Translation',
+    })
+    await user.dblClick(confirm)
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('textbox', { name: 'Your Translation' }),
+    ).not.toBeInTheDocument()
+    const submittedResponse =
+      screen.getByRole('heading', {
+        name: 'Your Submitted Translation',
+      }).nextElementSibling
+    expect(submittedResponse?.textContent).toBe(response)
+    expect(screen.getAllByText('Translation Submitted').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Translation Complete').length).toBeGreaterThan(0)
     expect(sessionState()).toMatchObject({
-      translationReviewCount: 2,
-      translationRevisionNote: 'I confirmed the age and relationship.',
+      studentTranslation: response,
+      translationFinallySubmitted: true,
+      translationStageStatus: 'complete',
     })
+    expect(sessionState().translationSubmittedAt).toMatch(
+      /^\d{4}-\d{2}-\d{2}T/,
+    )
+
+    const reportSnapshot = snapshotLetterIdentificationSession(
+      sessionState() as LetterIdentificationSession,
+    )
+    expect(reportSnapshot.studentTranslation).toBe(response)
+    expect(reportSnapshot.translationFinallySubmitted).toBe(true)
+    expect(reportSnapshot.translationStageStatus).toBe('complete')
   })
 
-  it('requires a current review and allows a blank revision note', async () => {
-    const user = userEvent.setup()
+  it('removes editing, comparison, instructor material, checklists, notes, and grading after submission', async () => {
     render(<TranslationHarness />)
-    const complete = screen.getByRole('button', {
-      name: 'Complete Translation Stage',
-    })
-    expect(complete).toBeDisabled()
-    await enterTranslation()
-    expect(complete).toBeDisabled()
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    expect(complete).toBeEnabled()
-    expect(
-      screen.getByRole('textbox', { name: 'Revision Note' }),
-    ).toHaveValue('')
-    await user.click(complete)
-    expect(screen.getByText('Translation Complete')).toBeInTheDocument()
-  })
-
-  it('allows stylistically different prose after a current review', async () => {
-    const user = userEvent.setup()
-    render(<TranslationHarness />)
-    await enterTranslation('A student uses different English phrasing here.')
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
+    const { user, dialog } = await submitInHarness(
+      'A stylistically independent response.',
     )
     await user.click(
-      screen.getByRole('button', {
-        name: 'Complete Translation Stage',
+      within(dialog).getByRole('button', {
+        name: 'Submit Final Translation',
       }),
     )
-    expect(screen.getByText('Translation Complete')).toBeInTheDocument()
-    expect(screen.getByText('RIB 785 Investigation Complete')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /edit|revise/i }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText(RIB_785_CASE.translation)).not.toBeInTheDocument()
+    expect(screen.queryByText('D(IS) M(ANIBUS)')).not.toBeInTheDocument()
+    expect(document.body).not.toHaveTextContent(
+      /Instructor Reference Translation|Normalized Instructor Reading|Review Translation|Revision Note|content checklist|semantic|score|percentage|pass|fail/i,
+    )
+    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
   })
 
-  it('shows all four non-color-only completion statements', async () => {
-    const user = userEvent.setup()
-    const initial = seededSession()
-    initial.studentTranslation = 'Student translation.'
-    initial.translationReviewCount = 1
-    initial.translationReviewCurrent = true
-    render(<TranslationHarness initial={initial} />)
+  it('immediately displays all four complete stages and the completed investigation', async () => {
+    render(<TranslationHarness />)
+    const { user, dialog } = await submitInHarness()
     await user.click(
-      screen.getByRole('button', {
-        name: 'Complete Translation Stage',
+      within(dialog).getByRole('button', {
+        name: 'Submit Final Translation',
       }),
     )
     const summary = screen.getByRole('region', {
@@ -440,92 +384,143 @@ describe('RIB 785 student translation', () => {
     expect(summary).toHaveTextContent('Transcription — Complete')
     expect(summary).toHaveTextContent('Word Segmentation — Complete')
     expect(summary).toHaveTextContent('Translation — Complete')
-    expect(summary).not.toHaveTextContent(/print|pdf|json|numerical/i)
   })
 
-  it('invalidates review after transcription changes while preserving translation', async () => {
-    const user = userEvent.setup()
-    render(<TranscriptionDependencyHarness />)
-    await user.type(
-      screen.getByRole('textbox', { name: 'Line 5 transcription' }),
-      'X',
+  it('makes every earlier stage review-only after final submission', async () => {
+    const user = await finalizeAppTranslation()
+    expect(screen.getByText(/This investigation has been finalized/)).toBeInTheDocument()
+
+    await user.click(
+      screen.getByRole('button', { name: 'Letter Identification' }),
     )
-    expect(sessionState('dependency-session')).toMatchObject({
-      studentTranslation: 'A student translation.',
-      translationReviewCurrent: false,
-      translationStageStatus: 'in-progress',
-      translationEarlierWorkChanged: true,
-    })
-  })
+    expect(
+      screen.getByRole('heading', { name: 'Letter Identification Review' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Select Letter mode' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('textbox', { name: 'Letter label' }),
+    ).not.toBeInTheDocument()
 
-  it('invalidates review after segmentation changes while preserving translation', async () => {
-    const user = userEvent.setup()
-    render(<SegmentationDependencyHarness />)
-    await user.type(
-      screen.getByRole('textbox', {
-        name: 'Line 3 word segmentation',
-      }),
-      ' ',
+    await user.click(screen.getByRole('button', { name: 'Transcription' }))
+    expect(
+      screen.getByRole('heading', { name: 'Transcription Review' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('textbox', { name: /transcription/i }),
+    ).not.toBeInTheDocument()
+
+    await user.click(
+      screen.getByRole('button', { name: 'Word Segmentation' }),
     )
-    expect(sessionState('dependency-session')).toMatchObject({
-      studentTranslation: 'A student translation.',
-      translationReviewCurrent: false,
-      translationStageStatus: 'in-progress',
-      translationEarlierWorkChanged: true,
-    })
-  })
+    expect(
+      screen.getByRole('heading', { name: 'Word Segmentation Review' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('textbox', { name: /word segmentation/i }),
+    ).not.toBeInTheDocument()
 
-  it('clears all Translation state through case-level Start Over', async () => {
-    const user = await completePriorStages()
     await user.click(screen.getByRole('button', { name: 'Translation' }))
-    await user.type(
-      screen.getByRole('textbox', { name: 'Your Translation' }),
-      'Personal student work.',
+    expect(
+      screen.getByRole('heading', {
+        name: 'Your Submitted Translation',
+      }),
+    ).toBeInTheDocument()
+  }, 20_000)
+
+  it('uses the stronger completed Start Over dialog and Cancel preserves all work', async () => {
+    const response = 'Preserve this final response.'
+    const user = await finalizeAppTranslation(response)
+    await user.click(screen.getByRole('button', { name: 'Start Over' }))
+    const dialog = screen.getByRole('dialog', {
+      name: 'Start Investigation Over?',
+    })
+    expect(dialog).toHaveTextContent(
+      'permanently clear your submitted translation and all work from this browser session',
     )
     await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
+      within(dialog).getByRole('button', { name: 'Cancel' }),
     )
-    await user.type(
-      screen.getByRole('textbox', { name: 'Revision Note' }),
-      'A note.',
-    )
+    expect(screen.getByText(response)).toBeInTheDocument()
+    expect(
+      screen.getByText('RIB 785 Investigation Complete'),
+    ).toBeInTheDocument()
+  }, 20_000)
+
+  it('confirmed completed Start Over clears every student stage and returns to the beginning', async () => {
+    const user = await finalizeAppTranslation('Erase this final response.')
     await user.click(screen.getByRole('button', { name: 'Start Over' }))
+    const dialog = screen.getByRole('dialog', {
+      name: 'Start Investigation Over?',
+    })
+    await user.click(
+      within(dialog).getByRole('button', {
+        name: 'Start Investigation Over',
+      }),
+    )
     expect(screen.getByText('0 letters selected')).toBeInTheDocument()
     expect(screen.getByText('Translation').closest('li')).toHaveTextContent(
       'Locked',
     )
-  })
+    expect(
+      screen.queryByText('Erase this final response.'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('RIB 785 Investigation Complete'),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Start Over' })).toBeDisabled()
+  }, 20_000)
 
-  it('keeps permanent references unchanged, instructor tools hidden, and storage empty', () => {
+  it('keeps pre-submission earlier stages functional and preserves existing Start Over behavior', async () => {
+    const user = await completePriorStages()
+    expect(
+      screen.getByRole('button', { name: 'Check Word Segmentation' }),
+    ).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'Transcription' }))
+    expect(
+      screen.getByRole('textbox', { name: 'Line 1 transcription' }),
+    ).toBeEnabled()
+    expect(window.confirm).toHaveBeenCalled()
+  }, 20_000)
+
+  it('keeps permanent instructor data unchanged, tools hidden, and browser storage empty', () => {
     const before = JSON.stringify(RIB_785_CASE)
     render(<TranslationHarness />)
     expect(JSON.stringify(RIB_785_CASE)).toBe(before)
     expect(document.querySelector('a[href*="dev"]')).not.toBeInTheDocument()
-    expect(document.body).not.toHaveTextContent(/source-code paths|intake documentation/i)
+    expect(document.body).not.toHaveTextContent(
+      /source-code paths|intake documentation/i,
+    )
     expect(localStorage.length).toBe(0)
     expect(sessionStorage.length).toBe(0)
   })
 
-  it('provides responsive structural classes and labeled keyboard controls', async () => {
-    const user = userEvent.setup()
+  it('provides responsive structures and preserves the GitHub Pages asset base', async () => {
     const { container } = render(<TranslationHarness />)
-    await enterTranslation()
-    await user.click(
-      screen.getByRole('button', { name: 'Review Translation' }),
-    )
-    expect(container.querySelector('.student-translation-evidence')).toBeInTheDocument()
-    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
     expect(
-      screen.getByRole('textbox', { name: 'Revision Note' }),
+      container.querySelector('.student-translation-evidence'),
     ).toBeInTheDocument()
-    await user.click(
-      screen.getByRole('button', { name: 'Return to Editing' }),
-    )
     expect(
+      screen.getByRole('img', {
+        name: 'RIB 785 funerary inscription for translation',
+      }),
+    ).toHaveAttribute(
+      'src',
+      '/herculaneum-ink-lab/cases/RIB%20785/source.png',
+    )
+    fireEvent.change(
       screen.getByRole('textbox', { name: 'Your Translation' }),
+      { target: { value: 'Keyboard response.' } },
+    )
+    const submit = screen.getByRole('button', {
+      name: 'Submit Final Translation',
+    })
+    submit.focus()
+    fireEvent.keyDown(submit, { key: 'Enter' })
+    fireEvent.click(submit)
+    expect(
+      screen.getByRole('dialog', { name: 'Submit Final Translation?' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', {
-      name: 'Hide My Transcription',
-    })).toBeInTheDocument()
   })
 })

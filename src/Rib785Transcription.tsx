@@ -85,14 +85,6 @@ export function Rib785Transcription({
         segmentationComparisonCurrent: false,
         segmentationReferenceRevealed: false,
         segmentationStageStatus: 'in-progress',
-        translationReviewCurrent: false,
-        translationInstructorReferenceRevealed: false,
-        translationNormalizedReadingRevealed: false,
-        translationStageStatus: 'in-progress',
-        translationEarlierWorkChanged:
-          current.translationReviewCount > 0 ||
-          current.studentTranslation.trim().length > 0 ||
-          current.translationStageStatus === 'complete',
         transcriptionStageStatus:
           current.transcriptionStageStatus === 'complete'
             ? 'in-progress'

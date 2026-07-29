@@ -91,21 +91,22 @@ starts from the revised student text.
 ## Student translation stage
 
 Translation uses the student's completed diplomatic transcription and word
-segmentation as prior evidence. The permanent normalized reading and English
-translation stay separate in the curated case data and remain hidden until
-the student selects **Review Translation** after writing nonblank English
-prose.
+segmentation as prior evidence. Students may revise ordinary English prose
+freely until they choose **Submit Final Translation** and confirm the
+submission. Blank or whitespace-only text cannot be submitted. Confirmation
+locks the exact response, preserving capitalization, punctuation, spelling,
+and paragraph breaks without automatic correction or evaluation.
 
-Review is a student- and instructor-guided comparison rather than semantic
-grading. The application does not infer ideas from the prose or calculate a
-score, and it does not use a content checklist. Students may keep an optional
-revision note, which may remain blank. The session tracks review attempts,
-reveal states, completion, and the transcription and segmentation versions
-used for the review. Completing Translation requires a nonblank translation
-and a current review; editing after review requires another review.
+The permanent normalized reading and English translation remain separate in
+the curated case data for possible future instructor tools, but neither is
+rendered in the student Translation workflow. The software provides no answer
+key, semantic comparison, checklist, automated comments, score, percentage,
+or pass/fail result. The instructor reviews the submitted response later.
 
-Changing either earlier text stage invalidates Translation review and
-completion while preserving the student's typed prose when practical.
-Completing Translation displays a four-stage case-completion summary. Student
-state remains browser-memory only, and the combined final report is reserved
-for a later milestone.
+Final submission immediately completes Translation and displays the four-stage
+case-completion summary. The exact response, final-submission status,
+completion status, and submission timestamp remain in the browser-memory
+session for the future combined report. Earlier stages become review-only.
+After completion, **Start Over** requires a stronger confirmation and clears
+the submitted translation and all other student work. The combined final
+report remains reserved for a later milestone.

@@ -3078,11 +3078,11 @@ h1 {
   }
 }
 
-.student-translation-dependency-warning {
+.student-investigation-finalized {
   margin: 0;
-  border: 2px dashed var(--rust);
+  border: 2px solid var(--forest);
   border-radius: 0.75rem;
-  background: #fff6ee;
+  background: #eef5ee;
   padding: 0.85rem 1rem;
   font-weight: 800;
 }
@@ -3096,8 +3096,7 @@ h1 {
 
 .student-translation-prior-work,
 .student-translation-entry,
-.student-translation-comparison,
-.student-translation-revision-note,
+.student-translation-submitted,
 .student-translation-complete {
   border: 1px solid var(--line-color);
   border-radius: 1.15rem;
@@ -3108,21 +3107,18 @@ h1 {
 
 .student-translation-prior-work h2,
 .student-translation-entry h2,
-.student-translation-comparison h2,
-.student-translation-revision-note h2,
+.student-translation-submitted h2,
 .student-translation-complete h2 {
   margin: 0.15rem 0 0.65rem;
 }
 
-.student-translation-prior-work__controls,
-.student-translation-comparison__controls {
+.student-translation-prior-work__controls {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
 }
 
-.student-translation-prior-work__controls button,
-.student-translation-comparison__controls button {
+.student-translation-prior-work__controls button {
   min-height: 2.75rem;
   border: 1px solid var(--forest);
   border-radius: 0.55rem;
@@ -3133,8 +3129,7 @@ h1 {
   padding: 0.55rem 0.75rem;
 }
 
-.student-translation-prior-work__controls button[aria-pressed='true'],
-.student-translation-comparison__controls button[aria-pressed='true'] {
+.student-translation-prior-work__controls button[aria-pressed='true'] {
   background: var(--forest);
   color: #fff;
 }
@@ -3143,8 +3138,7 @@ h1 {
   margin-top: 1rem;
 }
 
-.student-translation-prior-work ol,
-.student-translation-comparison ol {
+.student-translation-prior-work ol {
   list-style: none;
   display: grid;
   gap: 0.4rem;
@@ -3166,21 +3160,18 @@ h1 {
   font-weight: 800;
 }
 
-.student-translation-prior-work li strong,
-.student-translation-comparison li {
+.student-translation-prior-work li strong {
   overflow-wrap: anywhere;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
 .student-translation-entry,
-.student-translation-comparison,
-.student-translation-revision-note,
+.student-translation-submitted,
 .student-translation-complete {
   margin-top: 1.25rem;
 }
 
-.student-translation-entry label,
-.student-translation-revision-note > label {
+.student-translation-entry label {
   display: grid;
   gap: 0.4rem;
   margin-top: 1rem;
@@ -3188,8 +3179,7 @@ h1 {
   font-weight: 800;
 }
 
-.student-translation-entry textarea,
-.student-translation-revision-note textarea {
+.student-translation-entry textarea {
   box-sizing: border-box;
   width: 100%;
   resize: vertical;
@@ -3212,37 +3202,107 @@ h1 {
   text-align: right;
 }
 
-.student-translation-comparison > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.student-translation-comparison__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-  margin-top: 1rem;
-}
-
-.student-translation-comparison__grid article {
-  min-width: 0;
-  border: 1px solid var(--line-color);
-  border-left: 0.4rem solid var(--forest);
-  border-radius: 0.7rem;
-  background: #f5f1e8;
-  padding: 0.9rem;
-}
-
-.student-translation-comparison__grid h3 {
-  margin: 0 0 0.6rem;
-}
-
-.student-translation-comparison__grid p {
+.student-translation-submitted__response {
   overflow-wrap: anywhere;
   margin: 0;
+  border-left: 0.4rem solid var(--forest);
+  border-radius: 0.55rem;
+  background: #f5f1e8;
+  line-height: 1.65;
+  padding: 1rem;
   white-space: pre-wrap;
+}
+
+.student-translation-status {
+  display: grid;
+  gap: 0.15rem;
+  border: 2px solid var(--forest);
+  border-radius: 0.65rem;
+  background: #eef5ee;
+  padding: 0.65rem 0.85rem;
+  text-align: right;
+}
+
+.student-finalized-review {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--line-color);
+  border-radius: 1.15rem;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 0.75rem 2rem rgba(32, 52, 45, 0.08);
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.student-finalized-review h2 {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.student-finalized-review__summary {
+  margin: 0;
+  font-weight: 800;
+}
+
+.student-finalized-review__lines {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.student-finalized-review__lines li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  border-bottom: 1px dashed var(--line-color);
+  padding: 0.5rem 0;
+}
+
+.student-finalized-review__lines span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.student-finalized-review__lines strong {
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.confirmation-dialog-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: rgba(10, 28, 24, 0.68);
+  padding: 1rem;
+}
+
+.confirmation-dialog {
+  box-sizing: border-box;
+  width: min(34rem, 100%);
+  border: 3px solid var(--forest);
+  border-radius: 1rem;
+  background: #fffdf8;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.32);
+  padding: clamp(1.15rem, 4vw, 2rem);
+}
+
+.confirmation-dialog h2 {
+  margin: 0 0 0.75rem;
+}
+
+.confirmation-dialog p {
+  line-height: 1.55;
+}
+
+.confirmation-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
 }
 
 .student-translation-complete {
@@ -3265,23 +3325,19 @@ h1 {
 }
 
 @media (max-width: 800px) {
-  .student-translation-evidence,
-  .student-translation-comparison__grid {
+  .student-translation-evidence {
     grid-template-columns: 1fr;
-  }
-
-  .student-translation-comparison > header {
-    display: block;
-  }
-
-  .student-translation-comparison__controls {
-    margin-top: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .student-translation-prior-work li {
+  .student-translation-prior-work li,
+  .student-finalized-review__lines li {
     grid-template-columns: 1fr;
+  }
+
+  .confirmation-dialog__actions > * {
+    width: 100%;
   }
 }
 

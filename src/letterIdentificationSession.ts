@@ -11,9 +11,9 @@ export type LetterIdentificationStageStatus =
 /**
  * Plain in-memory case-session data for the implemented RIB 785 stages.
  *
- * Letter Identification and Transcription share this object so future stages
- * and reporting can be added without reading component-specific state. No
- * browser storage, accounts, export, or network persistence is used.
+ * All four RIB 785 stages share this object so the future combined report can
+ * read the exact final response without reaching into component-specific
+ * state. No browser storage, accounts, export, or network persistence is used.
  */
 export type LetterIdentificationSession = {
   caseId: string
@@ -48,17 +48,10 @@ export type LetterIdentificationSession = {
   segmentationComparisonCurrent: boolean
   segmentationReferenceRevealed: boolean
   segmentationStageStatus: LetterIdentificationStageStatus
-  segmentationVersion: number
   studentTranslation: string
-  translationReviewCount: number
-  translationReviewCurrent: boolean
-  translationInstructorReferenceRevealed: boolean
-  translationNormalizedReadingRevealed: boolean
-  translationRevisionNote: string
+  translationFinallySubmitted: boolean
   translationStageStatus: LetterIdentificationStageStatus
-  translationSourceTranscriptionVersion: number | null
-  translationSourceSegmentationVersion: number | null
-  translationEarlierWorkChanged: boolean
+  translationSubmittedAt: string | null
 }
 
 export function createLetterIdentificationSession(
@@ -95,17 +88,10 @@ export function createLetterIdentificationSession(
     segmentationComparisonCurrent: false,
     segmentationReferenceRevealed: false,
     segmentationStageStatus: 'in-progress',
-    segmentationVersion: 0,
     studentTranslation: '',
-    translationReviewCount: 0,
-    translationReviewCurrent: false,
-    translationInstructorReferenceRevealed: false,
-    translationNormalizedReadingRevealed: false,
-    translationRevisionNote: '',
+    translationFinallySubmitted: false,
     translationStageStatus: 'in-progress',
-    translationSourceTranscriptionVersion: null,
-    translationSourceSegmentationVersion: null,
-    translationEarlierWorkChanged: false,
+    translationSubmittedAt: null,
   }
 }
 

@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { publicAssetUrl } from './assetPaths'
+import { ConfirmationDialog } from './ConfirmationDialog'
 import { RIB_785_CASE } from './content/curated/RIB 785/case'
 import { RIB_785_LETTER_REFERENCE } from './content/curated/RIB 785/letterReference'
 import {
@@ -13,6 +14,7 @@ import {
 } from './letterIdentificationSession'
 import type { LetterRegion } from './letterRegions'
 import { LetterRegionSelector } from './LetterRegionSelector'
+import { Rib785FinalizedStageReview } from './Rib785FinalizedStageReview'
 import { Rib785Transcription } from './Rib785Transcription'
 import { Rib785Translation } from './Rib785Translation'
 import { Rib785WordSegmentation } from './Rib785WordSegmentation'
@@ -216,6 +218,8 @@ export function Rib785LetterIdentification({
   const [showStudentSelections, setShowStudentSelections] = useState(true)
   const [activeStage, setActiveStage] =
     useState<StudentStage>('letter-identification')
+  const [startOverDialogOpen, setStartOverDialogOpen] = useState(false)
+  const startOverButtonRef = useRef<HTMLButtonElement>(null)
 
   const hasWork =
     session.studentRegions.length > 0 ||
@@ -225,8 +229,7 @@ export function Rib785LetterIdentification({
     session.studentSegmentation.some((line) => line.length > 0) ||
     session.segmentationCheckCount > 0 ||
     session.studentTranslation.trim().length > 0 ||
-    session.translationReviewCount > 0 ||
-    session.translationRevisionNote.trim().length > 0
+    session.translationFinallySubmitted
   useEffect(() => {
     if (!hasWork) return
     const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -344,7 +347,22 @@ export function Rib785LetterIdentification({
     onReturnHome()
   }
 
+  const resetInvestigation = () => {
+    setSession(createSession())
+    setSelectedRegionId(null)
+    setComparison(null)
+    setComparisonMode('editing')
+    setShowInstructorReference(false)
+    setShowStudentSelections(true)
+    setActiveStage('letter-identification')
+    setStartOverDialogOpen(false)
+  }
+
   const startOver = () => {
+    if (session.translationFinallySubmitted) {
+      setStartOverDialogOpen(true)
+      return
+    }
     if (
       hasWork &&
       !window.confirm(
@@ -353,13 +371,7 @@ export function Rib785LetterIdentification({
     ) {
       return
     }
-    setSession(createSession())
-    setSelectedRegionId(null)
-    setComparison(null)
-    setComparisonMode('editing')
-    setShowInstructorReference(false)
-    setShowStudentSelections(true)
-    setActiveStage('letter-identification')
+    resetInvestigation()
   }
 
   const toggleInstructorReference = () => {
@@ -396,6 +408,7 @@ export function Rib785LetterIdentification({
             Return to Homepage
           </button>
           <button
+            ref={startOverButtonRef}
             type="button"
             className="control-button student-letter-investigation__start-over"
             onClick={startOver}
@@ -502,7 +515,20 @@ export function Rib785LetterIdentification({
         </ol>
       </nav>
 
-      {activeStage === 'letter-identification' ? (
+      {session.translationFinallySubmitted && (
+        <p className="student-investigation-finalized" role="status">
+          This investigation has been finalized. Earlier stages are available
+          for review only.
+        </p>
+      )}
+
+      {session.translationFinallySubmitted &&
+      activeStage !== 'translation' ? (
+        <Rib785FinalizedStageReview
+          stage={activeStage}
+          session={session}
+        />
+      ) : activeStage === 'letter-identification' ? (
         <>
       <section
         className="student-letter-prompt"
@@ -861,6 +887,17 @@ export function Rib785LetterIdentification({
           onReturnToWordSegmentation={() =>
             setActiveStage('word-segmentation')
           }
+        />
+      )}
+
+      {startOverDialogOpen && (
+        <ConfirmationDialog
+          title="Start Investigation Over?"
+          description="Start this investigation over? This will permanently clear your submitted translation and all work from this browser session."
+          confirmLabel="Start Investigation Over"
+          onCancel={() => setStartOverDialogOpen(false)}
+          onConfirm={resetInvestigation}
+          returnFocusRef={startOverButtonRef}
         />
       )}
     </main>

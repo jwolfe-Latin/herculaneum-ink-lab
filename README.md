@@ -678,41 +678,34 @@ the student's capitalization, punctuation, sentences, and wording without
 automatic correction, rewriting, vocabulary help, grammar hints, or machine
 translation.
 
-**Review Translation** remains disabled until the student enters nonblank
-text. Reviewing opens a structured workspace containing the student's
-translation, segmented Latin text, the separately stored normalized instructor
-reading, and the **Instructor Reference Translation**. Instructor material is
-hidden before the first review. It is presented as supporting classroom
-comparison, not as the only possible English wording.
+**Submit Final Translation** remains disabled until the student enters
+nonblank text. Students may revise freely before submission. Selecting the
+button opens an accessible confirmation dialog that explains the response
+cannot be revised afterward. Cancel returns to the editable field with the
+student's text preserved. Confirmation locks the response and presents it as
+**Your Submitted Translation**, along with **Translation Submitted** and
+**Translation Complete**.
 
-The software does not attempt semantic grading. It performs no exact-match,
-keyword, grammar, or automated accuracy judgment and produces no score,
-percentage, grade, or pass/fail result. The stage does not use a content
-checklist or substitute another set of prompts or automated checks. The
-instructor guides discussion and evaluates the quality of the translation. An
-optional **Revision Note** records what the student revised or confirmed and
-may remain blank.
+The exact response is preserved without rewriting, normalizing, or evaluating
+it. The student never sees an instructor translation, normalized instructor
+reading, answer key, automated comparison, checklist, or revision note. The
+software performs no exact-match, keyword, grammar, or semantic judgment and
+produces no score, percentage, grade, or pass/fail result. The instructor will
+review the submitted response later.
 
-Students can hide or show the instructor translation and normalized reading,
-return to editing, revise freely, and review again. The session records the
-translation text, review count, reveal states, optional note, completion
-state, and the versions of the earlier text work used by the current review.
-If Transcription or Word Segmentation changes, the typed
-translation is preserved when practical, but its review and completion become
-outdated. The message **Earlier text work has changed. Review your translation
-again.** appears, and another review is required.
+Final submission immediately completes Translation and displays the four-stage
+summary headed **RIB 785 Investigation Complete**. Letter Identification,
+Transcription, and Word Segmentation then remain available only for reviewing
+the student's existing evidence. They cannot be edited while the submitted
+translation remains in place.
 
-**Complete Translation Stage** requires nonblank text and at least one current
-review. Editing the translation after review requires another review before
-completion. Stylistic differences and a blank Revision Note never block
-completion automatically. After completion, a simple non-numerical summary
-lists all four stages as complete and displays **RIB 785 Investigation
-Complete**.
-
-Translation work remains only in the current browser-memory session.
-Case-level **Start Over** clears all four student stages and reveal states
-without changing permanent instructor data. The final combined printable
-report is intentionally reserved for a later milestone.
+The browser-memory session retains the exact translation, final-submission
+status, Translation completion status, and submission timestamp so the future
+combined report can reproduce the response. No browser storage, account, or
+server is used. After completion, **Start Over** displays a stronger warning;
+confirmation erases the submitted translation and all four student stages,
+while Cancel preserves the completed investigation. The final combined
+printable report is intentionally reserved for a later milestone.
 
 ## Current limitations
 

@@ -39,17 +39,10 @@ describe('letter-identification session data', () => {
       segmentationComparisonCurrent: false,
       segmentationReferenceRevealed: false,
       segmentationStageStatus: 'in-progress',
-      segmentationVersion: 0,
       studentTranslation: '',
-      translationReviewCount: 0,
-      translationReviewCurrent: false,
-      translationInstructorReferenceRevealed: false,
-      translationNormalizedReadingRevealed: false,
-      translationRevisionNote: '',
+      translationFinallySubmitted: false,
       translationStageStatus: 'in-progress',
-      translationSourceTranscriptionVersion: null,
-      translationSourceSegmentationVersion: null,
-      translationEarlierWorkChanged: false,
+      translationSubmittedAt: null,
     })
   })
 
@@ -73,6 +66,11 @@ describe('letter-identification session data', () => {
       labelOrLineMismatches: 0,
     }
     session.stageStatus = 'checked'
+    session.studentTranslation =
+      'Exact Student punctuation.\n\nA second paragraph!'
+    session.translationFinallySubmitted = true
+    session.translationStageStatus = 'complete'
+    session.translationSubmittedAt = '2026-07-29T20:00:00.000Z'
 
     const snapshot = snapshotLetterIdentificationSession(session)
     expect(snapshot).toMatchObject({
@@ -80,6 +78,11 @@ describe('letter-identification session data', () => {
       studentRegions: [{ label: 'V', lineNumber: 2 }],
       comparisonCounts: { matchedLetters: 1 },
       stageStatus: 'checked',
+      studentTranslation:
+        'Exact Student punctuation.\n\nA second paragraph!',
+      translationFinallySubmitted: true,
+      translationStageStatus: 'complete',
+      translationSubmittedAt: '2026-07-29T20:00:00.000Z',
     })
     expect(snapshot.studentRegions[0]).not.toBe(session.studentRegions[0])
     expect(snapshot.comparisonCounts).not.toBe(session.comparisonCounts)
